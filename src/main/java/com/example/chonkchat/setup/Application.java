@@ -1,4 +1,4 @@
-package com.example.chonkchat;
+package com.example.chonkchat.setup;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

@@ -6,5 +6,5 @@ package com.example.chonkchat.data;
  * @author Joseph Adamson
  */
 public enum MessageType {
-    CONNECTED, DISCONNECTED, TEXT, SERVER, SHUTDOWN
+    CONNECTED, DISCONNECTED, TEXT, SERVER, SHUTDOWN, ERROR, NAMEREQUEST
 }

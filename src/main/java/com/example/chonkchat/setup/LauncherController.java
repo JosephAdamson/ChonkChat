@@ -1,5 +1,6 @@
-package com.example.chonkchat;
+package com.example.chonkchat.setup;
 
+import com.example.chonkchat.client.ChatController;
 import com.example.chonkchat.server.TerminalController;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.application.Platform;
@@ -8,12 +9,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Objects;
 
 public class LauncherController extends CustomWindowBaseController {
@@ -21,6 +24,9 @@ public class LauncherController extends CustomWindowBaseController {
     private TerminalController terminalController;
 
     private boolean terminalOpen;
+
+    @FXML
+    public TextField usernameInput;
 
     @FXML
     private ToggleButton launchServerButton;
@@ -76,27 +82,30 @@ public class LauncherController extends CustomWindowBaseController {
     
     @FXML
     public void launchClient() {
-
-        Parent root;
+        
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass()
+            
+            String username = usernameInput.getText();
+            
+            FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass()
                     .getResource("/com/example/views/chat-view.fxml")));
+            
+            Parent root = fxmlLoader.load();
+            
+            ChatController chatController = fxmlLoader.getController();
+            chatController.setUsername(username);
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.getIcons().add(new Image(getClass()
                     .getResourceAsStream("/com/example/images/client.png")));
+
             stage.setTitle("client");
             stage.setScene(scene);
-
             stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setTerminalOpen(boolean terminalOpen) {
-        this.terminalOpen = terminalOpen;
     }
 }

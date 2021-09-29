@@ -3,8 +3,8 @@ module com.example.chonkchat {
     requires javafx.fxml;
 
 
-    opens com.example.chonkchat to javafx.fxml;
-    exports com.example.chonkchat;
+    exports com.example.chonkchat.setup;
+    opens com.example.chonkchat.setup to javafx.fxml;
     exports com.example.chonkchat.client;
     opens com.example.chonkchat.client to javafx.fxml;
     exports com.example.chonkchat.server;

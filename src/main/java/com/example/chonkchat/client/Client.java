@@ -17,7 +17,7 @@ import java.util.Scanner;
  * 
  * @author Joseph Adamson
  */
-public class Client {
+public class Client implements Runnable{
     
     private final Socket socket;
     private ObjectInputStream input;
@@ -34,55 +34,48 @@ public class Client {
      * on a separate thread, as while loop is a blocking operation
      * and would otherwise lock up the main client thread.
      */
-    public void listenForMessage() {
-        
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+    @Override
+    public void run() {
+        try {
 
-                try {
-                    
-                    output = new ObjectOutputStream(socket.getOutputStream());
-                    input = new ObjectInputStream(socket.getInputStream());
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
 
-                    connectToServer();
+            connectToServer();
 
-                    while (socket.isConnected()) {
+            while (socket.isConnected()) {
 
-                        Message incomingMsg = (Message) input.readObject();
+                Message incomingMsg = (Message) input.readObject();
 
-                        switch (incomingMsg.getMessageType()) {
+                switch (incomingMsg.getMessageType()) {
 
-                            case TEXT:
-                                System.out.println(incomingMsg.getMessage());
-                                break;
-                                
-                            case SERVER:
-                                System.out.println("[SERVER]: " + incomingMsg.getMessage());
-                                break;
+                    case TEXT:
+                        System.out.println(incomingMsg.getMessage());
+                        break;
 
-                            case SHUTDOWN:
-                                System.out.println("Server has shut down");
-                                ResourceHandler.closeResources(socket, input, output);
-                                break;
+                    case SERVER:
+                        System.out.println("[SERVER]: " + incomingMsg.getMessage());
+                        break;
 
-                            default:
-                                System.out.println("Whoa there...");
-                        }
-                    }
+                    case SHUTDOWN:
+                        System.out.println("Server has shut down");
+                        ResourceHandler.closeResources(socket, input, output);
+                        break;
 
-                } catch (SocketException e) {
-                    System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
-                    
-                } catch (IOException | ClassNotFoundException e) {
-                    System.err.println("Exception in run() method for client");
-                    
-                } finally {
-                    ResourceHandler.closeResources(socket, input, output);
+                    default:
+                        System.out.println("Whoa there...");
                 }
-                
             }
-        }).start();
+
+        } catch (SocketException e) {
+            System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Exception in run() method for client");
+
+        } finally {
+            ResourceHandler.closeResources(socket, input, output);
+        }
     }
 
     /**
@@ -90,7 +83,7 @@ public class Client {
      * will have to be changed later so it can be integrated
      * will the Chat UI
      */
-    public void sendMessage() {
+    /*public void sendMessage() {
         
         try {
             
@@ -114,6 +107,28 @@ public class Client {
             
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }*/
+
+    /**
+     * Sends standard text message.
+     * 
+     * @param text string text.
+     */
+    public void sendMessage(String text) {
+        try {
+            
+            Message message = new Message();
+            message.setSender(username);
+            message.setMessage(text);
+            message.setMessageType(MessageType.TEXT);
+            
+            output.writeObject(message);
+            output.flush();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            ResourceHandler.closeResources(socket, input, output);
         }
     }
 
@@ -140,7 +155,7 @@ public class Client {
     /**
      * Temporary way to interface with server.
      */
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         // retrieve user name
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter a username: ");
@@ -152,6 +167,6 @@ public class Client {
 
         // listen comes first as it will be on a separate thread
         client.listenForMessage();
-        client.sendMessage();
-    }
+        //client.sendMessage();
+    }*/
 }

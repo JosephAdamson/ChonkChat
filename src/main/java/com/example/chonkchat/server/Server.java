@@ -202,15 +202,18 @@ public class Server {
         public void confirmConnection(String username) {
 
             try {
+                
+                Message initialMsg = new Message();
+                
                 // add output stream active clients, so it can be written to later.
                 this.clientUsername = username;
                 activeClients.put(username, output);
-                
-                Message confirmationMsg = new Message();
-                confirmationMsg.setMessage("Welcome to ChonkChat!");
-                confirmationMsg.setMessageType(MessageType.SERVER);
-                
-                output.writeObject(confirmationMsg);
+                    
+                initialMsg.setMessage("Welcome to ChonkChat!");
+                initialMsg.setMessageType(MessageType.SERVER);
+                    
+
+                output.writeObject(initialMsg);
                 output.flush();
 
             } catch (IOException e) {
