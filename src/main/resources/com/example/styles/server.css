@@ -1,0 +1,101 @@
+@font-face {
+    src: url("whitrabt.ttf");
+}
+
+/* ----output listview ---- */
+.list-view {
+    -fx-background-color: #1c1c1c;
+    -fx-border-color: transparent, #1c1c1c, transparent, #1c1c1c;
+    -fx-background-radius: 0;
+}
+
+/* style main scroll-bars for terminal output */
+
+.scroll-bar:vertical {
+    -fx-background-color :transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :2.0em;
+}
+
+
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 10.0 0.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";
+    -fx-padding :0.0 0.15em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #424242;
+    -fx-background-radius: 2.0em;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color : derive(#4D4C4F,10.0%);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 2.0em;
+}
+
+/* ----styling list view content---- */
+
+.label {
+    -fx-font-family: "White Rabbit";
+    -fx-font-size: 14px;
+}
+
+.list-cell {
+    -fx-background-color: #1c1c1c;
+}
+
+/* ----Styles for the terminal input---- */
+#terminalInput {
+    -fx-background-color: transparent, #1c1c1c, transparent, #1c1c1c;
+    -fx-border-color: #1c1c1c;
+    -fx-text-fill: #00FF41;
+    -fx-font-family: "White Rabbit";
+    -fx-font-size: 14px;
+    -fx-focus-color: transparent;
+    -fx-prompt-text-fill: #00FF41;
+}
+
+#terminalInput .content {
+    -fx-control-inner-background: #1c1c1c; 
+    -fx-border-color: transparent, #1c1c1c, transparent, #1c1c1c;
+    -fx-background-radius: 0;
+}
+
+#terminalInput:focused .content {
+    -fx-control-inner-background: #1c1c1c; 
+    -fx-border-color: #1c1c1c;
+    -fx-focus-traversable: false;
+}
+
+#terminalInput .scroll-pane {
+    -fx-hbar-policy: never;
+}
+
+#console {
+    -fx-border-color: #1c1c1c;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+#console .content {
+    -fx-control-inner-background: #1c1c1c;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+#basePane {
+    -fx-background-color: #1c1c1c;
+    -fx-border-color: #1c1c1c;
+    -fx-border-radius: 2em;
+}

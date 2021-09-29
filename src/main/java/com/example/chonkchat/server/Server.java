@@ -1,0 +1,236 @@
+package com.example.chonkchat.server;
+
+import com.example.chonkchat.data.Message;
+import com.example.chonkchat.data.MessageType;
+import com.example.chonkchat.util.ResourceHandler;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * ChonkChat server.
+ * 
+ * @author Joseph Adamson
+ */
+public class Server {
+
+    public final static int PORT = 49200;
+    private final String serverID = "[server @ port " + PORT + "]:";
+    private ServerSocket serverSocket;
+    private boolean serverActive = false;
+    TerminalController serverController;
+    
+    private final HashMap<String, ObjectOutputStream> activeClients = new HashMap<>();
+    
+    public Server(TerminalController serverController) {
+        this.serverController = serverController;
+        
+    }
+    
+    /**
+     * Creates main server thread which in turn generates client connection
+     * threads.
+     */
+    @FXML
+    public void startSever() {
+        
+        serverActive = true;
+        
+        // Server runs on its own thread away from the main UI thread.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                
+                // For now keep at 50 clients max
+                ExecutorService clientThreads = Executors.newFixedThreadPool(50);
+                
+                try {
+                    // init server socket
+                    serverSocket = new ServerSocket(PORT);
+
+                    // Platform.runlater() schedules terminal update for when we are handed back
+                    // the main UI thread (the terminal) because we cannot update directly 
+                    // from this thread.
+                    Platform.runLater(
+                            () -> serverController.addTerminalMessage(serverID + " now online!")
+                    );
+
+                    
+                    // listen for incoming connections and start new thread for each connection
+                    while (!serverSocket.isClosed()) {
+                        
+                        Socket clientConnection = serverSocket.accept();
+
+                        ClientHandler clientHandler = new ClientHandler(clientConnection);
+                        clientThreads.execute(clientHandler);
+                        
+                        Platform.runLater(
+                                () -> serverController
+                                        .addTerminalMessage(serverID + " a new client has connected.")
+                        );
+                    }
+
+                } catch (SocketException e) {
+                    clientThreads.shutdownNow();
+
+                } catch (IOException e) {
+                    System.err.println("Server connection couldn't be established.");
+                    clientThreads.shutdownNow();
+                    shutdownServer();
+                }
+
+            }
+        }).start();
+    }
+
+    /**
+     * Close server socket to force shutdown. Communicate shutdown to
+     * active clients.
+     */
+    public void shutdownServer() {
+        
+        serverActive = false;
+        
+        Platform.runLater(
+                () -> serverController.addTerminalMessage(serverID + " shutting down...")
+        );
+        
+        try {
+
+            // Issue shutdown command to safely stop handler and client.
+            Message shutdownCmd = new Message();
+            shutdownCmd.setMessageType(MessageType.SHUTDOWN);
+            shutdownCmd.setSender("SERVER");
+            
+            for (Map.Entry<String, ObjectOutputStream> entry : activeClients.entrySet()) {
+                entry.getValue().writeObject(shutdownCmd);
+            }
+            
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @return active clients on the server.
+     */
+    public HashMap<String, ObjectOutputStream> getActiveClients() {
+        return activeClients;
+    }
+
+    /**
+     * Manages client connection to the server.
+     */
+    public class ClientHandler implements Runnable {
+
+        private final Socket socket;
+        private ObjectInputStream input;
+        private ObjectOutputStream output;
+        private String clientUsername;
+        
+        public ClientHandler(Socket socket) {
+            this.socket = socket;
+        }
+
+        /**
+         * Listens for incoming messages from corresponding client connection.
+         * Executed in a separate thread.
+         */
+        @Override
+        public void run() {
+
+            try {
+
+                output = new ObjectOutputStream(socket.getOutputStream());
+                input = new ObjectInputStream(socket.getInputStream());
+
+                while (socket.isConnected() && serverActive) {
+                    
+                    Message msg = (Message) input.readObject();
+                    
+                    switch (msg.getMessageType()) {
+
+                        // to test we'll print the message to teh server terminal
+                        // more cases will be added as Message's functionality is increased.
+                        case TEXT:
+                            String text = msg.getMessage();
+                            Platform.runLater(
+                                    () -> serverController.addTerminalMessage(text)
+                            );
+                            break;
+                            
+                        case CONNECTED:
+                            Platform.runLater(
+                                    () -> serverController.addTerminalMessage((msg.getMessage()))
+                            );
+                            confirmConnection(msg.getSender());
+                            break;
+                            
+                        case DISCONNECTED:
+                            ResourceHandler.closeResources(socket, input, output);
+                            break;
+                            
+                        default:
+                            System.out.println("Whoa there...");
+                            
+                    }
+                }
+                ResourceHandler.closeResources(socket, input, output);
+                
+            } catch (IOException | ClassNotFoundException e) {
+                removeClient();
+                ResourceHandler.closeResources(socket, input, output);
+            }
+        }
+
+        /**
+         * Ping new client with a welcome message to confirm connection.
+         */
+        public void confirmConnection(String username) {
+
+            try {
+                // add output stream active clients, so it can be written to later.
+                this.clientUsername = username;
+                activeClients.put(username, output);
+                
+                Message confirmationMsg = new Message();
+                confirmationMsg.setMessage("Welcome to ChonkChat!");
+                confirmationMsg.setMessageType(MessageType.SERVER);
+                
+                output.writeObject(confirmationMsg);
+                output.flush();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                ResourceHandler.closeResources(socket, input, output);
+            }
+        }
+
+        /**
+         * Remove client form active client list.
+         */
+        public void removeClient() {
+            activeClients.remove(clientUsername);
+            Platform.runLater(
+                    () -> serverController.addTerminalMessage(clientUsername + 
+                            " has left the chat.")
+            );
+        }
+        
+    }
+    
+    
+    }
