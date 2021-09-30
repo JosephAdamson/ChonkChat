@@ -11,4 +11,6 @@ module com.example.chonkchat {
     opens com.example.chonkchat.server to javafx.fxml;
     exports com.example.chonkchat.util;
     opens com.example.chonkchat.util to javafx.fxml;
+    exports com.example.chonkchat.data;
+    opens com.example.chonkchat.data to javafx.fxml;
 }

@@ -1,6 +1,8 @@
 package com.example.chonkchat.setup;
 
 import com.example.chonkchat.client.ChatController;
+import com.example.chonkchat.client.Client;
+import com.example.chonkchat.server.Server;
 import com.example.chonkchat.server.TerminalController;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.application.Platform;
@@ -89,17 +91,22 @@ public class LauncherController extends CustomWindowBaseController {
             
             FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass()
                     .getResource("/com/example/views/chat-view.fxml")));
-            
+
             Parent root = fxmlLoader.load();
             
+            // set up fields and inject them manually and start client listening thread
             ChatController chatController = fxmlLoader.getController();
+            Socket socket = new Socket("localhost", Server.PORT);
+            Client client = new Client(socket, username, chatController);
+            chatController.setClient(client);
             chatController.setUsername(username);
-
+            chatController.getClient().listenForIncomingMessages();
+            
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.getIcons().add(new Image(getClass()
                     .getResourceAsStream("/com/example/images/client.png")));
-
+            
             stage.setTitle("client");
             stage.setScene(scene);
             stage.show();

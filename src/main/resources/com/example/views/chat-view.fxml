@@ -11,61 +11,61 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
       <HBox prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <Button mnemonicParsing="false" text="x" focusTraversable="false">
+         <Button focusTraversable="false" mnemonicParsing="false" text="x">
             <HBox.margin>
-               <Insets left="10.0" top="20.0"/>
+               <Insets left="10.0" top="20.0" />
             </HBox.margin>
             <font>
-               <Font size="10.0"/>
+               <Font size="10.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" text="-" focusTraversable="false">
+         <Button focusTraversable="false" mnemonicParsing="false" text="-">
             <font>
-               <Font size="10.0"/>
+               <Font size="10.0" />
             </font>
             <HBox.margin>
-               <Insets left="5.0" top="20.0"/>
+               <Insets left="5.0" top="20.0" />
             </HBox.margin>
          </Button>
          <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../images/client.png"/>
+            <Image url="@../images/client.png" />
             <HBox.margin>
-               <Insets bottom="8.0" left="40.0" top="8.0"/>
+               <Insets bottom="8.0" left="40.0" top="8.0" />
             </HBox.margin>
          </ImageView>
-         <ComboBox prefWidth="90.0" focusTraversable="false">
+         <ComboBox focusTraversable="false" prefWidth="90.0">
             <HBox.margin>
-               <Insets left="20.0" top="15.0"/>
+               <Insets left="20.0" top="15.0" />
             </HBox.margin>
          </ComboBox>
       </HBox>
    </top>
    <left>
-      <ListView prefHeight="400.0" prefWidth="250.0" BorderPane.alignment="CENTER" focusTraversable="false"/>
+      <ListView focusTraversable="false" prefHeight="400.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
    </left>
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" focusTraversable="false"/>
+            <ListView id="chatWindow" fx:id="chatWindow" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <Button mnemonicParsing="false" text="emoji" focusTraversable="false">
+               <Button focusTraversable="false" mnemonicParsing="false" text="emoji">
                   <HBox.margin>
-                     <Insets left="20.0" top="35.0"/>
+                     <Insets left="20.0" top="35.0" />
                   </HBox.margin>
                </Button>
-               <Button mnemonicParsing="false" text="file" focusTraversable="false">
+               <Button focusTraversable="false" mnemonicParsing="false" text="file">
                   <HBox.margin>
-                     <Insets left="15.0" top="35.0"/>
+                     <Insets left="15.0" top="35.0" />
                   </HBox.margin>
                </Button>
-               <TextArea prefHeight="50.0" prefWidth="560.0" focusTraversable="false">
+               <TextArea id="textInput" fx:id="textInput" focusTraversable="false" onKeyPressed="#onTextInputEnter" prefHeight="50.0" prefWidth="560.0">
                   <HBox.margin>
-                     <Insets bottom="10.0" left="20.0" top="10.0"/>
+                     <Insets bottom="10.0" left="20.0" top="10.0" />
                   </HBox.margin>
                </TextArea>
             </HBox>

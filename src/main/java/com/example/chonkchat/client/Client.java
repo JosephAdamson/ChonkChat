@@ -10,23 +10,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Scanner;
 
 /**
  * ChonkChat Client.
  * 
  * @author Joseph Adamson
+ * 
+ * TODO: methods for sending files and images.
  */
-public class Client implements Runnable{
+public class Client {
     
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private final String username;
+    private String username;
+    private ChatController chatController;
     
-    public Client(Socket socket, String username) {
+    public Client(Socket socket, String username, ChatController chatController) {
         this.socket = socket;
         this.username = username;
+        this.chatController = chatController;
     }
 
     /**
@@ -34,81 +37,54 @@ public class Client implements Runnable{
      * on a separate thread, as while loop is a blocking operation
      * and would otherwise lock up the main client thread.
      */
-    @Override
-    public void run() {
-        try {
-
-            output = new ObjectOutputStream(socket.getOutputStream());
-            input = new ObjectInputStream(socket.getInputStream());
-
-            connectToServer();
-
-            while (socket.isConnected()) {
-
-                Message incomingMsg = (Message) input.readObject();
-
-                switch (incomingMsg.getMessageType()) {
-
-                    case TEXT:
-                        System.out.println(incomingMsg.getMessage());
-                        break;
-
-                    case SERVER:
-                        System.out.println("[SERVER]: " + incomingMsg.getMessage());
-                        break;
-
-                    case SHUTDOWN:
-                        System.out.println("Server has shut down");
-                        ResourceHandler.closeResources(socket, input, output);
-                        break;
-
-                    default:
-                        System.out.println("Whoa there...");
-                }
-            }
-
-        } catch (SocketException e) {
-            System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
-
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Exception in run() method for client");
-
-        } finally {
-            ResourceHandler.closeResources(socket, input, output);
-        }
-    }
-
-    /**
-     * NOTE: For now we'll test the client from the terminal, this
-     * will have to be changed later so it can be integrated
-     * will the Chat UI
-     */
-    /*public void sendMessage() {
+    public void listenForIncomingMessages() {
         
-        try {
-            
-            Scanner scanner = new Scanner(System.in);
-            
-            while (socket.isConnected()) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
 
-                String text = scanner.nextLine();
-                Message msgToSend = new Message();
-                if (text.trim().equals("bye")) {
-                    msgToSend.setMessageType(MessageType.DISCONNECTED);
-                } else {
-                    msgToSend.setMessage(text + "\n");
-                    msgToSend.setMessageType(MessageType.TEXT);
+                    output = new ObjectOutputStream(socket.getOutputStream());
+                    input = new ObjectInputStream(socket.getInputStream());
+
+                    connectToServer();
+
+                    while (socket.isConnected()) {
+
+                        Message incomingMsg = (Message) input.readObject();
+
+                        switch (incomingMsg.getMessageType()) {
+
+                            case TEXT:
+                                chatController.updateChatWindow(incomingMsg);
+                                break;
+
+                            case SERVER:
+                                System.out.println("[SERVER]: " + incomingMsg.getMessage());
+                                break;
+
+                            case SHUTDOWN:
+                                System.out.println("Server has shut down");
+                                ResourceHandler.closeResources(socket, input, output);
+                                break;
+
+                            default:
+                                System.out.println("Whoa there...");
+                        }
+                    }
+
+                } catch (SocketException e) {
+                    System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
+
+                } catch (IOException | ClassNotFoundException e) {
+                    System.err.println("Exception in run() method for client");
+
+                } finally {
+                    ResourceHandler.closeResources(socket, input, output);
                 }
-
-                // use the stream
-                output.writeObject(msgToSend);
-                output.flush();
             }
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
+        }).start();
+    }
 
     /**
      * Sends standard text message.
@@ -151,22 +127,4 @@ public class Client implements Runnable{
             e.printStackTrace();
         }
     }
-
-    /**
-     * Temporary way to interface with server.
-     */
-    /*public static void main(String[] args) throws IOException {
-        // retrieve user name
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a username: ");
-        String username = scanner.nextLine();
-
-        // launch connection
-        Socket socket = new Socket("localhost", Server.PORT);
-        Client client = new Client(socket, username);
-
-        // listen comes first as it will be on a separate thread
-        client.listenForMessage();
-        //client.sendMessage();
-    }*/
 }
