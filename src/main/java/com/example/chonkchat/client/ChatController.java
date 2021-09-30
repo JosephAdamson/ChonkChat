@@ -97,11 +97,21 @@ public class ChatController extends CustomWindowBaseController {
         
         if (!message.getSender().equals(username)) {
             UserPost userPost = new UserPost(message);
+            
+            userPost.setOnSucceeded(event -> {
+                chatWindow.getItems().add(userPost.getValue());
+            });
+            
             Thread userPostUpdate = new Thread(userPost);
             userPostUpdate.setDaemon(true);
             userPostUpdate.start();
         } else {
             SelfPost selfPost = new SelfPost(message);
+            
+            selfPost.setOnSucceeded(event -> {
+                chatWindow.getItems().add(selfPost.getValue());
+            });
+            
             Thread selfPostUpdate = new Thread(selfPost);
             selfPostUpdate.setDaemon(true);
             selfPostUpdate.start();
@@ -114,6 +124,7 @@ public class ChatController extends CustomWindowBaseController {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             String text = textInput.getText();
             client.sendMessage(text);
+            textInput.clear();
         }
     }
 

@@ -167,9 +167,14 @@ public class Server {
                         // more cases will be added as Message's functionality is increased.
                         case TEXT:
                             String text = msg.getMessage();
+                            // for now terminal will keep track of all messages sent
                             Platform.runLater(
-                                    () -> serverController.addTerminalMessage(text)
+                                    () -> serverController.addTerminalMessage(
+                                            msg.getSender() + ": " + text
+                                    )
                             );
+                            // kick message on to all other active users.
+                            broadcastMessage(msg);
                             break;
                             
                         case CONNECTED:
@@ -231,6 +236,20 @@ public class Server {
                     () -> serverController.addTerminalMessage(clientUsername + 
                             " has left the chat.")
             );
+        }
+        
+        public void broadcastMessage(Message message) {
+            
+            try {
+                
+                for (Map.Entry<String, ObjectOutputStream> activeClient : activeClients.entrySet()) {
+                    activeClient.getValue().writeObject(message);
+                }
+                
+            } catch (IOException e) {
+                e.printStackTrace();
+                ResourceHandler.closeResources(socket, input, output);
+            }
         }
         
     }
