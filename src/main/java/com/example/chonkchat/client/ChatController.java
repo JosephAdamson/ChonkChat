@@ -1,22 +1,20 @@
 package com.example.chonkchat.client;
 
 import com.example.chonkchat.data.Message;
-import com.example.chonkchat.server.Server;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-
-import java.io.IOException;
-import java.net.Socket;
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class ChatController extends CustomWindowBaseController {
 
@@ -41,19 +39,29 @@ public class ChatController extends CustomWindowBaseController {
         
         @Override
         protected HBox call() throws Exception {
-            Label content = new Label(message.getMessage());
-            content.setStyle(
-                    "-fx-background-color: #a804d1;" 
-                    + "-fx-text-fill: #ffffff;"
-                    + "-fx-background-radius: 24px;"
-                    + "-fx-border-radius: 24px;"
+
+            Text content = new Text(message.getMessage());
+            content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+            content.setFill(Color.WHITE);
+
+            Text time = new Text(message.getTimeSent());
+            time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+            time.setFill(Color.valueOf("#d0d2d6"));
+
+            TextFlow flow = new TextFlow();
+            flow.setStyle(
+                    "-fx-background-color: #007EA7;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
             );
-            content.setWrapText(true);
+            flow.getChildren().addAll(content, time);
             
             // create node
             HBox container = new HBox();
-            container.getChildren().add(content);
-            container.setMaxWidth(500);
+            container.getChildren().add(flow);
+            container.setMaxWidth(700);
+            container.setAlignment(Pos.BASELINE_RIGHT);
             
             return container;
         }
@@ -69,20 +77,34 @@ public class ChatController extends CustomWindowBaseController {
 
         @Override
         protected HBox call() throws Exception {
-            Label content = new Label(message.getMessage());
-            content.setStyle(
-                    "-fx-background-color: #d3d2d4;"
-                    + "-fx-text-fill: #000000;"
-                    + "-fx-background-radius: 24px;" 
-                    +"-fx-border-radius: 24px;"
+            
+            Text sender = new Text(message.getSender() + "\n");
+            sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
+            sender.setFill(Color.WHITE);
+            
+            Text content = new Text(message.getMessage());
+            content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+            content.setFill(Color.WHITE);
+
+            Text time = new Text(message.getTimeSent());
+            time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+            time.setFill(Color.valueOf("#d0d2d6"));
+
+            TextFlow flow = new TextFlow();
+            flow.setStyle(
+                    "-fx-background-color: #3b3d3d;" 
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
             );
-            content.setWrapText(true);
+            flow.getChildren().addAll(sender, content, time);
 
             // create node
             HBox container = new HBox();
-            container.getChildren().add(content);
-            container.setMaxWidth(500);
-
+            container.setMaxWidth(700);
+            container.getChildren().add(flow);
+            container.setAlignment(Pos.CENTER_LEFT);
+            
             return container;
         }
     }

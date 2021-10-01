@@ -13,24 +13,24 @@
 
 .scroll-bar:vertical {
     -fx-background-color :transparent;
-    -fx-border-color :transparent;
-    -fx-background-radius : 0.0em;
-    -fx-border-radius :2.0em;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius: 2.0em;
 }
 
 
 .scroll-bar:vertical .increment-button ,
 .scroll-bar:vertical .decrement-button {
-    -fx-background-color :transparent;
-    -fx-background-radius : 0.0em;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.0em;
     -fx-padding :0.0 10.0 0.0 0.0;
 
 }
 
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:vertical .decrement-arrow{
-    -fx-shape : " ";
-    -fx-padding :0.0 0.15em;
+    -fx-shape: " ";
+    -fx-padding: 0.0 0.15em;
 }
 
 .scroll-bar:vertical .thumb {
@@ -39,9 +39,9 @@
 }
 
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color : derive(#4D4C4F,10.0%);
-    -fx-background-insets : 2.0, 0.0, 0.0;
-    -fx-background-radius : 2.0em;
+    -fx-background-color: derive(#4D4C4F,10.0%);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
 }
 
 /* ----styling list view content---- */

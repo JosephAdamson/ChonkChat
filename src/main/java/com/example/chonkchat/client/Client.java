@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Date;
 
 /**
  * ChonkChat Client.
@@ -98,6 +99,7 @@ public class Client {
             message.setSender(username);
             message.setMessage(text);
             message.setMessageType(MessageType.TEXT);
+            message.setTimeSent(new Date());
             
             output.writeObject(message);
             output.flush();

@@ -1,6 +1,8 @@
 package com.example.chonkchat.data;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Data model for all types of message.
@@ -10,8 +12,12 @@ import java.io.Serializable;
 public class Message implements Serializable {
     
     private String sender;
+    private String senderColourTag;
     private String message;
     private MessageType messageType;
+    
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
+    private String timeSent;
     
     public Message () {}
 
@@ -21,6 +27,14 @@ public class Message implements Serializable {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getSenderColourTag() {
+        return senderColourTag;
+    }
+
+    public void setSenderColourTag(String senderColourTag) {
+        this.senderColourTag = senderColourTag;
     }
 
     public String getMessage() {
@@ -37,5 +51,15 @@ public class Message implements Serializable {
 
     public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
+    }
+    
+    
+    
+    public void setTimeSent(Date timeSent) {
+        this.timeSent = dateFormat.format(timeSent);
+    }
+    
+    public String getTimeSent() {
+        return timeSent;
     }
 }

@@ -163,7 +163,7 @@ public class Server {
                     
                     switch (msg.getMessageType()) {
 
-                        // to test we'll print the message to teh server terminal
+                        // to test we'll print the message to the server terminal
                         // more cases will be added as Message's functionality is increased.
                         case TEXT:
                             String text = msg.getMessage();

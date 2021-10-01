@@ -93,6 +93,8 @@ public class LauncherController extends CustomWindowBaseController {
                     .getResource("/com/example/views/chat-view.fxml")));
 
             Parent root = fxmlLoader.load();
+            root.getStylesheets().add(String.valueOf(getClass()
+                    .getResource("/com/example/styles/chat.css")));
             
             // set up fields and inject them manually and start client listening thread
             ChatController chatController = fxmlLoader.getController();
