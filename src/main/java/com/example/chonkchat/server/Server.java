@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -181,7 +182,7 @@ public class Server {
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage((msg.getMessage()))
                             );
-                            confirmConnection(msg.getSender());
+                            addToActiveClients(msg);
                             break;
                             
                         case DISCONNECTED:
@@ -204,27 +205,16 @@ public class Server {
         /**
          * Ping new client with a welcome message to confirm connection.
          */
-        public void confirmConnection(String username) {
+        public void addToActiveClients(Message initialMsg) {
+            
+            // add output stream active clients, so it can be written to later.
+            String username = initialMsg.getSender();
+            this.clientUsername = username;
+            activeClients.put(username, output);
 
-            try {
-                
-                Message initialMsg = new Message();
-                
-                // add output stream active clients, so it can be written to later.
-                this.clientUsername = username;
-                activeClients.put(username, output);
-                    
-                initialMsg.setMessage("Welcome to ChonkChat!");
-                initialMsg.setMessageType(MessageType.SERVER);
-                    
+            initialMsg.setActiveUsers(new ArrayList<>(activeClients.keySet()));
 
-                output.writeObject(initialMsg);
-                output.flush();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                ResourceHandler.closeResources(socket, input, output);
-            }
+            broadcastMessage(initialMsg);
         }
 
         /**
@@ -240,10 +230,14 @@ public class Server {
         
         public void broadcastMessage(Message message) {
             
+            // active users at the time the message is sent.
+            message.setActiveUsers(new ArrayList<>(activeClients.keySet()));
+            
             try {
                 
                 for (Map.Entry<String, ObjectOutputStream> activeClient : activeClients.entrySet()) {
                     activeClient.getValue().writeObject(message);
+                    activeClient.getValue().flush();
                 }
                 
             } catch (IOException e) {
@@ -253,6 +247,5 @@ public class Server {
         }
         
     }
-    
     
     }

@@ -4,6 +4,7 @@ import com.example.chonkchat.data.Message;
 import com.example.chonkchat.data.MessageType;
 import com.example.chonkchat.server.Server;
 import com.example.chonkchat.util.ResourceHandler;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -67,6 +68,12 @@ public class Client {
                             case SHUTDOWN:
                                 System.out.println("Server has shut down");
                                 ResourceHandler.closeResources(socket, input, output);
+                                break;
+                                
+                            case CONNECTED:
+                                Platform.runLater(
+                                        () -> chatController.refreshOnlineUserList(incomingMsg)
+                                );
                                 break;
 
                             default:

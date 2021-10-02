@@ -3,6 +3,7 @@ package com.example.chonkchat.data;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Data model for all types of message.
@@ -15,6 +16,8 @@ public class Message implements Serializable {
     private String senderColourTag;
     private String message;
     private MessageType messageType;
+    private
+    List<String> activeUsers; 
     
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
     private String timeSent;
@@ -53,13 +56,19 @@ public class Message implements Serializable {
         this.messageType = messageType;
     }
     
-    
-    
     public void setTimeSent(Date timeSent) {
         this.timeSent = dateFormat.format(timeSent);
     }
     
     public String getTimeSent() {
         return timeSent;
+    }
+    
+    public void setActiveUsers(List<String> activeUsers) {
+        this.activeUsers = activeUsers;
+    }
+    
+    public List<String> getActiveUsers() {
+        return activeUsers;
     }
 }

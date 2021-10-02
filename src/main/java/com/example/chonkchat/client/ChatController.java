@@ -5,6 +5,7 @@ import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -16,8 +17,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class ChatController extends CustomWindowBaseController {
+import java.util.ArrayList;
+import java.util.List;
 
+public class ChatController extends CustomWindowBaseController {
+    
     private Client client;
     private String username;
     
@@ -26,6 +30,9 @@ public class ChatController extends CustomWindowBaseController {
 
     @FXML
     public ListView<HBox> chatWindow;
+
+    @FXML
+    public ListView<HBox> onlineUsers;
     
     // for now both tasks handle text messages only.
     
@@ -138,6 +145,25 @@ public class ChatController extends CustomWindowBaseController {
             selfPostUpdate.setDaemon(true);
             selfPostUpdate.start();
         }
+    }
+    
+    public void refreshOnlineUserList(Message message) {
+        List<String> activeUsers = message.getActiveUsers();
+        
+        ArrayList<HBox> users = new ArrayList<>();
+        for (String user: activeUsers) {
+            Label label = new Label(user);
+            label.setStyle("-fx-text-fill: #ffffff");
+            HBox container = new HBox();
+            container.getChildren().add(label);
+            container.setAlignment(Pos.CENTER);
+            container.setStyle("-fx-background-color: #151a1c;" +
+                    "-fx-border-color: #151a1c #151a1c #484a4a #151a1c");
+            users.add(container);
+        }
+        
+        onlineUsers.getItems().clear();
+        onlineUsers.getItems().addAll(users);
     }
 
     @FXML

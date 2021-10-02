@@ -1,5 +1,6 @@
 package com.example.chonkchat.server;
 
+import com.example.chonkchat.util.ResourceHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -13,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -111,11 +114,6 @@ public class TerminalController implements Initializable {
                 case "clients":
                     getClients();
                     break;
-                    
-                /* case "broadcast":
-                    String msg = String.join(" ", Arrays.asList(tokens)
-                            .subList(2, tokens.length));
-                    break;*/
 
                 default:
                     addTerminalMessage("chonk: command not found: " + cmd);

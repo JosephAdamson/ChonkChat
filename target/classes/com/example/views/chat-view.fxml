@@ -13,7 +13,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
-      <HBox prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <HBox id="titleBar" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <Button focusTraversable="false" mnemonicParsing="false" text="x">
             <HBox.margin>
                <Insets left="10.0" top="20.0" />
@@ -44,7 +44,7 @@
       </HBox>
    </top>
    <left>
-      <ListView focusTraversable="false" prefHeight="400.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
+      <ListView id="onlineUsers" fx:id="onlineUsers" focusTraversable="false" prefHeight="400.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
    </left>
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -52,7 +52,7 @@
             <ListView id="chatWindow" fx:id="chatWindow" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <Button focusTraversable="false" mnemonicParsing="false" text="emoji">
                   <HBox.margin>
                      <Insets left="20.0" top="35.0" />
