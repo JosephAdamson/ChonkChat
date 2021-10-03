@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controller for main chat interface.
+ * 
+ * @author Joseph Adamson.
+ */
 public class ChatController extends CustomWindowBaseController {
     
     private Client client;
