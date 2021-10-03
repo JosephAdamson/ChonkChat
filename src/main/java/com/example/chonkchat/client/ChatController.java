@@ -39,6 +39,10 @@ public class ChatController extends CustomWindowBaseController {
     public ListView<HBox> onlineUsers;
     
     // for now both tasks handle text messages only.
+    /**
+     * Background UI task that updates chat window when the user
+     * posts an message
+     */
     class SelfPost extends Task<HBox> {
         
         private final Message message;
@@ -76,7 +80,11 @@ public class ChatController extends CustomWindowBaseController {
             return container;
         }
     }
-    
+
+    /**
+     * Background UI task that updates chat window as soon as another
+     * user posts a message.
+     */
     class UserPost extends Task<HBox> {
         
         private Message message;
