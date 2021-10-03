@@ -167,7 +167,7 @@ public class Server {
                         // to test we'll print the message to the server terminal
                         // more cases will be added as Message's functionality is increased.
                         case TEXT:
-                            String text = msg.getMessage();
+                            String text = msg.getTextData();
                             // for now terminal will keep track of all messages sent
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
@@ -180,7 +180,7 @@ public class Server {
                             
                         case CONNECTED:
                             Platform.runLater(
-                                    () -> serverController.addTerminalMessage((msg.getMessage()))
+                                    () -> serverController.addTerminalMessage((msg.getTextData()))
                             );
                             addToActiveClients(msg);
                             break;

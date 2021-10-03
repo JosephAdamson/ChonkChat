@@ -62,7 +62,7 @@ public class Client {
                                 break;
 
                             case SERVER:
-                                System.out.println("[SERVER]: " + incomingMsg.getMessage());
+                                System.out.println("[SERVER]: " + incomingMsg.getTextData());
                                 break;
 
                             case SHUTDOWN:
@@ -104,7 +104,7 @@ public class Client {
             
             Message message = new Message();
             message.setSender(username);
-            message.setMessage(text);
+            message.setTextData(text);
             message.setMessageType(MessageType.TEXT);
             message.setTimeSent(new Date());
             
@@ -126,7 +126,7 @@ public class Client {
         try {
             Message connectMsg = new Message();
             connectMsg.setSender(username);
-            connectMsg.setMessage(username + " has entered the chat.");
+            connectMsg.setTextData(username + " has entered the chat.");
             connectMsg.setMessageType(MessageType.CONNECTED);
             
             output.writeObject(connectMsg);

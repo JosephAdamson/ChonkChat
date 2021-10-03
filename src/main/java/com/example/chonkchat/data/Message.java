@@ -14,7 +14,7 @@ public class Message implements Serializable {
     
     private String sender;
     private String senderColourTag;
-    private String message;
+    private String textData;
     private MessageType messageType;
     private
     List<String> activeUsers; 
@@ -40,12 +40,12 @@ public class Message implements Serializable {
         this.senderColourTag = senderColourTag;
     }
 
-    public String getMessage() {
-        return message;
+    public String getTextData() {
+        return textData;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setTextData(String textData) {
+        this.textData = textData;
     }
 
     public MessageType getMessageType() {

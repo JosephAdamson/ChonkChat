@@ -59,7 +59,7 @@ public class ChatController extends CustomWindowBaseController {
         @Override
         protected HBox call() throws Exception {
 
-            Text content = new Text(message.getMessage());
+            Text content = new Text(message.getTextData());
             content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
             content.setFill(Color.WHITE);
 
@@ -105,7 +105,7 @@ public class ChatController extends CustomWindowBaseController {
             sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
             sender.setFill(Color.WHITE);
             
-            Text content = new Text(message.getMessage());
+            Text content = new Text(message.getTextData());
             content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
             content.setFill(Color.WHITE);
 
