@@ -1,6 +1,5 @@
 package com.example.chonkchat.server;
 
-import com.example.chonkchat.util.ResourceHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,8 +13,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -25,8 +22,8 @@ import java.util.ResourceBundle;
  * @author Joseph Adamson
  */
 public class TerminalController implements Initializable {
-    
-    private boolean isActive = false;
+
+    private boolean serverActive = false;
     private Server server;
     
     @FXML
@@ -102,12 +99,12 @@ public class TerminalController implements Initializable {
                     break;
 
                 case "start":
-                    isActive = true;
+                    serverActive = true;
                     server.startSever();
                     break;
 
                 case "stop":
-                    isActive = false;
+                    serverActive = false;
                     server.shutdownServer();
                     break;
 
@@ -155,7 +152,7 @@ public class TerminalController implements Initializable {
      */
     public void getClients() {
         
-        if (isActive) {
+        if (serverActive) {
             
             if (!server.getActiveClients().isEmpty()) {
                 
@@ -199,5 +196,9 @@ public class TerminalController implements Initializable {
         server.shutdownServer();
         Stage thisStage = (Stage) basePane.getScene().getWindow();
         thisStage.close();
+    }
+
+    public boolean isServerActive() {
+        return serverActive;
     }
 }
