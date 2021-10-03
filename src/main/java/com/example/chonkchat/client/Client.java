@@ -136,4 +136,21 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Disconnect client.
+     */
+    public void disconnect() {
+        
+        try {
+            Message disconnectMsg = new Message();
+            disconnectMsg.setMessageType(MessageType.DISCONNECTED);
+            
+            output.writeObject(disconnectMsg);
+            output.flush();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

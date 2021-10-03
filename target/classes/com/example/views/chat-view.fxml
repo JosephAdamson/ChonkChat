@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
+<BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
       <HBox id="titleBar" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <Button focusTraversable="false" mnemonicParsing="false" text="x">
+         <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" text="x">
             <HBox.margin>
                <Insets left="10.0" top="20.0" />
             </HBox.margin>
@@ -22,7 +22,7 @@
                <Font size="10.0" />
             </font>
          </Button>
-         <Button focusTraversable="false" mnemonicParsing="false" text="-">
+         <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#minimize" text="-">
             <font>
                <Font size="10.0" />
             </font>

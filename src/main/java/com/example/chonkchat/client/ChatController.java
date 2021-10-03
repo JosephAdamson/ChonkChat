@@ -5,25 +5,29 @@ import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ChatController extends CustomWindowBaseController {
     
     private Client client;
     private String username;
+
+    @FXML
+    public BorderPane basePane;
     
     @FXML
     private TextArea textInput;
@@ -35,7 +39,6 @@ public class ChatController extends CustomWindowBaseController {
     public ListView<HBox> onlineUsers;
     
     // for now both tasks handle text messages only.
-    
     class SelfPost extends Task<HBox> {
         
         private final Message message;
@@ -146,7 +149,12 @@ public class ChatController extends CustomWindowBaseController {
             selfPostUpdate.start();
         }
     }
-    
+
+    /**
+     * Refresh active users displayed to the left of the chat window.
+     * 
+     * @param message containing current active users.
+     */
     public void refreshOnlineUserList(Message message) {
         List<String> activeUsers = message.getActiveUsers();
         
@@ -166,6 +174,11 @@ public class ChatController extends CustomWindowBaseController {
         onlineUsers.getItems().addAll(users);
     }
 
+    /**
+     * Keyboard input for text input in chat window.
+     * 
+     * @param keyEvent enter 
+     */
     @FXML
     public void onTextInputEnter(KeyEvent keyEvent) {
         
@@ -173,6 +186,26 @@ public class ChatController extends CustomWindowBaseController {
             String text = textInput.getText();
             client.sendMessage(text);
             textInput.clear();
+        }
+    }
+
+    /**
+     * Custom close window method for chat window.
+     */
+    @FXML
+    public void logoutOnWindowClose() {
+        
+        Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        logoutAlert.setContentText("Are you sure you want to log out?");
+
+        Optional<ButtonType> confirmation = logoutAlert.showAndWait();
+        if (confirmation.get() == ButtonType.OK) {
+            client.disconnect();
+            Stage thisStage = (Stage) basePane.getScene().getWindow();
+            thisStage.close();
+            
+        } else {
+            logoutAlert.close();
         }
     }
 

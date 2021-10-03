@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
@@ -115,6 +116,7 @@ public class LauncherController extends CustomWindowBaseController {
 
                 stage.setTitle("client");
                 stage.setScene(scene);
+                stage.initStyle(StageStyle.UNDECORATED);
                 stage.show();
             } else {
 
