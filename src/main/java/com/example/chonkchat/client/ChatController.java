@@ -90,8 +90,7 @@ public class ChatController extends CustomWindowBaseController {
         protected HBox call() throws Exception {
             
             TextFlow flow = setBasicPost(message);
-
-            // create node
+            
             HBox container = new HBox();
             container.setMaxWidth(700);
             container.getChildren().add(flow);
