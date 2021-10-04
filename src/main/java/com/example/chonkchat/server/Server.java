@@ -168,13 +168,23 @@ public class Server {
                         // more cases will be added as Message's functionality is increased.
                         case TEXT:
                             String text = msg.getTextData();
-                            // for now terminal will keep track of all messages sent
+                            
+                            // For now we'll keep track of conversations.
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
                                             msg.getSender() + ": " + text
                                     )
                             );
-                            // kick message on to all other active users.
+                            broadcastMessage(msg);
+                            break;
+                            
+                        case FILE:
+                            String file = (msg.getFile().getName() + msg.getFile().getExtension());
+                            Platform.runLater(
+                                    () -> serverController.addTerminalMessage(
+                                            msg.getSender() + "send file: " + file
+                                    )
+                            );
                             broadcastMessage(msg);
                             break;
                             

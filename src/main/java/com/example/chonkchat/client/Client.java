@@ -7,10 +7,7 @@ import com.example.chonkchat.server.Server;
 import com.example.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.file.Files;
@@ -21,8 +18,7 @@ import java.util.Date;
  * ChonkChat Client.
  * 
  * @author Joseph Adamson
- * 
- * TODO: methods for sending files and images.
+ *
  */
 public class Client {
     
@@ -62,6 +58,8 @@ public class Client {
                         switch (incomingMsg.getMessageType()) {
 
                             case TEXT:
+
+                            case FILE:
                                 chatController.updateChatWindow(incomingMsg);
                                 break;
 
@@ -120,7 +118,13 @@ public class Client {
             ResourceHandler.closeResources(socket, input, output);
         }
     }
-    
+
+    /**
+     * Send a file (document or image) over server connection to other
+     * clients.
+     * 
+     * @param file data to be sent to other users.
+     */
     public void sendFile(File file) {
         
         try {
@@ -138,10 +142,39 @@ public class Client {
             fileTransfer.setExtension(extension);
 
             Message message = new Message();
+            message.setMessageType(MessageType.FILE);
             message.setFile(fileTransfer);
             
             output.writeObject(message);
             output.flush();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            ResourceHandler.closeResources(socket, input, output);
+        }
+    }
+
+    /**
+     * Client protocol for downloading files. Download location is
+     * set as the default OS downloads folder.
+     * 
+     * @param fileTransfer file to be downloaded.
+     */
+    public void downloadFile(FileTransfer fileTransfer) {
+        
+        try {
+            
+            String filename = fileTransfer.getName();
+            String extension = fileTransfer.getExtension();
+            
+            String home = System.getProperty("user.home");
+            File fileToDownload =  new File(home + "/Downloads/" + filename + extension);
+
+            // get stream to write data to the new file in downloads.
+            FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
+           
+            fileOutputStream.write(fileTransfer.getContent());
+            fileOutputStream.close();
             
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,8 +1,6 @@
 package com.example.chonkchat.client;
 
-import com.example.chonkchat.data.FileTransfer;
 import com.example.chonkchat.data.Message;
-import com.example.chonkchat.data.MessageType;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
@@ -23,10 +21,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,10 +47,9 @@ public class ChatController extends CustomWindowBaseController {
     @FXML
     public ListView<HBox> onlineUsers;
     
-    // for now both tasks handle text messages only.
     /**
      * Background UI task that updates chat window when the user
-     * posts an message
+     * posts a message.
      */
     class SelfPost extends Task<HBox> {
         
@@ -87,7 +80,7 @@ public class ChatController extends CustomWindowBaseController {
      */
     class UserPost extends Task<HBox> {
         
-        private Message message;
+        private final Message message;
         
         public UserPost(Message message) {
             this.message = message;
