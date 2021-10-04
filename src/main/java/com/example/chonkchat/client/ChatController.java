@@ -64,7 +64,6 @@ public class ChatController extends CustomWindowBaseController {
             
             TextFlow flow = setBasicPost(message);
             
-            // create node
             HBox container = new HBox();
             container.getChildren().add(flow);
             container.setMaxWidth(700);
@@ -236,7 +235,12 @@ public class ChatController extends CustomWindowBaseController {
             logoutAlert.close();
         }
     }
-    
+
+    /**
+     * Upload file via the chat window
+     * 
+     * @param event click of the 'file' button.
+     */
     @FXML
     public void uploadFile(MouseEvent event) {
 
