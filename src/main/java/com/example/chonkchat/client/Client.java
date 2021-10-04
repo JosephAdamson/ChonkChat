@@ -1,16 +1,20 @@
 package com.example.chonkchat.client;
 
+import com.example.chonkchat.data.FileTransfer;
 import com.example.chonkchat.data.Message;
 import com.example.chonkchat.data.MessageType;
 import com.example.chonkchat.server.Server;
 import com.example.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 
 /**
@@ -114,6 +118,33 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
             ResourceHandler.closeResources(socket, input, output);
+        }
+    }
+    
+    public void sendFile(File file) {
+        
+        try {
+            byte[] content = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+
+            String fileString = file.getName();
+            int extIndex = fileString.lastIndexOf(".");
+            String filename = fileString.substring(0, extIndex);
+            String extension = fileString.substring(extIndex);
+
+
+            FileTransfer fileTransfer = new FileTransfer();
+            fileTransfer.setContent(content);
+            fileTransfer.setName(filename);
+            fileTransfer.setExtension(extension);
+
+            Message message = new Message();
+            message.setFile(fileTransfer);
+            
+            output.writeObject(message);
+            output.flush();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

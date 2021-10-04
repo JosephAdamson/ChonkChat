@@ -16,7 +16,8 @@ public class Message implements Serializable {
     private String senderColourTag;
     private String textData;
     private MessageType messageType;
-    private List<String> activeUsers; 
+    private List<String> activeUsers;
+    private FileTransfer file;
     
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
     private String timeSent;
@@ -69,5 +70,13 @@ public class Message implements Serializable {
     
     public List<String> getActiveUsers() {
         return activeUsers;
+    }
+
+    public FileTransfer getFile() {
+        return file;
+    }
+
+    public void setFile(FileTransfer file) {
+        this.file = file;
     }
 }

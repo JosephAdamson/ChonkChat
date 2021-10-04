@@ -45,6 +45,7 @@
 #chatWindow {
     -fx-background-color: #00171F;
     -fx-border-color: #00171F;
+    -fx-hbar-policy: never;
 }
 
 #chatWindow .list-cell {

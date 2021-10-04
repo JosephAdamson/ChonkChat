@@ -101,7 +101,7 @@ public class LauncherController extends CustomWindowBaseController {
                 root.getStylesheets().add(String.valueOf(getClass()
                         .getResource("/com/example/styles/chat.css")));
 
-                // set up fields and inject them manually and start client listening thread
+                // set up fields, inject them manually and start client listening thread
                 ChatController chatController = fxmlLoader.getController();
                 Socket socket = new Socket("localhost", Server.PORT);
                 Client client = new Client(socket, username, chatController);

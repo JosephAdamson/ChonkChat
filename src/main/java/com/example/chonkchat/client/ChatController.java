@@ -1,13 +1,17 @@
 package com.example.chonkchat.client;
 
+import com.example.chonkchat.data.FileTransfer;
 import com.example.chonkchat.data.Message;
+import com.example.chonkchat.data.MessageType;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
+import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -15,8 +19,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,23 +68,8 @@ public class ChatController extends CustomWindowBaseController {
         
         @Override
         protected HBox call() throws Exception {
-
-            Text content = new Text(message.getTextData());
-            content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
-            content.setFill(Color.WHITE);
-
-            Text time = new Text(message.getTimeSent());
-            time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
-            time.setFill(Color.valueOf("#d0d2d6"));
-
-            TextFlow flow = new TextFlow();
-            flow.setStyle(
-                    "-fx-background-color: #007EA7;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
-            flow.getChildren().addAll(content, time);
+            
+            TextFlow flow = setBasicPost(message);
             
             // create node
             HBox container = new HBox();
@@ -101,26 +96,7 @@ public class ChatController extends CustomWindowBaseController {
         @Override
         protected HBox call() throws Exception {
             
-            Text sender = new Text(message.getSender() + "\n");
-            sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
-            sender.setFill(Color.WHITE);
-            
-            Text content = new Text(message.getTextData());
-            content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
-            content.setFill(Color.WHITE);
-
-            Text time = new Text(message.getTimeSent());
-            time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
-            time.setFill(Color.valueOf("#d0d2d6"));
-
-            TextFlow flow = new TextFlow();
-            flow.setStyle(
-                    "-fx-background-color: #3b3d3d;" 
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
-            flow.getChildren().addAll(sender, content, time);
+            TextFlow flow = setBasicPost(message);
 
             // create node
             HBox container = new HBox();
@@ -130,6 +106,53 @@ public class ChatController extends CustomWindowBaseController {
             
             return container;
         }
+    }
+
+    /**
+     * Set colour attributes for basic text posts (user and self)
+     * 
+     * @param message: message.
+     * @return formatted and styled text for a post.
+     */
+    public TextFlow setBasicPost(Message message) {
+
+        Text content = new Text(message.getTextData());
+        content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+        content.setFill(Color.WHITE);
+
+        Text time = new Text(message.getTimeSent());
+        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+        time.setFill(Color.valueOf("#d0d2d6"));
+        
+        TextFlow flow = new TextFlow();
+        
+        if (!message.getSender().equals(username)) {
+
+            Text sender = new Text(message.getSender() + "\n");
+            sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
+            sender.setFill(Color.WHITE);
+
+            flow.setStyle(
+                    "-fx-background-color: #3b3d3d;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
+            );
+            
+            flow.getChildren().addAll(sender, content, time);
+            
+        } else {
+            flow.setStyle(
+                    "-fx-background-color: #007EA7;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
+            );
+            
+            flow.getChildren().addAll(content, time);
+        }
+        
+        return flow;
     }
 
     /**
@@ -220,6 +243,28 @@ public class ChatController extends CustomWindowBaseController {
         } else {
             logoutAlert.close();
         }
+    }
+    
+    @FXML
+    public void uploadFile(MouseEvent event) {
+
+        // Retrieve the window.
+        Node node = (Node) event.getSource();
+        Stage thisStage = (Stage) node.getScene().getWindow();
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters()
+                .addAll(
+                        new FileChooser.ExtensionFilter("All files must have", "*.*"),
+                        new FileChooser.ExtensionFilter("Document", List.of(".txt", ".pdf")), 
+                        new FileChooser.ExtensionFilter( "Image", List.of(".png", ".jpg", "gif"))
+                );
+        
+        File selectedFile = fileChooser.showOpenDialog(thisStage);
+        if (selectedFile != null) {
+            client.sendFile(selectedFile);
+        }
+        
     }
 
     public void setClient(Client client) {

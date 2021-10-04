@@ -58,7 +58,7 @@
                      <Insets left="20.0" top="35.0" />
                   </HBox.margin>
                </Button>
-               <Button focusTraversable="false" mnemonicParsing="false" text="file">
+               <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#uploadFile" text="file">
                   <HBox.margin>
                      <Insets left="15.0" top="35.0" />
                   </HBox.margin>
