@@ -142,6 +142,7 @@ public class Client {
             fileTransfer.setExtension(extension);
 
             Message message = new Message();
+            message.setSender(username);
             message.setMessageType(MessageType.FILE);
             message.setFile(fileTransfer);
             

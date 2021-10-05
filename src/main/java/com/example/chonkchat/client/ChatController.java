@@ -1,5 +1,6 @@
 package com.example.chonkchat.client;
 
+import com.example.chonkchat.data.FileTransfer;
 import com.example.chonkchat.data.Message;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
@@ -7,11 +8,14 @@ import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -46,6 +50,151 @@ public class ChatController extends CustomWindowBaseController {
 
     @FXML
     public ListView<HBox> onlineUsers;
+
+    /**
+     * Set colour attributes for basic text posts (user and self)
+     *
+     * @param message: message.
+     * @return formatted and styled text in a TextFlow.
+     */
+    public TextFlow formatBasicPost(Message message) {
+
+        Text content = new Text(message.getTextData());
+        content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+        content.setFill(Color.WHITE);
+
+        Text time = new Text(message.getTimeSent());
+        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+        time.setFill(Color.valueOf("#d0d2d6"));
+
+        TextFlow flow = new TextFlow();
+
+        if (!message.getSender().equals(username)) {
+
+            Text sender = new Text(message.getSender() + "\n");
+            sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
+            sender.setFill(Color.WHITE);
+
+            flow.setStyle(
+                    "-fx-background-color: #3b3d3d;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
+            );
+
+            flow.getChildren().addAll(sender, content, time);
+
+        } else {
+            flow.setStyle(
+                    "-fx-background-color: #007EA7;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
+            );
+
+            flow.getChildren().addAll(content, time);
+        }
+
+        return flow;
+    }
+
+    /**
+     * Set attributes for a file post
+     * 
+     * @param message: message
+     * @return formatted post in a HBox
+     */
+    public VBox formatFilePost(Message message) {
+        FileTransfer fileTransfer = message.getFile();
+        String filename = fileTransfer.getName() + fileTransfer.getExtension();
+        
+        VBox bubble = new VBox();
+        
+        // middle element of the bubble; displays file pic, filename and download clickable.
+        HBox downloadView = new HBox();
+
+        try {
+            ImageView fileImg = new ImageView(new Image(String.valueOf(getClass()
+                    .getResource("/com/example/images/file.png"))));
+            fileImg.setFitWidth(30);
+            fileImg.setFitHeight(30);
+
+            ImageView downloadImg = new ImageView(new Image(String.valueOf(getClass()
+                    .getResource("/com/example/images/download.png"))));
+            downloadImg.setFitWidth(30);
+            downloadImg.setFitHeight(30);
+
+            // need to add event handler to downloadImg
+
+            downloadView.getChildren().add(fileImg);
+            downloadView.getChildren().add(new Label(filename));
+            downloadView.getChildren().add(downloadImg);
+            downloadView.setSpacing(5);
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        if (!message.getSender().equals(username)) {
+            bubble.setStyle(
+                    "-fx-background-color: #3b3d3d;"
+                            +"-fx-text-fill: #ffffff;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
+            );
+            
+            downloadView.setStyle("-fx-background-color: #3b3d3d;");
+            
+            Label sender = new Label(message.getSender());
+            sender.setStyle("-fx-background-color: #3b3d3d;"
+                    +"-fx-text-fill: #ffffff;");
+            bubble.getChildren().add(sender);
+        } else {
+            bubble.setStyle(
+                    "-fx-background-color: #007EA7;"
+                            +"-fx-text-fill: #ffffff;"
+                            + "-fx-background-radius: 24px;"
+                            +"-fx-border-radius: 24px;"
+                            + "-fx-padding: 10;"
+            );
+            
+            downloadView.setStyle("-fx-background-color: #007EA7;");
+        }
+        bubble.getChildren().add(downloadView);
+        // textflow for time and size
+        
+        return bubble;
+    }
+
+    /**
+     * Looks at a given message and passes it on to the helper method
+     * designed to format it for display according to its MessageType.
+     *  
+     * @param container: underlying HBox that forms the base of the list cell
+     *                  displayed when a post is updated to the chat window
+     * @param message: message
+     * @return container
+     */
+    public HBox processMessage(HBox container, Message message) {
+        switch (message.getMessageType()) {
+
+            case TEXT:
+                TextFlow flow = formatBasicPost(message);
+                container.getChildren().add(flow);
+                break;
+
+            case FILE:
+                VBox box = formatFilePost(message);
+                container.getChildren().add(box);
+                break;
+
+            default:
+                System.out.println("Whaaaat?");
+        }
+
+        return container;
+    }
     
     /**
      * Background UI task that updates chat window when the user
@@ -60,16 +209,13 @@ public class ChatController extends CustomWindowBaseController {
         }
         
         @Override
-        protected HBox call() throws Exception {
-            
-            TextFlow flow = setBasicPost(message);
-            
+        protected HBox call() {
+
             HBox container = new HBox();
-            container.getChildren().add(flow);
             container.setMaxWidth(700);
             container.setAlignment(Pos.BASELINE_RIGHT);
             
-            return container;
+            return processMessage(container, message);
         }
     }
 
@@ -86,64 +232,14 @@ public class ChatController extends CustomWindowBaseController {
         }
 
         @Override
-        protected HBox call() throws Exception {
-            
-            TextFlow flow = setBasicPost(message);
-            
+        protected HBox call() {
+
             HBox container = new HBox();
             container.setMaxWidth(700);
-            container.getChildren().add(flow);
             container.setAlignment(Pos.CENTER_LEFT);
             
-            return container;
+            return processMessage(container, message);
         }
-    }
-
-    /**
-     * Set colour attributes for basic text posts (user and self)
-     * 
-     * @param message: message.
-     * @return formatted and styled text for a post.
-     */
-    public TextFlow setBasicPost(Message message) {
-
-        Text content = new Text(message.getTextData());
-        content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
-        content.setFill(Color.WHITE);
-
-        Text time = new Text(message.getTimeSent());
-        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
-        time.setFill(Color.valueOf("#d0d2d6"));
-        
-        TextFlow flow = new TextFlow();
-        
-        if (!message.getSender().equals(username)) {
-
-            Text sender = new Text(message.getSender() + "\n");
-            sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
-            sender.setFill(Color.WHITE);
-
-            flow.setStyle(
-                    "-fx-background-color: #3b3d3d;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
-            
-            flow.getChildren().addAll(sender, content, time);
-            
-        } else {
-            flow.setStyle(
-                    "-fx-background-color: #007EA7;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
-            
-            flow.getChildren().addAll(content, time);
-        }
-        
-        return flow;
     }
 
     /**
@@ -217,26 +313,6 @@ public class ChatController extends CustomWindowBaseController {
     }
 
     /**
-     * Custom close window method for chat window.
-     */
-    @FXML
-    public void logoutOnWindowClose() {
-        
-        Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        logoutAlert.setContentText("Are you sure you want to log out?");
-
-        Optional<ButtonType> confirmation = logoutAlert.showAndWait();
-        if (confirmation.get() == ButtonType.OK) {
-            client.disconnect();
-            Stage thisStage = (Stage) basePane.getScene().getWindow();
-            thisStage.close();
-            
-        } else {
-            logoutAlert.close();
-        }
-    }
-
-    /**
      * Upload file via the chat window
      * 
      * @param event click of the 'file' button.
@@ -261,6 +337,26 @@ public class ChatController extends CustomWindowBaseController {
             client.sendFile(selectedFile);
         }
         
+    }
+
+    /**
+     * Custom close window method for chat window.
+     */
+    @FXML
+    public void logoutOnWindowClose() {
+
+        Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        logoutAlert.setContentText("Are you sure you want to log out?");
+
+        Optional<ButtonType> confirmation = logoutAlert.showAndWait();
+        if (confirmation.get() == ButtonType.OK) {
+            client.disconnect();
+            Stage thisStage = (Stage) basePane.getScene().getWindow();
+            thisStage.close();
+
+        } else {
+            logoutAlert.close();
+        }
     }
 
     public void setClient(Client client) {

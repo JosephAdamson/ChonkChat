@@ -182,7 +182,7 @@ public class Server {
                             String file = (msg.getFile().getName() + msg.getFile().getExtension());
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
-                                            msg.getSender() + "send file: " + file
+                                            msg.getSender() + " sent file: " + file
                                     )
                             );
                             broadcastMessage(msg);
