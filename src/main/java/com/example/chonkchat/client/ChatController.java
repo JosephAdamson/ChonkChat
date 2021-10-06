@@ -100,7 +100,7 @@ public class ChatController extends CustomWindowBaseController {
     }
 
     /**
-     * Set attributes for a file post
+     * Set attributes for a file post (user and self)
      * 
      * @param message: message
      * @return formatted post in a HBox
