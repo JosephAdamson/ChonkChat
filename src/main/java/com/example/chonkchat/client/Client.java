@@ -144,6 +144,7 @@ public class Client {
             Message message = new Message();
             message.setSender(username);
             message.setMessageType(MessageType.FILE);
+            message.setTimeSent(new Date());
             message.setFile(fileTransfer);
             
             output.writeObject(message);
@@ -177,6 +178,7 @@ public class Client {
             StringBuilder fileVer = new StringBuilder(filename);
             while (fileToDownload.exists()) {
                 version++;
+                System.out.println(version);
                 
                 if (filename.equals(fileVer.toString())) {
                     fileVer.append("(1)");
@@ -184,7 +186,7 @@ public class Client {
                     fileVer.delete(fileVer.length() - 3, fileVer.length());
                     fileVer.append("(").append(version).append(")");
                 }
-                fileToDownload = new File(downloadsFolderPath + fileVer.toString() + extension);
+                fileToDownload = new File(downloadsFolderPath + fileVer + extension);
             }
         
             System.out.println(fileToDownload);

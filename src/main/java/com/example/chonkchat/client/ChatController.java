@@ -64,7 +64,7 @@ public class ChatController extends CustomWindowBaseController {
         content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
         content.setFill(Color.WHITE);
 
-        Text time = new Text(message.getTimeSent());
+        Text time = new Text( message.getTimeSent());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
 
@@ -115,13 +115,13 @@ public class ChatController extends CustomWindowBaseController {
         HBox downloadView = new HBox();
 
         try {
-            ImageView fileImg = new ImageView(new Image(String.valueOf(getClass()
-                    .getResource("/com/example/images/file.png"))));
+            ImageView fileImg = new ImageView(String.valueOf(getClass()
+                    .getResource("/com/example/images/file.png")));
             fileImg.setFitWidth(30);
             fileImg.setFitHeight(30);
 
-            ImageView downloadImg = new ImageView(new Image(String.valueOf(getClass()
-                    .getResource("/com/example/images/download.png"))));
+            ImageView downloadImg = new ImageView(String.valueOf(getClass()
+                    .getResource("/com/example/images/download.png")));
             downloadImg.setFitWidth(30);
             downloadImg.setFitHeight(30);
 
@@ -130,6 +130,11 @@ public class ChatController extends CustomWindowBaseController {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     client.downloadFile(message.getFile());
+                    
+                    // insert a progress indicator here?
+                    
+                    downloadImg.setImage(new Image(String.valueOf(getClass()
+                            .getResource("/com/example/images/checked.png"))));
                 }
             });
 
@@ -171,6 +176,27 @@ public class ChatController extends CustomWindowBaseController {
         }
         bubble.getChildren().add(downloadView);
         // textflow for time and size
+        
+        TextFlow flow = new TextFlow();
+        
+        Text size = new Text();
+        long byteVal = message.getFile().getContent().length;
+        long kilobytes = byteVal / 1024;
+        if (kilobytes > 1024) {
+            long megabytes = kilobytes / 1024;
+            size.setText(String.format("%,d MB", megabytes));
+        } else {
+            size.setText(String.format("%,d KB", kilobytes));
+        }
+        size.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+        size.setFill(Color.BLACK);
+        
+        Text time = new Text("\t\t\t\t\t  " + message.getTimeSent());
+        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+        time.setFill(Color.valueOf("#d0d2d6"));
+        
+        flow.getChildren().addAll(size, time);
+        bubble.getChildren().add(flow);
         
         return bubble;
     }
