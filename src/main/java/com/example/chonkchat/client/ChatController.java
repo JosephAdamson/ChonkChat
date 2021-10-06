@@ -4,6 +4,7 @@ import com.example.chonkchat.data.FileTransfer;
 import com.example.chonkchat.data.Message;
 import com.example.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -125,6 +126,12 @@ public class ChatController extends CustomWindowBaseController {
             downloadImg.setFitHeight(30);
 
             // need to add event handler to downloadImg
+            downloadImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    client.downloadFile(message.getFile());
+                }
+            });
 
             downloadView.getChildren().add(fileImg);
             downloadView.getChildren().add(new Label(filename));
@@ -145,6 +152,7 @@ public class ChatController extends CustomWindowBaseController {
             );
             
             downloadView.setStyle("-fx-background-color: #3b3d3d;");
+            downloadView.getChildren().get(1).setStyle("-fx-text-fill: #ffffff");
             
             Label sender = new Label(message.getSender());
             sender.setStyle("-fx-background-color: #3b3d3d;"
