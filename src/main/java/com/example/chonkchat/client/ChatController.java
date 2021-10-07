@@ -209,6 +209,7 @@ public class ChatController extends CustomWindowBaseController {
         
         flow.getChildren().addAll(size, time);
         bubble.getChildren().add(flow);
+        bubble.setSpacing(5);
         
         return bubble;
     }
