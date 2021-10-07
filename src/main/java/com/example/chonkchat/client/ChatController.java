@@ -64,7 +64,18 @@ public class ChatController extends CustomWindowBaseController {
         content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
         content.setFill(Color.WHITE);
 
-        Text time = new Text( message.getTimeSent());
+        Text time = new Text(message.getTimeSent());
+
+        // position the time sent to the bottom-right of the post bubble
+        String spaces;
+        if (content.getLayoutBounds().getWidth() >= 700) {
+            spaces = " ".repeat(700 - (int) time.getLayoutBounds().getWidth());
+        } else {
+            int increment = ((int) content.getLayoutBounds().getWidth() 
+                    - (int) time.getLayoutBounds().getWidth()) / 2;
+            spaces = " ".repeat(increment);
+        }
+        time = new Text(spaces + time.getText());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
 
@@ -95,7 +106,8 @@ public class ChatController extends CustomWindowBaseController {
 
             flow.getChildren().addAll(content, time);
         }
-
+        flow.setLineSpacing(2);
+        
         return flow;
     }
 
@@ -175,11 +187,11 @@ public class ChatController extends CustomWindowBaseController {
             downloadView.setStyle("-fx-background-color: #007EA7;");
         }
         bubble.getChildren().add(downloadView);
-        // textflow for time and size
         
         TextFlow flow = new TextFlow();
-        
         Text size = new Text();
+        
+        // covert file bytes to a human-readable format
         long byteVal = message.getFile().getContent().length;
         long kilobytes = byteVal / 1024;
         if (kilobytes > 1024) {
