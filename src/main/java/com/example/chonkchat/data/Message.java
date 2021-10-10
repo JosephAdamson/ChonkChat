@@ -18,6 +18,7 @@ public class Message implements Serializable {
     private MessageType messageType;
     private List<String> activeUsers;
     private FileTransfer file;
+    private Exception exception;
     
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
     private String timeSent;
@@ -78,5 +79,13 @@ public class Message implements Serializable {
 
     public void setFile(FileTransfer file) {
         this.file = file;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }

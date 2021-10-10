@@ -1,7 +1,11 @@
 package com.example.chonkchat.util;
 
+import com.example.chonkchat.data.Message;
+import com.example.chonkchat.data.MessageType;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.Date;
 
 /**
  * Helper method(s) to manage ClientHandler/Client resources.
@@ -31,6 +35,31 @@ public class ResourceHandler {
             if (objOut != null) {
                 objOut.close();
             }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Produce stack trace that can be viewed in terminal GUI.
+     * Designed to broadcast any errors to the terminal that
+     * occur whilst the client is connected.
+     * 
+     * @param exception: error
+     */
+    public static void sendStackTrace(Exception exception, String username, ObjectOutputStream output) {
+        
+        try {
+
+            Message msg = new Message();
+            msg.setSender(username);
+            msg.setTimeSent(new Date());
+            msg.setException(exception);
+            msg.setMessageType(MessageType.ERROR);
+            
+            output.writeObject(msg);
+            output.flush();
             
         } catch (IOException e) {
             e.printStackTrace();

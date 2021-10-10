@@ -84,6 +84,7 @@ public class Client {
                     }
 
                 } catch (SocketException e) {
+                    ResourceHandler.sendStackTrace(e, username, output);
                     System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -114,7 +115,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            e.printStackTrace();
+            ResourceHandler.sendStackTrace(e, username, output);
             ResourceHandler.closeResources(socket, input, output);
         }
     }
@@ -151,7 +152,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            e.printStackTrace();
+            ResourceHandler.sendStackTrace(e, username, output);
             ResourceHandler.closeResources(socket, input, output);
         }
     }
@@ -200,7 +201,7 @@ public class Client {
             System.out.println("Download successful!");
             
         } catch (IOException e) {
-            e.printStackTrace();
+            ResourceHandler.sendStackTrace(e, username, output);
         }
     }
 
@@ -220,7 +221,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            e.printStackTrace();
+            ResourceHandler.sendStackTrace(e, username, output);
         }
     }
 
@@ -237,7 +238,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            e.printStackTrace();
+            ResourceHandler.sendStackTrace(e, username, output);
         }
     }
 }

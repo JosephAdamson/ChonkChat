@@ -6,9 +6,7 @@ import com.example.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -199,6 +197,10 @@ public class Server {
                             ResourceHandler.closeResources(socket, input, output);
                             break;
                             
+                        case ERROR:
+                            handleException(msg.getSender(), msg.getTimeSent(), msg.getException());
+                            break;
+                            
                         default:
                             System.out.println("Whoa there...");
                             
@@ -253,6 +255,38 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
                 ResourceHandler.closeResources(socket, input, output);
+            }
+        }
+
+        /**
+         * print stacktrace caused by client exception to terminal GUI
+         * 
+         * @param sender: source of exception
+         * @param timeSent: time of exception's occurrence
+         * @param exception: exception
+         */
+        public void handleException(String sender, String timeSent, Exception exception) {
+
+            try {
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(stringWriter);
+                
+                exception.printStackTrace(printWriter);
+
+                String stacktrace = "---Exception---\n" +
+                        timeSent + "\n" +
+                        sender + "\n" +
+                        stringWriter.toString();
+                
+                stringWriter.close();
+                printWriter.close();
+                
+                Platform.runLater(
+                        () -> serverController.addTerminalMessage(stacktrace)
+                );
+            
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         
