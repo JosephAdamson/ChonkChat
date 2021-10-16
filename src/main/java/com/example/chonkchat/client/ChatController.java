@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -39,6 +40,7 @@ public class ChatController extends CustomWindowBaseController {
     
     private Client client;
     private String username;
+    private final DownloaderService downloaderService = new DownloaderService();
 
     @FXML
     public BorderPane basePane;
@@ -132,27 +134,41 @@ public class ChatController extends CustomWindowBaseController {
             fileImg.setFitWidth(30);
             fileImg.setFitHeight(30);
 
+            // load pane will contain download image, the progress indicator and
+            // the updated (on success image)
+            StackPane loadPane = new StackPane();
+            loadPane.setPrefWidth(30);
+            loadPane.setPrefHeight(30);
+
             ImageView downloadImg = new ImageView(String.valueOf(getClass()
                     .getResource("/com/example/images/download.png")));
             downloadImg.setFitWidth(30);
             downloadImg.setFitHeight(30);
-
-            // need to add event handler to downloadImg
-            downloadImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            
+            loadPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    client.downloadFile(message.getFile());
                     
                     // insert a progress indicator here?
+                    ProgressIndicator progressIndicator = new ProgressIndicator();
+                    downloaderService.setFileTDownload(message.getFile());
+                    progressIndicator.progressProperty()
+                            .bind(downloaderService.progressProperty());
                     
+                    loadPane.getChildren().add(progressIndicator);
+                    
+                    downloaderService.restart();
+                    
+                    downloadImg.toFront();
                     downloadImg.setImage(new Image(String.valueOf(getClass()
                             .getResource("/com/example/images/checked.png"))));
                 }
             });
+            loadPane.getChildren().add(downloadImg);
 
             downloadView.getChildren().add(fileImg);
             downloadView.getChildren().add(new Label(filename));
-            downloadView.getChildren().add(downloadImg);
+            downloadView.getChildren().add(loadPane);
             downloadView.setSpacing(5);
 
         } catch (NullPointerException e) {

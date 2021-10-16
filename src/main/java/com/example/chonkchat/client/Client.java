@@ -158,54 +158,6 @@ public class Client {
     }
 
     /**
-     * Client protocol for downloading files. Download location is
-     * set as the default OS downloads folder.
-     * 
-     * @param fileTransfer file to be downloaded.
-     */
-    public void downloadFile(FileTransfer fileTransfer) {
-
-        String filename = fileTransfer.getName();
-        String extension = fileTransfer.getExtension();
-
-        String downloadsFolderPath = System.getProperty("user.home") + "/Downloads/";
-
-        try {
-            // check for any previously existing copies of the file in 
-            // the user's Downloads folder.
-            File fileToDownload =  new File(downloadsFolderPath + filename + extension);
-            
-            int version = 0;
-            StringBuilder fileVer = new StringBuilder(filename);
-            while (fileToDownload.exists()) {
-                version++;
-                System.out.println(version);
-                
-                if (filename.equals(fileVer.toString())) {
-                    fileVer.append("(1)");
-                } else {
-                    fileVer.delete(fileVer.length() - 3, fileVer.length());
-                    fileVer.append("(").append(version).append(")");
-                }
-                fileToDownload = new File(downloadsFolderPath + fileVer + extension);
-            }
-        
-            System.out.println(fileToDownload);
-
-            // get stream to write data to the new file in downloads.
-            FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
-           
-            fileOutputStream.write(fileTransfer.getContent());
-            fileOutputStream.close();
-
-            System.out.println("Download successful!");
-            
-        } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, username, output);
-        }
-    }
-
-    /**
      * Send initial communication to server so that information can
      * be checked and current session can be added to list of active clients.
      */
