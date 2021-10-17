@@ -5,6 +5,19 @@
     -fx-border-width: 0;
 }
 
+/* title bar buttons */
+#close {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: #FF605C;
+}
+
+#min {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: #FFBD44; 
+}
+
 /* Styles for scroll bars*/
 .scroll-bar:vertical {
     -fx-background-color :transparent;

@@ -14,17 +14,17 @@
 <BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="580.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
       <HBox id="titleBar" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" text="x">
+         <Button id="close" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" prefHeight="12.0" prefWidth="12.0" text="x">
             <HBox.margin>
                <Insets left="10.0" top="20.0" />
             </HBox.margin>
             <font>
-               <Font size="10.0" />
+               <Font size="6.0" />
             </font>
          </Button>
-         <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#minimize" text="-">
+         <Button id="min" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#minimize" prefHeight="12.0" prefWidth="12.0" text="-">
             <font>
-               <Font size="10.0" />
+               <Font size="6.0" />
             </font>
             <HBox.margin>
                <Insets left="5.0" top="20.0" />
