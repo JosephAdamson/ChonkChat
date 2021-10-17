@@ -1,6 +1,8 @@
 
 #basePane {
-    -fx-border-color: #484a4a;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-border-width: 0;
 }
 
 /* Styles for scroll bars*/
@@ -39,6 +41,9 @@
 
 #titleBar {
     -fx-background-color: #2d2e2e;
+    -fx-border-color: #484a4a;
+    -fx-border-radius: 15 15 0 0;
+    -fx-background-radius: 15 15 0 0;
 }
 
 /* Styles for the chat window */
@@ -54,6 +59,10 @@
 
 #textInputConsole {
     -fx-background-color: #2d2e2e;
+    -fx-border-color: #3b3d3d;
+    -fx-background-radius: 0 0 15 0;
+    -fx-border-radius: 0 0 15 0;
+    -fx-border-width: 1 1 1 0;
 }
 
 #textInputContainer {
@@ -90,10 +99,16 @@
 #onlineUsers {
     -fx-background-color: #151a1c;
     -fx-border-color: #484a4a;
+    -fx-border-radius: 0 0 0 15;
+    -fx-background-radius: 0 0 0 15;
+    -fx-border-width: 0 1 1 1;
 }
 
 #onlineUsers .list-cell {
-    -fx-background-color: #151a1c;
+    -fx-background-color: transparent;
     -fx-border-color: #151a1c;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-border-width: 0;
 }
 

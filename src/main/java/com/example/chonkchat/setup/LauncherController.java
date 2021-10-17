@@ -15,6 +15,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -110,13 +111,14 @@ public class LauncherController extends CustomWindowBaseController {
                 chatController.getClient().listenForIncomingMessages();
 
                 Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
                 Stage stage = new Stage();
                 stage.getIcons().add(new Image(getClass()
                         .getResourceAsStream("/com/example/images/client.png")));
 
                 stage.setTitle("client");
                 stage.setScene(scene);
-                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initStyle(StageStyle.TRANSPARENT);
                 stage.show();
             } else {
 

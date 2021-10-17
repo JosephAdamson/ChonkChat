@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
+<BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="580.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
       <HBox id="titleBar" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" text="x">
