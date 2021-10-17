@@ -1,4 +1,5 @@
 com/example/chonkchat/server/Server$2.class
+com/example/chonkchat/client/DownloaderService.class
 com/example/chonkchat/server/Server.class
 com/example/chonkchat/data/Status.class
 com/example/chonkchat/server/TerminalController.class
@@ -20,4 +21,5 @@ com/example/chonkchat/server/Server$ClientHandler.class
 com/example/chonkchat/setup/LauncherController.class
 com/example/chonkchat/client/ChatController$1.class
 com/example/chonkchat/util/CustomWindowBaseController.class
+com/example/chonkchat/client/DownloaderService$1.class
 com/example/chonkchat/client/Client$2.class

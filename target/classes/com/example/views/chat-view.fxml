@@ -14,29 +14,23 @@
 <BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="580.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
       <HBox id="titleBar" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <Button id="close" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" prefHeight="12.0" prefWidth="12.0" text="x">
+         <Button id="close" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" prefHeight="45.0" prefWidth="45.0" text="x">
             <HBox.margin>
-               <Insets left="10.0" top="20.0" />
+               <Insets left="10.0" top="8.0" />
             </HBox.margin>
             <font>
-               <Font size="6.0" />
+               <Font size="20.0" />
             </font>
          </Button>
-         <Button id="min" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#minimize" prefHeight="12.0" prefWidth="12.0" text="-">
+         <Button id="min" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#minimize" prefHeight="45.0" prefWidth="45.0" text="-">
+            <HBox.margin>
+               <Insets left="5.0" top="8.0" />
+            </HBox.margin>
             <font>
-               <Font size="6.0" />
+               <Font size="20.0" />
             </font>
-            <HBox.margin>
-               <Insets left="5.0" top="20.0" />
-            </HBox.margin>
          </Button>
-         <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../images/client.png" />
-            <HBox.margin>
-               <Insets bottom="8.0" left="40.0" top="8.0" />
-            </HBox.margin>
-         </ImageView>
-         <ComboBox focusTraversable="false" prefWidth="90.0">
+         <ComboBox focusTraversable="false" prefHeight="20.0" prefWidth="90.0">
             <HBox.margin>
                <Insets left="20.0" top="15.0" />
             </HBox.margin>
@@ -53,15 +47,25 @@
          </center>
          <bottom>
             <HBox id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <Button focusTraversable="false" mnemonicParsing="false" text="emoji">
+               <Button id="emojiButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0">
                   <HBox.margin>
-                     <Insets left="20.0" top="35.0" />
+                     <Insets left="10.0" top="25.0" />
                   </HBox.margin>
+                  <graphic>
+                     <ImageView fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
+                        <Image url="@../images/emoji.png" />
+                     </ImageView>
+                  </graphic>
                </Button>
-               <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#uploadFile" text="file">
+               <Button id="fileButton" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#uploadFile" prefHeight="50.0" prefWidth="50.0">
                   <HBox.margin>
-                     <Insets left="15.0" top="35.0" />
+                     <Insets left="10.0" top="25.0" />
                   </HBox.margin>
+                  <graphic>
+                     <ImageView fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
+                        <Image url="@../images/paper-clip.png" />
+                     </ImageView>
+                  </graphic>
                </Button>
                <HBox id="textInputContainer" prefHeight="100.0" prefWidth="380.0">
                   <children>

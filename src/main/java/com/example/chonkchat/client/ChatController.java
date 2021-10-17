@@ -347,7 +347,8 @@ public class ChatController extends CustomWindowBaseController {
         ArrayList<HBox> users = new ArrayList<>();
         for (String user: activeUsers) {
             Label label = new Label(user);
-            label.setStyle("-fx-text-fill: #ffffff");
+            label.setStyle("-fx-text-fill: #ffffff;" 
+                    + "-fx-font-size: 16;");
             HBox container = new HBox();
             container.getChildren().add(label);
             container.setAlignment(Pos.CENTER);

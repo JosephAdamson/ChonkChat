@@ -1,21 +1,18 @@
 
 #basePane {
-    -fx-border-radius: 15;
-    -fx-background-radius: 15;
+    -fx-border-radius: 15em;
+    -fx-background-radius: 15em;
     -fx-border-width: 0;
 }
 
-/* title bar buttons */
-#close {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-background-color: #FF605C;
+/* title bar options */
+#titleBar .button {
+    -fx-background-color: #2d2e2e;
+    -fx-text-fill: #949392;
 }
 
-#min {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-background-color: #FFBD44; 
+#titleBar .button:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
 }
 
 /* Styles for scroll bars*/
@@ -78,6 +75,14 @@
     -fx-border-width: 1 1 1 0;
 }
 
+#textInputConsole .button {
+    -fx-background-color: #2d2e2e;
+}
+
+#textInputConsole .button:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+}
+
 #textInputContainer {
     -fx-background-color: #3b3d3d;
     -fx-border-color: #3b3d3d;
@@ -120,8 +125,8 @@
 #onlineUsers .list-cell {
     -fx-background-color: transparent;
     -fx-border-color: #151a1c;
-    -fx-border-radius: 20;
-    -fx-background-radius: 20;
-    -fx-border-width: 0;
+    -fx-border-radius: 20em;
+    -fx-background-radius: 20em;
+    -fx-border-width: 0px;
 }
 

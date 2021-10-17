@@ -3,6 +3,7 @@
 /Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/com/example/chonkchat/data/Message.java
 /Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/com/example/chonkchat/client/Client.java
 /Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/com/example/chonkchat/server/Server.java
+/Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/com/example/chonkchat/client/DownloaderService.java
 /Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/module-info.java
 /Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/com/example/chonkchat/setup/Application.java
 /Users/joseph/Projects/Idea-projects/ChonkChat/src/main/java/com/example/chonkchat/util/CustomWindowBaseController.java
