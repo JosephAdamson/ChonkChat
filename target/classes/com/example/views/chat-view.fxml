@@ -14,7 +14,7 @@
 <BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="580.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.chonkchat.client.ChatController">
    <top>
       <HBox id="titleBar" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <Button id="close" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" prefHeight="45.0" prefWidth="45.0" text="x">
+         <Button id="close" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" prefHeight="45.0" prefWidth="45.0" text="X">
             <HBox.margin>
                <Insets left="10.0" top="8.0" />
             </HBox.margin>
@@ -46,8 +46,8 @@
             <ListView id="chatWindow" fx:id="chatWindow" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <HBox id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <Button id="emojiButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0">
+            <HBox id="textInputConsole" fx:id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <Button id="emojiButton" onMouseClicked="#emojiChooser" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0">
                   <HBox.margin>
                      <Insets left="10.0" top="25.0" />
                   </HBox.margin>
@@ -69,7 +69,7 @@
                </Button>
                <HBox id="textInputContainer" prefHeight="100.0" prefWidth="380.0">
                   <children>
-                     <TextArea id="textInput" fx:id="textInput" focusTraversable="false" onKeyPressed="#onTextInputEnter" prefHeight="50.0" prefWidth="370.0">
+                     <TextArea id="textInput" fx:id="textInput" focusTraversable="false" onKeyPressed="#onTextInputEnter" prefHeight="50.0" prefWidth="370.0" wrapText="true">
                         <HBox.margin>
                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                         </HBox.margin>

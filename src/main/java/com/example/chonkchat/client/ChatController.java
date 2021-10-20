@@ -49,10 +49,13 @@ public class ChatController extends CustomWindowBaseController {
     private TextArea textInput;
 
     @FXML
-    public ListView<HBox> chatWindow;
+    private HBox textInputConsole;
+    
+    @FXML
+    private ListView<HBox> chatWindow;
 
     @FXML
-    public ListView<HBox> onlineUsers;
+    private ListView<HBox> onlineUsers;
 
     /**
      * Set colour attributes for basic text posts (user and self)
@@ -82,6 +85,7 @@ public class ChatController extends CustomWindowBaseController {
         time.setFill(Color.valueOf("#d0d2d6"));
 
         TextFlow flow = new TextFlow();
+        flow.setMaxWidth(350);
 
         if (!message.getSender().equals(username)) {
 
@@ -298,7 +302,7 @@ public class ChatController extends CustomWindowBaseController {
         protected HBox call() {
 
             HBox container = new HBox();
-            container.setMaxWidth(700);
+            container.setMaxWidth(150);
             container.setAlignment(Pos.CENTER_LEFT);
             
             return processMessage(container, message);
@@ -401,6 +405,49 @@ public class ChatController extends CustomWindowBaseController {
             client.sendFile(selectedFile);
         }
         
+    }
+    
+    @FXML
+    public void emojiChooser() {
+        
+        // if the cancel button is present (emoji button already clicked)
+        // we do nothing, this might have to be changed in the future if I 
+        // add further buttons.
+        if (textInputConsole.getChildren().size() == 3) {
+            
+            // We will need to resize the textInputContainer and its container dynamically
+            // to accommodate cancel button.
+            HBox textInputContainer = (HBox) textInputConsole.getChildren().get(2);
+            double originalContainerWidth = textInputContainer.getWidth();
+            
+            // add cancellation button to left of emoji button
+            Button cancel = new Button();
+            cancel.prefHeight(45);
+            cancel.prefWidth(45);
+            cancel.setTranslateX(10);
+            cancel.setTranslateY(30);
+            
+            cancel.setStyle("-fx-text-fill: #949392;" 
+                    + "-fx-font-size: 20px;"
+                    + "-fx-font-family: System;"
+            );
+            cancel.setText("X");
+
+            cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    textInputConsole.getChildren().remove(0);
+                    ((HBox) textInputConsole.getChildren().get(2))
+                            .setPrefWidth(originalContainerWidth);
+                    
+                }
+            });
+            
+            ((HBox) textInputConsole.getChildren().get(2))
+                    .setPrefWidth(originalContainerWidth - 45);
+            
+            textInputConsole.getChildren().add(0, cancel);
+        }
     }
 
     /**
