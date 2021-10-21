@@ -1,8 +1,8 @@
-package com.example.chonkchat.server;
+package com.joe.chonkchat.server;
 
-import com.example.chonkchat.data.Message;
-import com.example.chonkchat.data.MessageType;
-import com.example.chonkchat.util.ResourceHandler;
+import com.joe.chonkchat.data.Message;
+import com.joe.chonkchat.data.MessageType;
+import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 

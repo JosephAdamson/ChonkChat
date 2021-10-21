@@ -1,4 +1,4 @@
-package com.example.chonkchat.server;
+package com.joe.chonkchat.server;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -130,7 +130,7 @@ public class TerminalController implements Initializable {
             // read help.log
             BufferedReader br = new BufferedReader(
                     new FileReader(new File(getClass()
-                            .getResource("/com/example/logs/help.log").getFile()))
+                            .getResource("/com/joe/logs/help.log").getFile()))
             );
             
             StringBuilder sb = new StringBuilder();

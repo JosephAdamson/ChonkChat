@@ -1,10 +1,10 @@
-package com.example.chonkchat.client;
+package com.joe.chonkchat.client;
 
-import com.example.chonkchat.data.FileTransfer;
-import com.example.chonkchat.data.Message;
-import com.example.chonkchat.data.MessageType;
-import com.example.chonkchat.server.Server;
-import com.example.chonkchat.util.ResourceHandler;
+import com.joe.chonkchat.data.FileTransfer;
+import com.joe.chonkchat.data.Message;
+import com.joe.chonkchat.data.MessageType;
+import com.joe.chonkchat.server.Server;
+import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.example.chonkchat.data;
+package com.joe.chonkchat.data;
 
 /**
  * Enum defines current status of client connected to

@@ -1,4 +1,4 @@
-package com.example.chonkchat.setup;
+package com.joe.chonkchat.setup;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,9 +13,9 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader
-                .load(getClass().getResource("/com/example/views/launch-view.fxml"));
+                .load(getClass().getResource("/com/joe/views/launch-view.fxml"));
         root.getStylesheets().add(String.valueOf(getClass()
-                .getResource("/com/example/styles/launcher.css")));
+                .getResource("/com/joe/styles/launcher.css")));
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);

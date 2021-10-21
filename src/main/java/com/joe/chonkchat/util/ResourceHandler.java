@@ -1,7 +1,7 @@
-package com.example.chonkchat.util;
+package com.joe.chonkchat.util;
 
-import com.example.chonkchat.data.Message;
-import com.example.chonkchat.data.MessageType;
+import com.joe.chonkchat.data.Message;
+import com.joe.chonkchat.data.MessageType;
 
 import java.io.*;
 import java.net.Socket;

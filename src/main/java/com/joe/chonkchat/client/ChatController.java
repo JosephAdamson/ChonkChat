@@ -1,8 +1,8 @@
-package com.example.chonkchat.client;
+package com.joe.chonkchat.client;
 
-import com.example.chonkchat.data.FileTransfer;
-import com.example.chonkchat.data.Message;
-import com.example.chonkchat.util.CustomWindowBaseController;
+import com.joe.chonkchat.data.FileTransfer;
+import com.joe.chonkchat.data.Message;
+import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -134,7 +134,7 @@ public class ChatController extends CustomWindowBaseController {
 
         try {
             ImageView fileImg = new ImageView(String.valueOf(getClass()
-                    .getResource("/com/example/images/file.png")));
+                    .getResource("/com/joe/images/file.png")));
             fileImg.setFitWidth(30);
             fileImg.setFitHeight(30);
 
@@ -145,7 +145,7 @@ public class ChatController extends CustomWindowBaseController {
             loadPane.setPrefHeight(30);
 
             ImageView downloadImg = new ImageView(String.valueOf(getClass()
-                    .getResource("/com/example/images/download.png")));
+                    .getResource("/com/joe/images/download.png")));
             downloadImg.setFitWidth(30);
             downloadImg.setFitHeight(30);
             
@@ -165,7 +165,7 @@ public class ChatController extends CustomWindowBaseController {
                     
                     downloadImg.toFront();
                     downloadImg.setImage(new Image(String.valueOf(getClass()
-                            .getResource("/com/example/images/checked.png"))));
+                            .getResource("/com/joe/images/checked.png"))));
                 }
             });
             loadPane.getChildren().add(downloadImg);

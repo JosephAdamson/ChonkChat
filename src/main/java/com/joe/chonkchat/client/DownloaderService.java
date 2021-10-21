@@ -1,6 +1,6 @@
-package com.example.chonkchat.client;
+package com.joe.chonkchat.client;
 
-import com.example.chonkchat.data.FileTransfer;
+import com.joe.chonkchat.data.FileTransfer;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

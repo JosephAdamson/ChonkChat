@@ -1,4 +1,4 @@
-package com.example.chonkchat.data;
+package com.joe.chonkchat.data;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

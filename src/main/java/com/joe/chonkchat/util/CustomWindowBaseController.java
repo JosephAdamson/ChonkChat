@@ -1,4 +1,4 @@
-package com.example.chonkchat.util;
+package com.joe.chonkchat.util;
 
 import javafx.application.Platform;
 import javafx.scene.Node;;
