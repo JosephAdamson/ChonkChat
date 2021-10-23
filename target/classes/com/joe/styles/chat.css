@@ -1,4 +1,8 @@
 
+@font-face {
+    src: url("fonts/OpenSansEmoji.ttf");
+}
+
 #basePane {
     -fx-border-radius: 15em;
     -fx-background-radius: 15em;
@@ -67,6 +71,16 @@
     -fx-background-color: #00171F;
 }
 
+/* Parent node for text input console (a border pane) */
+
+.emojiBox {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: #151a1c;
+    -fx-border-color: #3b3d3d;
+    -fx-border-width: 1 1 0 0;
+}
+
 #textInputConsole {
     -fx-background-color: #2d2e2e;
     -fx-border-color: #3b3d3d;
@@ -94,6 +108,8 @@
     -fx-background-color: #3b3d3d;
     -fx-border-color: #3b3d3d;
     -fx-text-fill: #ffffff;
+    -fx-font-size: 15;
+    -fx-font-family: "OpenSansEmoji";
 }
 
 #textInput .content {

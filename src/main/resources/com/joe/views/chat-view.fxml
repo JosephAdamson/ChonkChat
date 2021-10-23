@@ -46,40 +46,44 @@
             <ListView id="chatWindow" fx:id="chatWindow" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <HBox id="textInputConsole" fx:id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <Button id="emojiButton" onMouseClicked="#emojiChooser" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0">
-                  <HBox.margin>
-                     <Insets left="10.0" top="25.0" />
-                  </HBox.margin>
-                  <graphic>
-                     <ImageView fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
-                        <Image url="@../images/emoji.png" />
-                     </ImageView>
-                  </graphic>
-               </Button>
-               <Button id="fileButton" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#uploadFile" prefHeight="50.0" prefWidth="50.0">
-                  <HBox.margin>
-                     <Insets left="10.0" top="25.0" />
-                  </HBox.margin>
-                  <graphic>
-                     <ImageView fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
-                        <Image url="@../images/paper-clip.png" />
-                     </ImageView>
-                  </graphic>
-               </Button>
-               <HBox id="textInputContainer" prefHeight="100.0" prefWidth="380.0">
-                  <children>
-                     <TextArea id="textInput" fx:id="textInput" focusTraversable="false" onKeyPressed="#onTextInputEnter" prefHeight="50.0" prefWidth="370.0" wrapText="true">
+            <BorderPane fx:id="consoleBox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <HBox id="textInputConsole" fx:id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <Button id="emojiButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#emojiChooser" prefHeight="50.0" prefWidth="50.0">
                         <HBox.margin>
-                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           <Insets left="10.0" top="25.0" />
                         </HBox.margin>
-                     </TextArea>
-                  </children>
-                  <HBox.margin>
-                     <Insets bottom="10.0" left="10.0" top="10.0" />
-                  </HBox.margin>
-               </HBox>
-            </HBox>
+                        <graphic>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
+                              <Image url="@../images/emoji.png" />
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Button id="fileButton" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#uploadFile" prefHeight="50.0" prefWidth="50.0">
+                        <HBox.margin>
+                           <Insets left="10.0" top="25.0" />
+                        </HBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
+                              <Image url="@../images/paper-clip.png" />
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <HBox id="textInputContainer" prefHeight="100.0" prefWidth="380.0">
+                        <children>
+                           <TextArea id="textInput" fx:id="textInput" focusTraversable="false" onKeyPressed="#onTextInputEnter" prefHeight="50.0" prefWidth="370.0" wrapText="true">
+                              <HBox.margin>
+                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              </HBox.margin>
+                           </TextArea>
+                        </children>
+                        <HBox.margin>
+                           <Insets bottom="10.0" left="10.0" top="10.0" />
+                        </HBox.margin>
+                     </HBox>
+                  </HBox>
+               </center>
+            </BorderPane>
          </bottom>
       </BorderPane>
    </center>

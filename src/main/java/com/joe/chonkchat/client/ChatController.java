@@ -14,10 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -44,6 +41,12 @@ public class ChatController extends CustomWindowBaseController {
 
     @FXML
     public BorderPane basePane;
+
+    /**
+     * Allows for further manipulation of text input area
+     */
+    @FXML
+    private BorderPane consoleBox;
     
     @FXML
     private TextArea textInput;
@@ -66,7 +69,7 @@ public class ChatController extends CustomWindowBaseController {
     public TextFlow formatBasicPost(Message message) {
 
         Text content = new Text(message.getTextData());
-        content.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+        content.setFont(Font.font("OpenSansEmoji", FontWeight.NORMAL, 15));
         content.setFill(Color.WHITE);
 
         Text time = new Text(message.getTimeSent());
@@ -83,7 +86,7 @@ public class ChatController extends CustomWindowBaseController {
         time = new Text(spaces + time.getText());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
-
+        
         TextFlow flow = new TextFlow();
         flow.setMaxWidth(350);
 
@@ -302,7 +305,7 @@ public class ChatController extends CustomWindowBaseController {
         protected HBox call() {
 
             HBox container = new HBox();
-            container.setMaxWidth(150);
+            container.setMaxWidth(700);
             container.setAlignment(Pos.CENTER_LEFT);
             
             return processMessage(container, message);
@@ -373,7 +376,8 @@ public class ChatController extends CustomWindowBaseController {
     @FXML
     public void onTextInputEnter(KeyEvent keyEvent) {
         
-        if (keyEvent.getCode() == KeyCode.ENTER) {
+        if (keyEvent.getCode() == KeyCode.ENTER && 
+                !textInput.getText().isEmpty()) {
             String text = textInput.getText();
             client.sendMessage(text);
             textInput.clear();
@@ -440,6 +444,8 @@ public class ChatController extends CustomWindowBaseController {
                     ((HBox) textInputConsole.getChildren().get(2))
                             .setPrefWidth(originalContainerWidth);
                     
+                    consoleBox.getChildren().remove(consoleBox.getTop());
+                    consoleBox.setPrefHeight(consoleBox.getPrefHeight() - 100);
                 }
             });
             
@@ -447,6 +453,19 @@ public class ChatController extends CustomWindowBaseController {
                     .setPrefWidth(originalContainerWidth - 45);
             
             textInputConsole.getChildren().add(0, cancel);
+            
+            
+            consoleBox.setPrefHeight(consoleBox.getPrefHeight() + 100);
+            
+            ScrollPane scrollPane = new ScrollPane();
+            
+            GridPane emojiSelector = new GridPane();
+            emojiSelector.setPrefHeight(100);
+            emojiSelector.setPrefWidth(200);
+            emojiSelector.getStyleClass().add("emojiBox");
+            scrollPane.setContent(emojiSelector);
+            
+            consoleBox.setTop(emojiSelector);
         }
     }
 
