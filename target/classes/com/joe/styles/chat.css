@@ -71,14 +71,32 @@
     -fx-background-color: #00171F;
 }
 
-/* Parent node for text input console (a border pane) */
+/* emoji pop box */
 
 .emojiBox {
     -fx-border-radius: 0;
     -fx-background-radius: 0;
     -fx-background-color: #151a1c;
+}
+
+.emojiButton {
+    -fx-background-color: #151a1c; 
+}
+
+.emojiButton:hover {
+    -fx-background-color: derive(#151a1c, -20%); 
+}
+
+.scroll-pane {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: #151a1c;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
     -fx-border-color: #3b3d3d;
-    -fx-border-width: 1 1 0 0;
+    -fx-border-width: 0 0 0 0;
 }
 
 #textInputConsole {

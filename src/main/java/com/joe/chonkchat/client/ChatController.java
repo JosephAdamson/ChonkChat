@@ -38,6 +38,9 @@ public class ChatController extends CustomWindowBaseController {
     private Client client;
     private String username;
     private final DownloaderService downloaderService = new DownloaderService();
+    
+    // set this so we only have to initialize it once.
+    private ScrollPane emojiSelector;
 
     @FXML
     public BorderPane basePane;
@@ -52,7 +55,7 @@ public class ChatController extends CustomWindowBaseController {
     private TextArea textInput;
 
     @FXML
-    private HBox textInputConsole;
+    public HBox textInputConsole;
     
     @FXML
     private ListView<HBox> chatWindow;
@@ -75,6 +78,7 @@ public class ChatController extends CustomWindowBaseController {
         Text time = new Text(message.getTimeSent());
 
         // position the time sent to the bottom-right of the post bubble
+        // might have to fix this, has unpredictable results.
         String spaces;
         if (content.getLayoutBounds().getWidth() >= 700) {
             spaces = " ".repeat(700 - (int) time.getLayoutBounds().getWidth());
@@ -457,14 +461,6 @@ public class ChatController extends CustomWindowBaseController {
             
             consoleBox.setPrefHeight(consoleBox.getPrefHeight() + 100);
             
-            ScrollPane scrollPane = new ScrollPane();
-            
-            GridPane emojiSelector = new GridPane();
-            emojiSelector.setPrefHeight(100);
-            emojiSelector.setPrefWidth(200);
-            emojiSelector.getStyleClass().add("emojiBox");
-            scrollPane.setContent(emojiSelector);
-            
             consoleBox.setTop(emojiSelector);
         }
     }
@@ -500,4 +496,10 @@ public class ChatController extends CustomWindowBaseController {
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    public void setEmojiSelector(ScrollPane emojiSelector) {
+        this.emojiSelector = emojiSelector;
+    }
+    
+    public TextArea getTextInput() {return textInput;}
 }

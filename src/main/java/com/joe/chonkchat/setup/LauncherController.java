@@ -11,18 +11,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class LauncherController extends CustomWindowBaseController {
@@ -110,16 +113,54 @@ public class LauncherController extends CustomWindowBaseController {
                 chatController.setUsername(username);
                 chatController.getClient().listenForIncomingMessages();
 
+                // set up emoji selector window (hidden) so we only have to initialize it once.
+                ScrollPane scrollPane = new ScrollPane();
+                
+                GridPane emojiSelector = new GridPane();
+                emojiSelector.setPrefHeight(100);
+                emojiSelector.setPrefWidth(200);
+                emojiSelector.getStyleClass().add("emojiBox");
+
+                scrollPane.setContent(emojiSelector);
+                
+                File emojiFolder = new File(Objects.requireNonNull(getClass()
+                        .getResource("/com/joe/images/emojis")).getFile());
+                
+                File[] emojis = emojiFolder.listFiles();
+
+                // had to hardcode this, not getting a filled-out gridpane.
+                double dim = 35;
+                
+                for (int i = 0;  i < emojis.length; i++) {
+                    int row = i / 10;
+                    int col = i % 10;
+                    
+                    String filename = emojis[i].getName();
+                    Button btn = new Button();
+                    btn.setPrefHeight(dim);
+                    btn.setPrefWidth(dim);
+                    btn.getStyleClass().add("emojiButton");
+                    ImageView emoji = new ImageView(new Image(String.valueOf(getClass()
+                            .getResource("/com/joe/images/emojis/" + filename))));
+                    emoji.setFitWidth(dim);
+                    emoji.setFitHeight(dim);
+                    btn.setGraphic(emoji);
+                    
+                    btn.setOnMouseClicked(new EmojiClicker(chatController.getTextInput(), filename));
+                    
+                    emojiSelector.add(btn, col, row);
+                }
+                
+                chatController.setEmojiSelector(scrollPane);
+
                 Scene scene = new Scene(root);
                 scene.setFill(Color.TRANSPARENT);
                 Stage stage = new Stage();
-                stage.getIcons().add(new Image(getClass()
-                        .getResourceAsStream("/com/joe/images/client.png")));
-
-                stage.setTitle("client");
+                
                 stage.setScene(scene);
                 stage.initStyle(StageStyle.TRANSPARENT);
                 stage.show();
+                
             } else {
 
                 Alert usernameAlert = new Alert(Alert.AlertType.WARNING);
@@ -140,6 +181,25 @@ public class LauncherController extends CustomWindowBaseController {
             
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Manage resources for a emoji button click.
+     */
+    private class EmojiClicker implements EventHandler<MouseEvent>{
+        TextArea output; 
+        String filename;
+        
+        public EmojiClicker(TextArea output, String filename) {
+            this.output = output;
+            this.filename = filename;
+        }
+
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            String emoteCode = filename.replace(".png", "");
+            output.setText(output.getText() + ":" + emoteCode + ":");
         }
     }
 }
