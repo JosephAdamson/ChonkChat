@@ -78,7 +78,7 @@ public class ChatController extends CustomWindowBaseController {
         Text time = new Text(message.getTimeSent());
 
         // position the time sent to the bottom-right of the post bubble
-        // might have to fix this, has unpredictable results.
+        // might have to fix this, has unpredictable results...
         String spaces;
         if (content.getLayoutBounds().getWidth() >= 700) {
             spaces = " ".repeat(700 - (int) time.getLayoutBounds().getWidth());
