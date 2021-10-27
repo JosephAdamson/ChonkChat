@@ -24,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -70,30 +71,19 @@ public class ChatController extends CustomWindowBaseController {
      * @return formatted and styled text in a TextFlow.
      */
     public TextFlow formatBasicPost(Message message) {
-
-        Text content = new Text(message.getTextData());
-        content.setFont(Font.font("OpenSansEmoji", FontWeight.NORMAL, 15));
-        content.setFill(Color.WHITE);
+        
+        TextFlow content = emojiParser(message.getTextData());
+        content.setMaxWidth(340);
 
         Text time = new Text(message.getTimeSent());
-
-        // position the time sent to the bottom-right of the post bubble
-        // might have to fix this, has unpredictable results...
-        String spaces;
-        if (content.getLayoutBounds().getWidth() >= 700) {
-            spaces = " ".repeat(700 - (int) time.getLayoutBounds().getWidth());
-        } else {
-            int increment = ((int) content.getLayoutBounds().getWidth() 
-                    - (int) time.getLayoutBounds().getWidth()) / 2;
-            spaces = " ".repeat(increment);
-        }
-        time = new Text(spaces + time.getText());
+        
+        time = new Text(time.getText());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
         
         TextFlow flow = new TextFlow();
         flow.setMaxWidth(350);
-
+        
         if (!message.getSender().equals(username)) {
 
             Text sender = new Text(message.getSender() + "\n");
@@ -107,7 +97,7 @@ public class ChatController extends CustomWindowBaseController {
                             + "-fx-padding: 10;"
             );
 
-            flow.getChildren().addAll(sender, content, time);
+            flow.getChildren().addAll(sender, content, new Text("\n"), time);
 
         } else {
             flow.setStyle(
@@ -117,7 +107,7 @@ public class ChatController extends CustomWindowBaseController {
                             + "-fx-padding: 10;"
             );
 
-            flow.getChildren().addAll(content, time);
+            flow.getChildren().addAll(content, new Text("\n"), time);
         }
         flow.setLineSpacing(2);
         
@@ -178,7 +168,9 @@ public class ChatController extends CustomWindowBaseController {
             loadPane.getChildren().add(downloadImg);
 
             downloadView.getChildren().add(fileImg);
-            downloadView.getChildren().add(new Label(filename));
+            Label file = new Label(filename);
+            file.setStyle("-fx-text-fill: #ffffff");
+            downloadView.getChildren().add(file);
             downloadView.getChildren().add(loadPane);
             downloadView.setSpacing(5);
 
@@ -230,11 +222,11 @@ public class ChatController extends CustomWindowBaseController {
         size.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         size.setFill(Color.BLACK);
         
-        Text time = new Text("\t\t\t\t\t  " + message.getTimeSent());
+        Text time = new Text(message.getTimeSent());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
         
-        flow.getChildren().addAll(size, time);
+        flow.getChildren().addAll(size, new Text("\n"), time);
         bubble.getChildren().add(flow);
         bubble.setSpacing(5);
         
@@ -463,6 +455,45 @@ public class ChatController extends CustomWindowBaseController {
             
             consoleBox.setTop(emojiSelector);
         }
+    }
+
+    /**
+     * Splits text content to identify Strings that represent emojis (byte codes).
+     * Turns string byte codes into corresponding emojis where they are added,
+     * along with text content, to the resulting TextFlow.
+     * 
+     * @param message text message content
+     * @return the formatted text content now containing inline emojis
+     */
+    public TextFlow emojiParser(String message) {
+        
+        TextFlow flow = new TextFlow();
+        
+        // split on colon-casing to determine if any strings represent emojis
+        String[] tokens = message.split(":");
+        
+        for (String token : tokens) {
+            
+            URL tokenPath = getClass().getResource("/com/joe/images/emojis/" + token + ".png");
+            System.out.println(tokenPath);
+            
+            if (tokenPath != null) {
+                System.out.println("Success!");
+                
+                ImageView emoji = new ImageView(new Image(String.valueOf(tokenPath)));
+                emoji.setFitHeight(22);
+                emoji.setFitWidth(22);
+                
+                flow.getChildren().add(emoji);
+                
+            } else {
+                Text textSegment = new Text(token);
+                textSegment.setFont(Font.font("OpenSansEmoji", FontWeight.NORMAL, 15));
+                textSegment.setFill(Color.WHITE);
+                flow.getChildren().add(textSegment);
+            }
+        }
+        return flow;
     }
 
     /**

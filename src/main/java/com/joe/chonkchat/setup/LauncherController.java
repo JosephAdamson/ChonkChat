@@ -199,7 +199,21 @@ public class LauncherController extends CustomWindowBaseController {
         @Override
         public void handle(MouseEvent mouseEvent) {
             String emoteCode = filename.replace(".png", "");
-            output.setText(output.getText() + ":" + emoteCode + ":");
+            
+            String content = output.getText();
+            
+            // quick fix to get around problems with having two emojis side
+            // by side in a TextFlow (was causing an error that I couldn't solve)
+            if (!content.isEmpty()) {
+                
+                if (content.charAt(content.length() - 1) == ':') {
+                    output.setText(output.getText() + " :" + emoteCode + ":"); 
+                } else {
+                    output.setText(output.getText() + ":" + emoteCode + ":");
+                }
+            } else {
+                output.setText(output.getText() + ":" + emoteCode + ":");
+            }
         }
     }
 }

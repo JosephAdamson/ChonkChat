@@ -63,7 +63,8 @@
 /* Styles for the chat window */
 #chatWindow {
     -fx-background-color: #00171F;
-    -fx-border-color: #00171F;
+    -fx-border-color: #3b3d3d;
+    -fx-border-width: 0 1 0 0;
     -fx-hbar-policy: never;
 }
 
