@@ -128,7 +128,7 @@ public class LauncherController extends CustomWindowBaseController {
                 
                 File[] emojis = emojiFolder.listFiles();
 
-                // had to hardcode this, not getting a filled-out gridpane.
+                // had to hardcode this, not getting a filled-out GridPane.
                 double dim = 35;
                 
                 for (int i = 0;  i < emojis.length; i++) {
@@ -140,6 +140,7 @@ public class LauncherController extends CustomWindowBaseController {
                     btn.setPrefHeight(dim);
                     btn.setPrefWidth(dim);
                     btn.getStyleClass().add("emojiButton");
+                    btn.setFocusTraversable(false);
                     ImageView emoji = new ImageView(new Image(String.valueOf(getClass()
                             .getResource("/com/joe/images/emojis/" + filename))));
                     emoji.setFitWidth(dim);
@@ -207,12 +208,12 @@ public class LauncherController extends CustomWindowBaseController {
             if (!content.isEmpty()) {
                 
                 if (content.charAt(content.length() - 1) == ':') {
-                    output.setText(output.getText() + " :" + emoteCode + ":"); 
+                    output.appendText( " :" + emoteCode + ":"); 
                 } else {
-                    output.setText(output.getText() + ":" + emoteCode + ":");
+                    output.appendText( ":" + emoteCode + ":");
                 }
             } else {
-                output.setText(output.getText() + ":" + emoteCode + ":");
+                output.appendText( ":" + emoteCode + ":");
             }
         }
     }
