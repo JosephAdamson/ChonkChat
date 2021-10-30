@@ -2,6 +2,7 @@ package com.joe.chonkchat.server;
 
 import com.joe.chonkchat.data.Message;
 import com.joe.chonkchat.data.MessageType;
+import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,7 +34,6 @@ public class Server {
     
     public Server(TerminalController serverController) {
         this.serverController = serverController;
-        
     }
     
     /**
@@ -238,6 +238,10 @@ public class Server {
                     () -> serverController.addTerminalMessage(clientUsername + 
                             " has left the chat.")
             );
+        }
+        
+        public boolean checkUser(User user) {
+            return true;
         }
         
         public void broadcastMessage(Message message) {

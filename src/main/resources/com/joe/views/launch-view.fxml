@@ -6,78 +6,100 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="400.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.setup.LauncherController">
+<BorderPane id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="500.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.setup.LauncherController">
    <top>
-      <BorderPane id="topWindow" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane id="topWindow" prefHeight="250.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
-            <HBox id="titlePane" prefHeight="30.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-               <Button focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="12.0" prefWidth="12.0" text="x">
+            <HBox id="titleBar" prefHeight="60.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+               <Button focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="45.0" prefWidth="45.0" text="x">
                   <HBox.margin>
-                     <Insets left="8.0" top="8.0" />
+                     <Insets left="10.0" top="8.0" />
                   </HBox.margin>
                   <font>
-                     <Font size="6.0" />
+                     <Font size="20.0" />
                   </font>
                </Button>
-               <Button focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#minimize" prefHeight="12.0" prefWidth="12.0" text="-">
+               <Button focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#minimize" prefHeight="45.0" prefWidth="45.0" text="-">
                   <HBox.margin>
                      <Insets left="5.0" top="8.0" />
                   </HBox.margin>
                   <font>
-                     <Font size="6.0" />
+                     <Font size="20.0" />
                   </font>
                </Button>
             </HBox>
          </top>
          <center>
             <StackPane prefHeight="150.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-               <TextField id="usernameInput" fx:id="usernameInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="159.0">
+               <TextField id="usernameInput" fx:id="usernameInput" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="159.0">
                   <StackPane.margin>
-                     <Insets left="25.0" />
+                     <Insets left="25.0" top="70.0" />
                   </StackPane.margin>
-               </TextField>
-               <Label text="Username:">
                   <font>
-                     <Font size="15.0" />
+                     <Font name="Arial Bold" size="13.0" />
+                  </font>
+               </TextField>
+               <Label text="Username:" textFill="WHITE">
+                  <font>
+                     <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets right="210.0" />
+                     <Insets right="210.0" top="70.0" />
                   </StackPane.margin>
                </Label>
-               <ColorPicker focusTraversable="false" prefHeight="26.0" prefWidth="44.0">
-                  <StackPane.margin>
-                     <Insets left="240.0" />
-                  </StackPane.margin>
-               </ColorPicker>
                <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#launchClient" text="Connect">
                   <font>
-                     <Font size="15.0" />
+                     <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets bottom="10.0" left="15.0" top="100.0" />
+                     <Insets left="15.0" top="170.0" />
                   </StackPane.margin>
                </Button>
-               <Label text="CHONKchat">
+               <Label text="CHONKchat" textFill="WHITE">
                   <font>
                      <Font size="20.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets bottom="100.0" left="15.0" />
+                     <Insets bottom="180.0" left="10.0" />
                   </StackPane.margin>
                </Label>
+               <ImageView fitHeight="59.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                  <StackPane.margin>
+                     <Insets bottom="60.0" />
+                  </StackPane.margin>
+               </ImageView>
+               <ImageView fx:id="avatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                  <StackPane.margin>
+                     <Insets bottom="60.0" left="10.0" />
+                  </StackPane.margin>
+                  <image>
+                     <Image url="@../images/avatars/space-invader.png" />
+                  </image>
+               </ImageView>
+               <ColorPicker fx:id="usernameFont" focusTraversable="false" onAction="#changeUsernameDisplayFont" prefHeight="23.0" prefWidth="48.0">
+                  <StackPane.margin>
+                     <Insets left="240.0" top="70.0" />
+                  </StackPane.margin>
+                  <value>
+                     <Color red="0.07236842066049576" green="0.0013401559554040432" blue="0.0013401559554040432" />
+                  </value>
+               </ColorPicker>
             </StackPane>
          </center>
       </BorderPane>
    </top>
    <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" BorderPane.alignment="CENTER">
          <center>
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets top="20.0" />
                </BorderPane.margin>
@@ -97,25 +119,25 @@
                      <Insets left="25.0" top="20.0" />
                   </StackPane.margin>
                </TextField>
-               <Label text="Server Setup">
+               <Label text="Server Setup" textFill="WHITE">
                   <font>
-                     <Font size="15.0" />
+                     <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets bottom="180.0" left="22.5" top="20.0" />
+                     <Insets bottom="180.0" left="15.0" top="20.0" />
                   </StackPane.margin>
                </Label>
-               <Label text="Port:">
+               <Label text="Port:" textFill="WHITE">
                   <font>
-                     <Font size="15.0" />
+                     <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
                      <Insets left="28.0" right="200.0" top="20.0" />
                   </StackPane.margin>
                </Label>
-               <Label text="Hostname:">
+               <Label text="Hostname:" textFill="WHITE">
                   <font>
-                     <Font size="15.0" />
+                     <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
                      <Insets bottom="100.0" left="30.0" right="240.0" top="20.0" />
@@ -123,10 +145,10 @@
                </Label>
                <ToggleButton id="launchServerButton" fx:id="launchServerButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#launchServer" text="Launch">
                   <StackPane.margin>
-                     <Insets left="25.0" top="120.0" />
+                     <Insets left="15.0" top="120.0" />
                   </StackPane.margin>
                   <font>
-                     <Font size="15.0" />
+                     <Font name="Arial" size="15.0" />
                   </font>
                </ToggleButton>
             </StackPane>

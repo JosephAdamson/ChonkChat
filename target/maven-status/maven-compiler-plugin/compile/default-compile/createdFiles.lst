@@ -3,6 +3,7 @@ com/joe/chonkchat/client/ChatController$2.class
 com/joe/chonkchat/client/DownloaderService.class
 com/joe/chonkchat/client/Client.class
 com/joe/chonkchat/client/Client$2.class
+com/joe/chonkchat/data/User.class
 com/joe/chonkchat/util/ResourceHandler.class
 com/joe/chonkchat/util/CustomWindowBaseController.class
 com/joe/chonkchat/data/MessageType.class

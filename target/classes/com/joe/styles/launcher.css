@@ -2,4 +2,23 @@
 #rootPane {
     -fx-border-radius: 15;
     -fx-background-radius: 15;
+    -fx-background-color: #2d2e2e;
+    -fx-border-color: #484a4a;
+    -fx-border-width: 1;
+}
+
+#titleBar {
+    -fx-background-color: #2d2e2e;
+    -fx-border-radius: 15 15 0 0;
+    -fx-background-radius: 15 15 0 0;
+}
+
+/* title bar options */
+#titleBar .button {
+    -fx-background-color: #2d2e2e;
+    -fx-text-fill: #949392;
+}
+
+#titleBar .button:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
 }

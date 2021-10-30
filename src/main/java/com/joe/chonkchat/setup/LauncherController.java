@@ -6,6 +6,8 @@ import com.joe.chonkchat.server.Server;
 import com.joe.chonkchat.server.TerminalController;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.nio.file.Path;
 import java.util.Objects;
 
 public class LauncherController extends CustomWindowBaseController {
@@ -36,6 +37,9 @@ public class LauncherController extends CustomWindowBaseController {
 
     @FXML
     public TextField usernameInput;
+
+    @FXML
+    public ColorPicker usernameFont;
 
     @FXML
     private ToggleButton launchServerButton;
@@ -128,7 +132,7 @@ public class LauncherController extends CustomWindowBaseController {
                 
                 File[] emojis = emojiFolder.listFiles();
 
-                // had to hardcode this, not getting a filled-out GridPane.
+                // had to hardcode the dimensions, not getting a filled-out GridPane.
                 double dim = 35;
                 
                 for (int i = 0;  i < emojis.length; i++) {
@@ -146,7 +150,6 @@ public class LauncherController extends CustomWindowBaseController {
                     emoji.setFitWidth(dim);
                     emoji.setFitHeight(dim);
                     btn.setGraphic(emoji);
-                    
                     btn.setOnMouseClicked(new EmojiClicker(chatController.getTextInput(), filename));
                     
                     emojiSelector.add(btn, col, row);
@@ -186,7 +189,7 @@ public class LauncherController extends CustomWindowBaseController {
     }
 
     /**
-     * Manage resources for a emoji button click.
+     * Manage resources for an emoji button click.
      */
     private class EmojiClicker implements EventHandler<MouseEvent>{
         TextArea output; 
@@ -216,5 +219,12 @@ public class LauncherController extends CustomWindowBaseController {
                 output.appendText( ":" + emoteCode + ":");
             }
         }
+    }
+    
+    @FXML
+    public void changeUsernameDisplayFont() {
+        String hex = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
+        System.out.println(hex);
+        usernameInput.setStyle("-fx-text-fill: " + hex + ";");
     }
 }

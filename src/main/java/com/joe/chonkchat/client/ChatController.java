@@ -475,15 +475,12 @@ public class ChatController extends CustomWindowBaseController {
         for (String token : tokens) {
             
             URL tokenPath = getClass().getResource("/com/joe/images/emojis/" + token + ".png");
-            System.out.println(tokenPath);
             
             if (tokenPath != null) {
-                System.out.println("Success!");
                 
                 ImageView emoji = new ImageView(new Image(String.valueOf(tokenPath)));
                 emoji.setFitHeight(22);
                 emoji.setFitWidth(22);
-                
                 flow.getChildren().add(emoji);
                 
             } else {
