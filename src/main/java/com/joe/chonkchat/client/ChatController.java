@@ -17,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -360,6 +359,7 @@ public class ChatController extends CustomWindowBaseController {
             avatar.setFitWidth(20);
             avatar.setFitHeight(20);
             HBox container = new HBox();
+            container.setPrefHeight(35);
             container.setSpacing(6);
             container.getChildren().add(avatar);
             container.getChildren().add(label);
