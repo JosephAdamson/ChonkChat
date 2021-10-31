@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="basePane" id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.server.TerminalController">
+<BorderPane id="basePane" fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.server.TerminalController">
    <bottom>
       <HBox id="console" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          
-         <TextArea id="terminalInput" fx:id="terminalInput" focusTraversable="false" maxHeight="1.7976931348623157E308" onKeyPressed="#terminalInputEnter" prefHeight="80.0" prefWidth="393.0" promptText="&gt;&gt;" wrapText="true" HBox.hgrow="ALWAYS">
+         <TextArea id="terminalInput" fx:id="terminalInput" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#terminalInputEnter" prefHeight="85.0" prefWidth="480.0" promptText="&gt;&gt;" wrapText="true" HBox.hgrow="ALWAYS">
             
             <HBox.margin>
-               <Insets />
+               <Insets left="10.0" top="10.0" />
             </HBox.margin>
             <opaqueInsets>
                <Insets />

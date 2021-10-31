@@ -2,11 +2,15 @@
     src: url("fonts/whitrabt.ttf");
 }
 
+.root {
+    -fx-focus-color: transparent;
+}
+
 /* ----output listview ---- */
 .list-view {
     -fx-background-color: #1c1c1c;
-    -fx-border-color: transparent, #1c1c1c, transparent, #1c1c1c;
     -fx-background-radius: 0;
+    -fx-border-width: 0;
 }
 
 /* style main scroll-bars for terminal output */
@@ -53,29 +57,36 @@
 
 .list-cell {
     -fx-background-color: #1c1c1c;
+    -fx-border-width: 0;
 }
 
 /* ----Styles for the terminal input---- */
 #terminalInput {
     -fx-background-color: transparent, #1c1c1c, transparent, #1c1c1c;
-    -fx-border-color: #1c1c1c;
+    -fx-border-width: 0;
     -fx-text-fill: #00FF41;
     -fx-font-family: "White Rabbit";
     -fx-font-size: 14px;
-    -fx-focus-color: transparent;
     -fx-prompt-text-fill: #00FF41;
+    -fx-background-insets: 0;
 }
 
 #terminalInput .content {
+    -fx-background-color: transparent, #1c1c1c, transparent, #1c1c1c;
     -fx-control-inner-background: #1c1c1c; 
-    -fx-border-color: transparent, #1c1c1c, transparent, #1c1c1c;
-    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-focus-traversable: false;
+    -fx-border-width: 0;
 }
 
 #terminalInput:focused .content {
-    -fx-control-inner-background: #1c1c1c; 
-    -fx-border-color: #1c1c1c;
-    -fx-focus-traversable: false;
+    -fx-control-inner-background: #1c1c1c;
+    -fx-background-color: transparent, #1c1c1c, transparent, #1c1c1c;
+    -fx-background-insets: 0;
+}
+
+#terminalInput:focused {
+    -fx-highlight-fill: #1c1c1c;
 }
 
 #terminalInput .scroll-pane {
@@ -83,8 +94,6 @@
 }
 
 #console {
-    -fx-border-color: #1c1c1c;
-    -fx-background-radius: 0;
     -fx-border-radius: 0;
 }
 
