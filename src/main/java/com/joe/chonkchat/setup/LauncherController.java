@@ -232,7 +232,6 @@ public class LauncherController extends CustomWindowBaseController {
     @FXML
     public void changeUsernameDisplayFont() {
         String hex = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
-        System.out.println(hex);
         usernameInput.setStyle("-fx-text-fill: " + hex + ";");
     }
 }

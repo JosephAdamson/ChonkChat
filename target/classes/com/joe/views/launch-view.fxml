@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="500.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.setup.LauncherController">
@@ -44,18 +43,18 @@
                      <Insets left="25.0" top="70.0" />
                   </StackPane.margin>
                   <font>
-                     <Font name="Arial Bold" size="13.0" />
+                     <Font name="Arial" size="13.0" />
                   </font>
                </TextField>
-               <Label text="Username:" textFill="WHITE">
+               <Label text="username:" textFill="WHITE">
                   <font>
                      <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets right="210.0" top="70.0" />
+                     <Insets right="220.0" top="70.0" />
                   </StackPane.margin>
                </Label>
-               <Button focusTraversable="false" mnemonicParsing="false" onMouseClicked="#launchClient" text="Connect">
+               <Button id="connectBtn" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#launchClient" text="connect">
                   <font>
                      <Font name="Arial" size="15.0" />
                   </font>
@@ -81,16 +80,13 @@
                      <Insets bottom="60.0" left="10.0" />
                   </StackPane.margin>
                   <image>
-                     <Image url="@../images/avatars/space-invader.png" />
+                     <Image url="@../images/avatars/ninja.png" />
                   </image>
                </ImageView>
-               <ColorPicker fx:id="usernameFont" focusTraversable="false" onAction="#changeUsernameDisplayFont" prefHeight="23.0" prefWidth="48.0">
+               <ColorPicker id="usernameFont" fx:id="usernameFont" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeUsernameDisplayFont" prefHeight="30.0" prefWidth="30.0">
                   <StackPane.margin>
-                     <Insets left="240.0" top="70.0" />
+                     <Insets left="220.0" top="70.0" />
                   </StackPane.margin>
-                  <value>
-                     <Color red="0.07236842066049576" green="0.0013401559554040432" blue="0.0013401559554040432" />
-                  </value>
                </ColorPicker>
             </StackPane>
          </center>
@@ -103,7 +99,7 @@
                <BorderPane.margin>
                   <Insets top="20.0" />
                </BorderPane.margin>
-               <TextField disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="159.0" text="localhost">
+               <TextField id="serverInfo" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="159.0" text="localhost">
                   <StackPane.margin>
                      <Insets bottom="100.0" left="25.0" top="20.0" />
                   </StackPane.margin>
@@ -111,7 +107,7 @@
                      <Font size="15.0" />
                   </font>
                </TextField>
-               <TextField disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="159.0" text="49200">
+               <TextField id="serverInfo" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="159.0" text="49200">
                   <font>
                      <Font size="15.0" />
                   </font>
@@ -119,7 +115,7 @@
                      <Insets left="25.0" top="20.0" />
                   </StackPane.margin>
                </TextField>
-               <Label text="Server Setup" textFill="WHITE">
+               <Label text="server setup" textFill="WHITE">
                   <font>
                      <Font name="Arial" size="15.0" />
                   </font>
@@ -127,23 +123,23 @@
                      <Insets bottom="180.0" left="15.0" top="20.0" />
                   </StackPane.margin>
                </Label>
-               <Label text="Port:" textFill="WHITE">
+               <Label text="port:" textFill="WHITE">
                   <font>
                      <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets left="28.0" right="200.0" top="20.0" />
+                     <Insets left="28.0" right="210.0" top="20.0" />
                   </StackPane.margin>
                </Label>
-               <Label text="Hostname:" textFill="WHITE">
+               <Label text="hostname:" textFill="WHITE">
                   <font>
                      <Font name="Arial" size="15.0" />
                   </font>
                   <StackPane.margin>
-                     <Insets bottom="100.0" left="30.0" right="240.0" top="20.0" />
+                     <Insets bottom="100.0" right="220.0" top="20.0" />
                   </StackPane.margin>
                </Label>
-               <ToggleButton id="launchServerButton" fx:id="launchServerButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#launchServer" text="Launch">
+               <ToggleButton id="launchServerButton" fx:id="launchServerButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#launchServer" text="launch">
                   <StackPane.margin>
                      <Insets left="15.0" top="120.0" />
                   </StackPane.margin>

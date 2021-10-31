@@ -25,4 +25,52 @@
 
 #usernameInput {
     -fx-background-color: #151a1c;
+    -fx-text-fill: #ffffff;
+}
+
+#connectBtn {
+    -fx-background-color: #2d2e2e;
+    -fx-border-width: 0.5 0.5 2 0.5;
+    -fx-border-color: #6b6b6a;
+    -fx-background-radius: 2;
+    -fx-border-radius: 2;
+    -fx-text-fill: #ffffff;
+}
+
+#connectBtn:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+}
+
+#launchServerButton {
+    -fx-background-color: #2d2e2e;
+    -fx-border-width: 0.5 0.5 2 0.5;
+    -fx-border-color: #6b6b6a;
+    -fx-background-radius: 2;
+    -fx-border-radius: 2;
+    -fx-text-fill: #ffffff;
+}
+
+#launchServerButton:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+}
+
+#usernameFont {
+    -fx-background-color: #2d2e2e;
+}
+
+#usernameFont:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+}
+
+#serverInfo {
+    -fx-background-color: #151a1c;
+    -fx-text-fill: #ffffff;
+}
+
+.color-picker {
+    -fx-background-color: #2d2e2e;
+}
+
+.color-picker .arrow {
+    -fx-background-color: transparent;
 }

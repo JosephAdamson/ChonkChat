@@ -6,7 +6,6 @@ import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
