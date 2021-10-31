@@ -2,6 +2,7 @@ package com.joe.chonkchat.setup;
 
 import com.joe.chonkchat.client.ChatController;
 import com.joe.chonkchat.client.Client;
+import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.server.Server;
 import com.joe.chonkchat.server.TerminalController;
 import com.joe.chonkchat.util.CustomWindowBaseController;
@@ -40,6 +41,9 @@ public class LauncherController extends CustomWindowBaseController {
 
     @FXML
     public ColorPicker usernameFont;
+    
+    @FXML
+    public ImageView avatar;
 
     @FXML
     private ToggleButton launchServerButton;
@@ -99,6 +103,8 @@ public class LauncherController extends CustomWindowBaseController {
         try {
 
             String username = usernameInput.getText();
+            String colorTag = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
+            String avatarChoice = avatar.getImage().getUrl();
 
             if (username != null && !username.isBlank()) {
 
@@ -112,7 +118,9 @@ public class LauncherController extends CustomWindowBaseController {
                 // set up fields, inject them manually and start client listening thread
                 ChatController chatController = fxmlLoader.getController();
                 Socket socket = new Socket("localhost", Server.PORT);
-                Client client = new Client(socket, username, chatController);
+                
+                User user = new User(username, colorTag, avatarChoice);
+                Client client = new Client(socket, user, chatController);
                 chatController.setClient(client);
                 chatController.setUsername(username);
                 chatController.getClient().listenForIncomingMessages();

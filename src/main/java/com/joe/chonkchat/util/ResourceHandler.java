@@ -2,6 +2,7 @@ package com.joe.chonkchat.util;
 
 import com.joe.chonkchat.data.Message;
 import com.joe.chonkchat.data.MessageType;
+import com.joe.chonkchat.data.User;
 
 import java.io.*;
 import java.net.Socket;
@@ -48,7 +49,7 @@ public class ResourceHandler {
      * 
      * @param exception: error
      */
-    public static void sendStackTrace(Exception exception, String username, ObjectOutputStream output) {
+    public static void sendStackTrace(Exception exception, User username, ObjectOutputStream output) {
         
         try {
 

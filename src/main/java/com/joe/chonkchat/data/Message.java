@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class Message implements Serializable {
     
-    private String sender;
+    private User sender;
     private String senderColourTag;
     private String textData;
     private MessageType messageType;
-    private List<String> activeUsers;
+    private List<User> activeUsers;
     private FileTransfer file;
     private Exception exception;
     
@@ -25,11 +25,11 @@ public class Message implements Serializable {
     
     public Message () {}
 
-    public String getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
@@ -65,11 +65,11 @@ public class Message implements Serializable {
         return timeSent;
     }
     
-    public void setActiveUsers(List<String> activeUsers) {
+    public void setActiveUsers(List<User> activeUsers) {
         this.activeUsers = activeUsers;
     }
     
-    public List<String> getActiveUsers() {
+    public List<User> getActiveUsers() {
         return activeUsers;
     }
 

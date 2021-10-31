@@ -3,6 +3,7 @@ package com.joe.chonkchat.client;
 import com.joe.chonkchat.data.FileTransfer;
 import com.joe.chonkchat.data.Message;
 import com.joe.chonkchat.data.MessageType;
+import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.server.Server;
 import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
@@ -26,11 +27,12 @@ public class Client {
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private String username;
+    private User user;
     private ChatController chatController;
     
-    public Client(Socket socket, String username, ChatController chatController) {
+    public Client(Socket socket, User user, ChatController chatController) {
         this.socket = socket;
-        this.username = username;
+        this.user = user;
         this.chatController = chatController;
     }
 
@@ -84,7 +86,7 @@ public class Client {
                     }
 
                 } catch (SocketException e) {
-                    ResourceHandler.sendStackTrace(e, username, output);
+                    ResourceHandler.sendStackTrace(e, user, output);
                     System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -106,7 +108,7 @@ public class Client {
         try {
             
             Message message = new Message();
-            message.setSender(username);
+            message.setSender(user);
             message.setTextData(text);
             message.setMessageType(MessageType.TEXT);
             message.setTimeSent(new Date());
@@ -115,7 +117,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, username, output);
+            ResourceHandler.sendStackTrace(e, user, output);
             ResourceHandler.closeResources(socket, input, output);
         }
     }
@@ -143,7 +145,7 @@ public class Client {
             fileTransfer.setExtension(extension);
 
             Message message = new Message();
-            message.setSender(username);
+            message.setSender(user);
             message.setMessageType(MessageType.FILE);
             message.setTimeSent(new Date());
             message.setFile(fileTransfer);
@@ -152,7 +154,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, username, output);
+            ResourceHandler.sendStackTrace(e, user, output);
             ResourceHandler.closeResources(socket, input, output);
         }
     }
@@ -165,7 +167,7 @@ public class Client {
         
         try {
             Message connectMsg = new Message();
-            connectMsg.setSender(username);
+            connectMsg.setSender(user);
             connectMsg.setTextData(username + " has entered the chat.");
             connectMsg.setMessageType(MessageType.CONNECTED);
             
@@ -173,7 +175,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, username, output);
+            ResourceHandler.sendStackTrace(e, user, output);
         }
     }
 
@@ -190,7 +192,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, username, output);
+            ResourceHandler.sendStackTrace(e, user, output);
         }
     }
 }

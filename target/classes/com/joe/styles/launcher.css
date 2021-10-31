@@ -22,3 +22,7 @@
 #titleBar .button:hover {
     -fx-background-color: derive(#2d2e2e, -20%);
 }
+
+#usernameInput {
+    -fx-background-color: #151a1c;
+}

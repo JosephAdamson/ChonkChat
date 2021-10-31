@@ -30,7 +30,7 @@ public class Server {
     private boolean serverActive = false;
     TerminalController serverController;
     
-    private final HashMap<String, ObjectOutputStream> activeClients = new HashMap<>();
+    private final HashMap<User, ObjectOutputStream> activeClients = new HashMap<>();
     
     public Server(TerminalController serverController) {
         this.serverController = serverController;
@@ -109,9 +109,8 @@ public class Server {
             // Issue shutdown command to safely stop handler and client.
             Message shutdownCmd = new Message();
             shutdownCmd.setMessageType(MessageType.SHUTDOWN);
-            shutdownCmd.setSender("SERVER");
             
-            for (Map.Entry<String, ObjectOutputStream> entry : activeClients.entrySet()) {
+            for (Map.Entry<User, ObjectOutputStream> entry : activeClients.entrySet()) {
                 entry.getValue().writeObject(shutdownCmd);
             }
             
@@ -126,7 +125,7 @@ public class Server {
     /**
      * @return active clients on the server.
      */
-    public HashMap<String, ObjectOutputStream> getActiveClients() {
+    public HashMap<User, ObjectOutputStream> getActiveClients() {
         return activeClients;
     }
 
@@ -138,7 +137,7 @@ public class Server {
         private final Socket socket;
         private ObjectInputStream input;
         private ObjectOutputStream output;
-        private String clientUsername;
+        private User clientUser;
         
         public ClientHandler(Socket socket) {
             this.socket = socket;
@@ -170,7 +169,7 @@ public class Server {
                             // For now we'll keep track of conversations.
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
-                                            msg.getSender() + ": " + text
+                                            msg.getSender().getUsername() + ": " + text
                                     )
                             );
                             broadcastMessage(msg);
@@ -180,7 +179,7 @@ public class Server {
                             String file = (msg.getFile().getName() + msg.getFile().getExtension());
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
-                                            msg.getSender() + " sent file: " + file
+                                            msg.getSender().getUsername() + " sent file: " + file
                                     )
                             );
                             broadcastMessage(msg);
@@ -198,7 +197,8 @@ public class Server {
                             break;
                             
                         case ERROR:
-                            handleException(msg.getSender(), msg.getTimeSent(), msg.getException());
+                            handleException(msg.getSender().getUsername(),
+                                    msg.getTimeSent(), msg.getException());
                             break;
                             
                         default:
@@ -220,9 +220,9 @@ public class Server {
         public void addToActiveClients(Message initialMsg) {
             
             // add output stream active clients, so it can be written to later.
-            String username = initialMsg.getSender();
-            this.clientUsername = username;
-            activeClients.put(username, output);
+            User user = initialMsg.getSender();
+            this.clientUser = user;
+            activeClients.put(user, output);
 
             initialMsg.setActiveUsers(new ArrayList<>(activeClients.keySet()));
 
@@ -233,15 +233,11 @@ public class Server {
          * Remove client form active client list.
          */
         public void removeClient() {
-            activeClients.remove(clientUsername);
+            activeClients.remove(clientUser);
             Platform.runLater(
-                    () -> serverController.addTerminalMessage(clientUsername + 
+                    () -> serverController.addTerminalMessage(clientUser.getUsername() + 
                             " has left the chat.")
             );
-        }
-        
-        public boolean checkUser(User user) {
-            return true;
         }
         
         public void broadcastMessage(Message message) {
@@ -251,7 +247,7 @@ public class Server {
             
             try {
                 
-                for (Map.Entry<String, ObjectOutputStream> activeClient : activeClients.entrySet()) {
+                for (Map.Entry<User, ObjectOutputStream> activeClient : activeClients.entrySet()) {
                     activeClient.getValue().writeObject(message);
                     activeClient.getValue().flush();
                 }

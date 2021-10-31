@@ -2,9 +2,11 @@ package com.joe.chonkchat.client;
 
 import com.joe.chonkchat.data.FileTransfer;
 import com.joe.chonkchat.data.Message;
+import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -16,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -84,11 +87,11 @@ public class ChatController extends CustomWindowBaseController {
         TextFlow flow = new TextFlow();
         flow.setMaxWidth(350);
         
-        if (!message.getSender().equals(username)) {
+        if (!message.getSender().getUsername().equals(username)) {
 
-            Text sender = new Text(message.getSender() + "\n");
-            sender.setFont(Font.font("Veranda", FontWeight.BOLD, 15));
-            sender.setFill(Color.WHITE);
+            Text sender = new Text(message.getSender().getUsername() + "\n");
+            sender.setStyle("-fx-fill: " + message.getSender().getColourTag() + ";" 
+                    + "-fx-font-size: 15");
 
             flow.setStyle(
                     "-fx-background-color: #3b3d3d;"
@@ -178,10 +181,11 @@ public class ChatController extends CustomWindowBaseController {
             e.printStackTrace();
         }
 
-        if (!message.getSender().equals(username)) {
+        if (!message.getSender().getUsername().equals(username)) {
             bubble.setStyle(
                     "-fx-background-color: #3b3d3d;"
                             +"-fx-text-fill: #ffffff;"
+                            + "-fx-font-size: 15;"
                             + "-fx-background-radius: 24px;"
                             +"-fx-border-radius: 24px;"
                             + "-fx-padding: 10;"
@@ -190,14 +194,15 @@ public class ChatController extends CustomWindowBaseController {
             downloadView.setStyle("-fx-background-color: #3b3d3d;");
             downloadView.getChildren().get(1).setStyle("-fx-text-fill: #ffffff");
             
-            Label sender = new Label(message.getSender());
+            Label sender = new Label(message.getSender().getUsername());
             sender.setStyle("-fx-background-color: #3b3d3d;"
-                    +"-fx-text-fill: #ffffff;");
+                    +"-fx-text-fill:" + message.getSender().getColourTag() + ";");
             bubble.getChildren().add(sender);
         } else {
             bubble.setStyle(
                     "-fx-background-color: #007EA7;"
                             +"-fx-text-fill: #ffffff;"
+                            + "-fx-font-size: 15;"
                             + "-fx-background-radius: 24px;"
                             +"-fx-border-radius: 24px;"
                             + "-fx-padding: 10;"
@@ -316,7 +321,7 @@ public class ChatController extends CustomWindowBaseController {
      */
     public synchronized void updateChatWindow(Message message) {
         
-        if (!message.getSender().equals(username)) {
+        if (!message.getSender().getUsername().equals(username)) {
             UserPost userPost = new UserPost(message);
             
             userPost.setOnSucceeded(event -> {
@@ -345,14 +350,19 @@ public class ChatController extends CustomWindowBaseController {
      * @param message containing current active users.
      */
     public void refreshOnlineUserList(Message message) {
-        List<String> activeUsers = message.getActiveUsers();
+        List<User> activeUsers = message.getActiveUsers();
         
         ArrayList<HBox> users = new ArrayList<>();
-        for (String user: activeUsers) {
-            Label label = new Label(user);
-            label.setStyle("-fx-text-fill: #ffffff;" 
+        for (User user: activeUsers) {
+            Label label = new Label(user.getUsername());
+            label.setStyle("-fx-text-fill: " + user.getColourTag() + ";" 
                     + "-fx-font-size: 16;");
+            ImageView avatar = new ImageView(new Image(message.getSender().getAvatar()));
+            avatar.setFitWidth(20);
+            avatar.setFitHeight(20);
             HBox container = new HBox();
+            container.setSpacing(6);
+            container.getChildren().add(avatar);
             container.getChildren().add(label);
             container.setAlignment(Pos.CENTER);
             container.setStyle("-fx-background-color: #151a1c;" +
