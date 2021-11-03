@@ -41,7 +41,7 @@ public class ChatController extends CustomWindowBaseController {
     private String username;
     private final DownloaderService downloaderService = new DownloaderService();
     
-    // set this so we only have to initialize it once.
+    // set this up, so we only have to initialize it once.
     private ScrollPane emojiSelector;
 
     @FXML
@@ -64,6 +64,79 @@ public class ChatController extends CustomWindowBaseController {
 
     @FXML
     private ListView<HBox> onlineUsers;
+
+    /**
+     * Method is called by client lister thread repeatedly during conversation.
+     * Must be synchronized each post thread will share same data structure (chatWindow)
+     * on execution.
+     *
+     * @param message Message object kicked up from clientThread.
+     */
+    public synchronized void updateChatWindow(Message message) {
+
+        Post post = new Post(message);
+
+        post.setOnSucceeded(event -> {
+            chatWindow.getItems().add(post.getValue());
+        });
+
+        Thread postUpdate = new Thread(post);
+        postUpdate.setDaemon(true);
+        postUpdate.start();
+    }
+
+    /**
+     * Represents a single post to the chat, carried out on its own thread
+     * away from the main GUI thread.
+     */
+    class Post extends Task<HBox> {
+
+        private final Message message;
+
+        Post(Message message) {
+            this.message = message;
+        }
+
+        @Override
+        protected HBox call() {
+            HBox container = new HBox();
+
+            if (message.getSender().getUsername().equals(username)) {
+                container.setAlignment(Pos.BASELINE_RIGHT);
+            } else {
+                container.setAlignment(Pos.CENTER_LEFT);
+            }
+            return processMessage(container, message);
+        }
+    }
+
+    /**
+     * Passes a given message on to the helper method designed to format it 
+     * for display, according to its MessageType.
+     *
+     * @param container: underlying HBox that forms the base of the list cell
+     *                  displayed when a post is updated to the chat window
+     * @param message: message
+     * @return container
+     */
+    public HBox processMessage(HBox container, Message message) {
+        switch (message.getMessageType()) {
+
+            case TEXT:
+                TextFlow flow = formatBasicPost(message);
+                container.getChildren().add(flow);
+                break;
+
+            case FILE:
+                VBox box = formatFilePost(message);
+                container.getChildren().add(box);
+                break;
+
+            default:
+                System.out.println("Message type not found.");
+        }
+        return container;
+    }
 
     /**
      * Set colour attributes for basic text posts (user and self)
@@ -90,29 +163,46 @@ public class ChatController extends CustomWindowBaseController {
             Text sender = new Text(message.getSender().getUsername() + "\n");
             sender.setStyle("-fx-fill: " + message.getSender().getColourTag() + ";" 
                     + "-fx-font-size: 15");
-
-            flow.setStyle(
-                    "-fx-background-color: #3b3d3d;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
-
+            flow.getStyleClass().add("senderBubble");
             flow.getChildren().addAll(sender, content, new Text("\n"), time);
 
         } else {
-            flow.setStyle(
-                    "-fx-background-color: #007EA7;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
-
+            flow.getStyleClass().add("selfBubble");
             flow.getChildren().addAll(content, new Text("\n"), time);
         }
         flow.setLineSpacing(2);
         
         return flow;
+    }
+
+    /**
+     * Refresh active users displayed to the left of the chat window.
+     *
+     * @param message containing current active users.
+     */
+    public void refreshOnlineUserList(Message message) {
+        List<User> activeUsers = message.getActiveUsers();
+
+        ArrayList<HBox> users = new ArrayList<>();
+        for (User user: activeUsers) {
+            Label label = new Label(user.getUsername());
+            label.setStyle("-fx-text-fill: " + user.getColourTag() + ";"
+                    + "-fx-font-size: 16;");
+            ImageView avatar = new ImageView(new Image(message.getSender().getAvatar()));
+            avatar.setFitWidth(20);
+            avatar.setFitHeight(20);
+            HBox container = new HBox();
+            container.setPrefHeight(35);
+            container.setSpacing(6);
+            container.getChildren().add(avatar);
+            container.getChildren().add(label);
+            container.setAlignment(Pos.CENTER);
+            container.setStyle("-fx-background-color: #151a1c;" +
+                    "-fx-border-color: #151a1c #151a1c #484a4a #151a1c");
+            users.add(container);
+        }
+        onlineUsers.getItems().clear();
+        onlineUsers.getItems().addAll(users);
     }
 
     /**
@@ -237,159 +327,6 @@ public class ChatController extends CustomWindowBaseController {
     }
 
     /**
-     * Looks at a given message and passes it on to the helper method
-     * designed to format it for display according to its MessageType.
-     *  
-     * @param container: underlying HBox that forms the base of the list cell
-     *                  displayed when a post is updated to the chat window
-     * @param message: message
-     * @return container
-     */
-    public HBox processMessage(HBox container, Message message) {
-        switch (message.getMessageType()) {
-
-            case TEXT:
-                TextFlow flow = formatBasicPost(message);
-                container.getChildren().add(flow);
-                break;
-
-            case FILE:
-                VBox box = formatFilePost(message);
-                container.getChildren().add(box);
-                break;
-
-            default:
-                System.out.println("Whaaaat?");
-        }
-
-        return container;
-    }
-    
-    /**
-     * Background UI task that updates chat window when the user
-     * posts a message.
-     */
-    class SelfPost extends Task<HBox> {
-        
-        private final Message message;
-        
-        public SelfPost(Message message) {
-           this.message = message; 
-        }
-        
-        @Override
-        protected HBox call() {
-
-            HBox container = new HBox();
-            container.setMaxWidth(700);
-            container.setAlignment(Pos.BASELINE_RIGHT);
-            
-            return processMessage(container, message);
-        }
-    }
-
-    /**
-     * Background UI task that updates chat window as soon as another
-     * user posts a message.
-     */
-    class UserPost extends Task<HBox> {
-        
-        private final Message message;
-        
-        public UserPost(Message message) {
-            this.message = message;
-        }
-
-        @Override
-        protected HBox call() {
-
-            HBox container = new HBox();
-            container.setMaxWidth(700);
-            container.setAlignment(Pos.CENTER_LEFT);
-            
-            return processMessage(container, message);
-        }
-    }
-
-    /**
-     * Method is called by client lister thread repeatedly during conversation.
-     * Must be synchronized as method calls share same data structure (chatWindow).
-     * 
-     * @param message Message object kicked up from clientThread.
-     */
-    public synchronized void updateChatWindow(Message message) {
-        
-        if (!message.getSender().getUsername().equals(username)) {
-            UserPost userPost = new UserPost(message);
-            
-            userPost.setOnSucceeded(event -> {
-                chatWindow.getItems().add(userPost.getValue());
-            });
-            
-            Thread userPostUpdate = new Thread(userPost);
-            userPostUpdate.setDaemon(true);
-            userPostUpdate.start();
-        } else {
-            SelfPost selfPost = new SelfPost(message);
-            
-            selfPost.setOnSucceeded(event -> {
-                chatWindow.getItems().add(selfPost.getValue());
-            });
-            
-            Thread selfPostUpdate = new Thread(selfPost);
-            selfPostUpdate.setDaemon(true);
-            selfPostUpdate.start();
-        }
-    }
-
-    /**
-     * Refresh active users displayed to the left of the chat window.
-     * 
-     * @param message containing current active users.
-     */
-    public void refreshOnlineUserList(Message message) {
-        List<User> activeUsers = message.getActiveUsers();
-        
-        ArrayList<HBox> users = new ArrayList<>();
-        for (User user: activeUsers) {
-            Label label = new Label(user.getUsername());
-            label.setStyle("-fx-text-fill: " + user.getColourTag() + ";" 
-                    + "-fx-font-size: 16;");
-            ImageView avatar = new ImageView(new Image(message.getSender().getAvatar()));
-            avatar.setFitWidth(20);
-            avatar.setFitHeight(20);
-            HBox container = new HBox();
-            container.setPrefHeight(35);
-            container.setSpacing(6);
-            container.getChildren().add(avatar);
-            container.getChildren().add(label);
-            container.setAlignment(Pos.CENTER);
-            container.setStyle("-fx-background-color: #151a1c;" +
-                    "-fx-border-color: #151a1c #151a1c #484a4a #151a1c");
-            users.add(container);
-        }
-        
-        onlineUsers.getItems().clear();
-        onlineUsers.getItems().addAll(users);
-    }
-
-    /**
-     * Keyboard input for text input in chat window.
-     * 
-     * @param keyEvent enter 
-     */
-    @FXML
-    public void onTextInputEnter(KeyEvent keyEvent) {
-        
-        if (keyEvent.getCode() == KeyCode.ENTER && 
-                !textInput.getText().isEmpty()) {
-            String text = textInput.getText();
-            client.sendMessage(text);
-            textInput.clear();
-        }
-    }
-
-    /**
      * Upload file via the chat window
      * 
      * @param event click of the 'file' button.
@@ -458,10 +395,7 @@ public class ChatController extends CustomWindowBaseController {
                     .setPrefWidth(originalContainerWidth - 45);
             
             textInputConsole.getChildren().add(0, cancel);
-            
-            
             consoleBox.setPrefHeight(consoleBox.getPrefHeight() + 100);
-            
             consoleBox.setTop(emojiSelector);
         }
     }
@@ -486,7 +420,6 @@ public class ChatController extends CustomWindowBaseController {
             URL tokenPath = getClass().getResource("/com/joe/images/emojis/" + token + ".png");
             
             if (tokenPath != null) {
-                
                 ImageView emoji = new ImageView(new Image(String.valueOf(tokenPath)));
                 emoji.setFitHeight(22);
                 emoji.setFitWidth(22);
@@ -500,6 +433,22 @@ public class ChatController extends CustomWindowBaseController {
             }
         }
         return flow;
+    }
+
+    /**
+     * Keyboard input for text input in chat window.
+     *
+     * @param keyEvent enter 
+     */
+    @FXML
+    public void onTextInputEnter(KeyEvent keyEvent) {
+
+        if (keyEvent.getCode() == KeyCode.ENTER &&
+                !textInput.getText().isEmpty()) {
+            String text = textInput.getText();
+            client.sendMessage(text);
+            textInput.clear();
+        }
     }
 
     /**
