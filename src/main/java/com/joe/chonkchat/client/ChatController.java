@@ -2,6 +2,7 @@ package com.joe.chonkchat.client;
 
 import com.joe.chonkchat.data.FileTransfer;
 import com.joe.chonkchat.data.Message;
+import com.joe.chonkchat.data.Status;
 import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
@@ -52,6 +53,9 @@ public class ChatController extends CustomWindowBaseController {
      */
     @FXML
     private BorderPane consoleBox;
+
+    @FXML
+    public ComboBox<String> statusBar;
     
     @FXML
     private TextArea textInput;
@@ -480,4 +484,8 @@ public class ChatController extends CustomWindowBaseController {
     }
     
     public TextArea getTextInput() {return textInput;}
+
+    public ComboBox<String> getStatusBar() {
+        return statusBar;
+    }
 }

@@ -180,3 +180,24 @@
     -fx-border-radius: 24px;
     -fx-padding: 10;
 }
+
+.combo-box {
+    -fx-background-color: #2d2e2e;
+}
+
+.combo-box .cell:selected {
+    -fx-text-fill: #949392;
+}
+
+.combo-box:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+}
+
+.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
+    -fx-background-color: #2d2e2e;
+    -fx-text-fill: #949392;
+}
+.combo-box .combo-box-popup .list-cell:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+    -fx-text-fill: #949392;
+}

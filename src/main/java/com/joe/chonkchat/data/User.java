@@ -10,6 +10,7 @@ public class User implements Serializable {
     private final String username;
     private final String colourTag;
     private final String avatar;
+    private Status status;
     
     public User(String username, String colourTag, String avatar) {
         this.username = username;
@@ -51,5 +52,13 @@ public class User implements Serializable {
 
     public String getAvatar() {
         return avatar;
+    }
+    
+    public Status getStatus() {
+        return status;
+    }
+    
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

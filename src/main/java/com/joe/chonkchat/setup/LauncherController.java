@@ -7,8 +7,6 @@ import com.joe.chonkchat.server.Server;
 import com.joe.chonkchat.server.TerminalController;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -101,7 +99,6 @@ public class LauncherController extends CustomWindowBaseController {
     public void launchClient() {
         
         try {
-
             String username = usernameInput.getText();
             String colorTag = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
             String avatarChoice = avatar.getImage().getUrl();
@@ -124,6 +121,7 @@ public class LauncherController extends CustomWindowBaseController {
                 chatController.setClient(client);
                 chatController.setUsername(username);
                 chatController.getClient().listenForIncomingMessages();
+                chatController.getStatusBar().getSelectionModel().selectFirst();
 
                 // set up emoji selector window (hidden) so we only have to initialize it once.
                 ScrollPane scrollPane = new ScrollPane();
