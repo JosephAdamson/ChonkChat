@@ -26,8 +26,7 @@ public class Client {
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private String username;
-    private User user;
+    private final User user;
     private ChatController chatController;
     
     public Client(Socket socket, User user, ChatController chatController) {
@@ -106,7 +105,6 @@ public class Client {
      */
     public void sendMessage(String text) {
         try {
-            
             Message message = new Message();
             message.setSender(user);
             message.setTextData(text);
@@ -168,7 +166,7 @@ public class Client {
         try {
             Message connectMsg = new Message();
             connectMsg.setSender(user);
-            connectMsg.setTextData(username + " has entered the chat.");
+            connectMsg.setTextData(user.getUsername() + " has entered the chat.");
             connectMsg.setMessageType(MessageType.CONNECTED);
             
             output.writeObject(connectMsg);

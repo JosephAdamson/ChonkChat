@@ -240,17 +240,13 @@ public class ChatController extends CustomWindowBaseController {
             loadPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    
-                    // insert a progress indicator here?
                     ProgressIndicator progressIndicator = new ProgressIndicator();
                     downloaderService.setFileTDownload(message.getFile());
                     progressIndicator.progressProperty()
                             .bind(downloaderService.progressProperty());
                     
                     loadPane.getChildren().add(progressIndicator);
-                    
                     downloaderService.restart();
-                    
                     downloadImg.toFront();
                     downloadImg.setImage(new Image(String.valueOf(getClass()
                             .getResource("/com/joe/images/checked.png"))));
@@ -278,7 +274,6 @@ public class ChatController extends CustomWindowBaseController {
                             +"-fx-border-radius: 24px;"
                             + "-fx-padding: 10;"
             );
-            
             downloadView.setStyle("-fx-background-color: #3b3d3d;");
             downloadView.getChildren().get(1).setStyle("-fx-text-fill: #ffffff");
             
@@ -295,7 +290,6 @@ public class ChatController extends CustomWindowBaseController {
                             +"-fx-border-radius: 24px;"
                             + "-fx-padding: 10;"
             );
-            
             downloadView.setStyle("-fx-background-color: #007EA7;");
         }
         bubble.getChildren().add(downloadView);
@@ -357,8 +351,7 @@ public class ChatController extends CustomWindowBaseController {
     public void emojiChooser() {
         
         // if the cancel button is present (emoji button already clicked)
-        // we do nothing, this might have to be changed in the future if I 
-        // add further buttons.
+        // we do nothing, this might have to be changed in the future if I add further buttons.
         if (textInputConsole.getChildren().size() == 3) {
             
             // We will need to resize the textInputContainer and its container dynamically
@@ -390,7 +383,6 @@ public class ChatController extends CustomWindowBaseController {
                     consoleBox.setPrefHeight(consoleBox.getPrefHeight() - 100);
                 }
             });
-            
             ((HBox) textInputConsole.getChildren().get(2))
                     .setPrefWidth(originalContainerWidth - 45);
             
