@@ -27,7 +27,7 @@ public class Client {
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private final User user;
-    private ChatController chatController;
+    private final ChatController chatController;
     
     public Client(Socket socket, User user, ChatController chatController) {
         this.socket = socket;
@@ -46,7 +46,6 @@ public class Client {
             @Override
             public void run() {
                 try {
-
                     output = new ObjectOutputStream(socket.getOutputStream());
                     input = new ObjectInputStream(socket.getInputStream());
 
@@ -78,6 +77,8 @@ public class Client {
                                         () -> chatController.refreshOnlineUserList(incomingMsg)
                                 );
                                 break;
+                                
+                            case REJECTED:
 
                             default:
                                 System.out.println("Whoa there...");

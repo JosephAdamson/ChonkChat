@@ -117,67 +117,80 @@ public class LauncherController extends CustomWindowBaseController {
                 Socket socket = new Socket("localhost", Server.PORT);
                 
                 User user = new User(username, colorTag, avatarChoice);
-                Client client = new Client(socket, user, chatController);
-                chatController.setClient(client);
-                chatController.setUsername(username);
-                chatController.getClient().listenForIncomingMessages();
-                chatController.getStatusBar().getSelectionModel().selectFirst();
+                
+                // Do not progress with connection if there is already a user 
+                // with the same username.
+                if (!terminalController.getServer().duplicateUsername(user)) {
 
-                // set up emoji selector window (hidden) so we only have to initialize it once.
-                ScrollPane scrollPane = new ScrollPane();
-                
-                GridPane emojiSelector = new GridPane();
-                emojiSelector.setPrefHeight(100);
-                emojiSelector.setPrefWidth(200);
-                emojiSelector.getStyleClass().add("emojiBox");
+                    Client client = new Client(socket, user, chatController);
+                    chatController.setClient(client);
+                    chatController.setUsername(username);
+                    chatController.getClient().listenForIncomingMessages();
+                    chatController.getStatusBar().getSelectionModel().selectFirst();
 
-                scrollPane.setContent(emojiSelector);
-                
-                File emojiFolder = new File(Objects.requireNonNull(getClass()
-                        .getResource("/com/joe/images/emojis")).getFile());
-                
-                File[] emojis = emojiFolder.listFiles();
+                    // set up emoji selector window (hidden) so we only have to initialize it once.
+                    ScrollPane scrollPane = new ScrollPane();
 
-                // had to hardcode the dimensions, not getting a filled-out GridPane.
-                double dim = 35;
-                
-                for (int i = 0;  i < emojis.length; i++) {
-                    int row = i / 10;
-                    int col = i % 10;
-                    
-                    String filename = emojis[i].getName();
-                    Button btn = new Button();
-                    btn.setPrefHeight(dim);
-                    btn.setPrefWidth(dim);
-                    btn.getStyleClass().add("emojiButton");
-                    btn.setFocusTraversable(false);
-                    ImageView emoji = new ImageView(new Image(String.valueOf(getClass()
-                            .getResource("/com/joe/images/emojis/" + filename))));
-                    emoji.setFitWidth(dim);
-                    emoji.setFitHeight(dim);
-                    btn.setGraphic(emoji);
-                    btn.setOnMouseClicked(new EmojiClicker(chatController.getTextInput(), filename));
-                    
-                    emojiSelector.add(btn, col, row);
+                    GridPane emojiSelector = new GridPane();
+                    emojiSelector.setPrefHeight(100);
+                    emojiSelector.setPrefWidth(200);
+                    emojiSelector.getStyleClass().add("emojiBox");
+
+                    scrollPane.setContent(emojiSelector);
+
+                    File emojiFolder = new File(Objects.requireNonNull(getClass()
+                            .getResource("/com/joe/images/emojis")).getFile());
+
+                    File[] emojis = emojiFolder.listFiles();
+
+                    // had to hardcode the dimensions, not getting a filled-out GridPane.
+                    double dim = 35;
+
+                    for (int i = 0; i < emojis.length; i++) {
+                        int row = i / 10;
+                        int col = i % 10;
+
+                        String filename = emojis[i].getName();
+                        Button btn = new Button();
+                        btn.setPrefHeight(dim);
+                        btn.setPrefWidth(dim);
+                        btn.getStyleClass().add("emojiButton");
+                        btn.setFocusTraversable(false);
+                        ImageView emoji = new ImageView(new Image(String.valueOf(getClass()
+                                .getResource("/com/joe/images/emojis/" + filename))));
+                        emoji.setFitWidth(dim);
+                        emoji.setFitHeight(dim);
+                        btn.setGraphic(emoji);
+                        btn.setOnMouseClicked(new EmojiClicker(chatController.getTextInput(), filename));
+
+                        emojiSelector.add(btn, col, row);
+                    }
+
+                    chatController.setEmojiSelector(scrollPane);
+
+                    Scene scene = new Scene(root);
+                    scene.setFill(Color.TRANSPARENT);
+                    Stage stage = new Stage();
+
+                    stage.setScene(scene);
+                    stage.initStyle(StageStyle.TRANSPARENT);
+                    stage.show();
+
+                } else {
+                    Alert usernameAlert = new Alert(Alert.AlertType.WARNING);
+                    usernameAlert.setTitle("Connection rejected");
+                    usernameAlert.setHeaderText("Duplicate username detected");
+                    usernameAlert.setContentText("There is already an active user with this username.");
+                    usernameAlert.show();
                 }
-                
-                chatController.setEmojiSelector(scrollPane);
-
-                Scene scene = new Scene(root);
-                scene.setFill(Color.TRANSPARENT);
-                Stage stage = new Stage();
-                
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.TRANSPARENT);
-                stage.show();
                 
             } else {
 
-                Alert usernameAlert = new Alert(Alert.AlertType.WARNING);
-                usernameAlert.setTitle("Username Warning");
-                usernameAlert.setHeaderText("Username must not be blank.");
-                usernameAlert.setContentText("Please make provide a username before logging in.");
-                usernameAlert.show();
+                Alert nameError = new Alert(Alert.AlertType.WARNING);
+                nameError.setTitle("Username Warning");
+                nameError.setHeaderText("Username must not be blank.");
+                nameError.setContentText("Please make provide a username before logging in.");
+                nameError.show();
             }
 
         } catch (ConnectException e) {

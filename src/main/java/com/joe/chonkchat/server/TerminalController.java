@@ -201,4 +201,8 @@ public class TerminalController implements Initializable {
     public boolean isServerActive() {
         return serverActive;
     }
+    
+    public Server getServer() {
+        return this.server;
+    }
 }

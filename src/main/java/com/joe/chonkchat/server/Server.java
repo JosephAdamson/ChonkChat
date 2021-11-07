@@ -122,6 +122,10 @@ public class Server {
         }
     }
 
+    public boolean duplicateUsername(User user) {
+        return activeClients.containsKey(user);
+    }
+
     /**
      * @return active clients on the server.
      */
@@ -151,7 +155,6 @@ public class Server {
         public void run() {
 
             try {
-
                 output = new ObjectOutputStream(socket.getOutputStream());
                 input = new ObjectInputStream(socket.getInputStream());
 
@@ -219,8 +222,9 @@ public class Server {
          */
         public void addToActiveClients(Message initialMsg) {
             
-            // add output stream active clients, so it can be written to later.
             User user = initialMsg.getSender();
+
+            // add output stream active clients, so it can be written to later.
             this.clientUser = user;
             activeClients.put(user, output);
 
@@ -239,7 +243,12 @@ public class Server {
                             " has left the chat.")
             );
         }
-        
+
+        /**
+         * Send Message packet to all active users in the chat.
+         * 
+         * @param message (text file etc.)
+         */
         public void broadcastMessage(Message message) {
             
             // active users at the time the message is sent.
