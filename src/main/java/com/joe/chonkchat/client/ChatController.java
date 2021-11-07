@@ -2,7 +2,6 @@ package com.joe.chonkchat.client;
 
 import com.joe.chonkchat.data.FileTransfer;
 import com.joe.chonkchat.data.Message;
-import com.joe.chonkchat.data.Status;
 import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;

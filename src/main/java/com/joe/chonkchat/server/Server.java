@@ -122,6 +122,12 @@ public class Server {
         }
     }
 
+    /**
+     * checks active clients against parameter user.
+     * 
+     * @param user: prospective connection
+     * @return true if user with same username already exists, false otherwise.
+     */
     public boolean duplicateUsername(User user) {
         return activeClients.containsKey(user);
     }
