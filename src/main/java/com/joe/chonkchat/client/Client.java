@@ -77,8 +77,6 @@ public class Client {
                                         () -> chatController.refreshOnlineUserList(incomingMsg)
                                 );
                                 break;
-                                
-                            case REJECTED:
 
                             default:
                                 System.out.println("Whoa there...");
