@@ -2,6 +2,7 @@ package com.joe.chonkchat.server;
 
 import com.joe.chonkchat.data.Message;
 import com.joe.chonkchat.data.MessageType;
+import com.joe.chonkchat.data.Status;
 import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
@@ -13,6 +14,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,7 +32,8 @@ public class Server {
     private boolean serverActive = false;
     TerminalController serverController;
     
-    private final HashMap<User, ObjectOutputStream> activeClients = new HashMap<>();
+    private final HashMap<String, ObjectOutputStream> activeConnections = new HashMap<>();
+    private final HashMap<String, User> activeUserRoster = new HashMap<>();
     
     public Server(TerminalController serverController) {
         this.serverController = serverController;
@@ -110,7 +113,7 @@ public class Server {
             Message shutdownCmd = new Message();
             shutdownCmd.setMessageType(MessageType.SHUTDOWN);
             
-            for (Map.Entry<User, ObjectOutputStream> entry : activeClients.entrySet()) {
+            for (Map.Entry<String, ObjectOutputStream> entry : activeConnections.entrySet()) {
                 entry.getValue().writeObject(shutdownCmd);
             }
             
@@ -129,14 +132,14 @@ public class Server {
      * @return true if user with same username already exists, false otherwise.
      */
     public boolean duplicateUsername(User user) {
-        return activeClients.containsKey(user);
+        return activeConnections.containsKey(user.getUsername());
     }
 
     /**
      * @return active clients on the server.
      */
-    public HashMap<User, ObjectOutputStream> getActiveClients() {
-        return activeClients;
+    public HashMap<String, ObjectOutputStream> getActiveConnections() {
+        return activeConnections;
     }
 
     /**
@@ -147,7 +150,7 @@ public class Server {
         private final Socket socket;
         private ObjectInputStream input;
         private ObjectOutputStream output;
-        private User clientUser;
+        private String username;
         
         public ClientHandler(Socket socket) {
             this.socket = socket;
@@ -202,7 +205,21 @@ public class Server {
                             break;
                             
                         case DISCONNECTED:
+                            removeClient();
+                            msg.setMessageType(MessageType.STATUS_UPDATE);
+                            msg.setActiveUsers(new ArrayList<>(activeUserRoster.values()));
+                            broadcastMessage(msg);
                             ResourceHandler.closeResources(socket, input, output);
+                            break;
+
+                        case STATUS_UPDATE:
+                            Platform.runLater(
+                                    () -> serverController.addTerminalMessage(
+                                            msg.getSender().getUsername() + " has updated their status.")
+                            );
+                            System.out.println(msg.getSender());
+                            updateActiveUserStatus(msg.getSender(), msg.getStatusUpdate());
+                            broadcastMessage(msg);
                             break;
                             
                         case ERROR:
@@ -227,25 +244,36 @@ public class Server {
          * Ping new client with a welcome message to confirm connection.
          */
         public void addToActiveClients(Message initialMsg) {
+
+            this.username = initialMsg.getSender().getUsername();
             
-            User user = initialMsg.getSender();
-
             // add output stream active clients, so it can be written to later.
-            this.clientUser = user;
-            activeClients.put(user, output);
+            activeConnections.put(username, output);
+            activeUserRoster.put(username, initialMsg.getSender());
 
-            initialMsg.setActiveUsers(new ArrayList<>(activeClients.keySet()));
+            initialMsg.setActiveUsers(new ArrayList<>(activeUserRoster.values()));
 
             broadcastMessage(initialMsg);
+        }
+
+        /**
+         * Replaces user-key with an updated version.
+         * 
+         * @param user user-key with update status.
+         */
+        public void updateActiveUserStatus(User user, Status update) {
+            user.setStatus(update);
+            activeUserRoster.replace(user.getUsername(), user);
         }
 
         /**
          * Remove client form active client list.
          */
         public void removeClient() {
-            activeClients.remove(clientUser);
+            activeConnections.remove(username);
+            activeUserRoster.remove(username);
             Platform.runLater(
-                    () -> serverController.addTerminalMessage(clientUser.getUsername() + 
+                    () -> serverController.addTerminalMessage(username + 
                             " has left the chat.")
             );
         }
@@ -258,11 +286,10 @@ public class Server {
         public void broadcastMessage(Message message) {
             
             // active users at the time the message is sent.
-            message.setActiveUsers(new ArrayList<>(activeClients.keySet()));
+            message.setActiveUsers(new ArrayList<>(activeUserRoster.values()));
             
             try {
-                
-                for (Map.Entry<User, ObjectOutputStream> activeClient : activeClients.entrySet()) {
+                for (Map.Entry<String, ObjectOutputStream> activeClient : activeConnections.entrySet()) {
                     activeClient.getValue().writeObject(message);
                     activeClient.getValue().flush();
                 }

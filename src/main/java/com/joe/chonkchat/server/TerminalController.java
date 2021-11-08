@@ -154,14 +154,14 @@ public class TerminalController implements Initializable {
         
         if (serverActive) {
             
-            if (!server.getActiveClients().isEmpty()) {
+            if (!server.getActiveConnections().isEmpty()) {
                 
                 // loop through active clients and print usernames
                 // to terminal
                 addTerminalMessage("--- active clients ---");
                 
                 StringBuilder clientList = new StringBuilder();
-                server.getActiveClients().forEach(
+                server.getActiveConnections().forEach(
                         (username, connection) -> {
                             clientList.append("\t").append(username).append("\n");
                         });

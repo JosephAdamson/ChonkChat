@@ -49,12 +49,12 @@ public class ResourceHandler {
      * 
      * @param exception: error
      */
-    public static void sendStackTrace(Exception exception, User username, ObjectOutputStream output) {
+    public static void sendStackTrace(Exception exception, String user, ObjectOutputStream output) {
         
         try {
 
             Message msg = new Message();
-            msg.setSender(username);
+            msg.setSender(new User(user, null, null));
             msg.setTimeSent(new Date());
             msg.setException(exception);
             msg.setMessageType(MessageType.ERROR);

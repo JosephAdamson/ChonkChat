@@ -63,8 +63,8 @@ public class LauncherController extends CustomWindowBaseController {
 
                 Scene scene = new Scene(root);
                 Stage stage = new Stage();
-                stage.getIcons().add(new Image(getClass()
-                        .getResourceAsStream("/com/joe/images/server.png")));
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass()
+                        .getResourceAsStream("/com/joe/images/server.png"))));
                 stage.setTitle("chonkchat server terminal");
                 
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -122,9 +122,8 @@ public class LauncherController extends CustomWindowBaseController {
                 // with the same username.
                 if (!terminalController.getServer().duplicateUsername(user)) {
 
-                    Client client = new Client(socket, user, chatController);
+                    Client client = new Client(socket, username, colorTag, avatarChoice, chatController);
                     chatController.setClient(client);
-                    chatController.setUsername(username);
                     chatController.getClient().listenForIncomingMessages();
                     chatController.getStatusBar().getSelectionModel().selectFirst();
 
@@ -185,7 +184,6 @@ public class LauncherController extends CustomWindowBaseController {
                 }
                 
             } else {
-
                 Alert nameError = new Alert(Alert.AlertType.WARNING);
                 nameError.setTitle("Username Warning");
                 nameError.setHeaderText("Username must not be blank.");

@@ -32,12 +32,12 @@
                <Font size="20.0" />
             </font>
          </Button>
-         <ComboBox id="statusBar" fx:id="statusBar" prefWidth="90.0">
+         <ComboBox id="statusBar" fx:id="statusBar" onAction="#changeAvailability" prefWidth="90.0">
             <items>
                <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Online" />
-                  <String fx:value="Busy" />
-                  <String fx:value="Away" />
+                  <String fx:value="online" />
+                  <String fx:value="busy" />
+                  <String fx:value="away" />
                </FXCollections>
             </items>
             <HBox.margin>

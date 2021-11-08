@@ -1,8 +1,6 @@
 package com.joe.chonkchat.client;
 
-import com.joe.chonkchat.data.FileTransfer;
-import com.joe.chonkchat.data.Message;
-import com.joe.chonkchat.data.User;
+import com.joe.chonkchat.data.*;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
@@ -38,7 +36,6 @@ import java.util.Optional;
 public class ChatController extends CustomWindowBaseController {
     
     private Client client;
-    private String username;
     private final DownloaderService downloaderService = new DownloaderService();
     
     // set this up, so we only have to initialize it once.
@@ -104,7 +101,7 @@ public class ChatController extends CustomWindowBaseController {
         protected HBox call() {
             HBox container = new HBox();
 
-            if (message.getSender().getUsername().equals(username)) {
+            if (message.getSender().getUsername().equals(client.getUsername())) {
                 container.setAlignment(Pos.BASELINE_RIGHT);
             } else {
                 container.setAlignment(Pos.CENTER_LEFT);
@@ -153,7 +150,6 @@ public class ChatController extends CustomWindowBaseController {
         content.setMaxWidth(340);
 
         Text time = new Text(message.getTimeSent());
-        
         time = new Text(time.getText());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
@@ -161,7 +157,7 @@ public class ChatController extends CustomWindowBaseController {
         TextFlow flow = new TextFlow();
         flow.setMaxWidth(350);
         
-        if (!message.getSender().getUsername().equals(username)) {
+        if (!message.getSender().getUsername().equals(client.getUsername())) {
 
             Text sender = new Text(message.getSender().getUsername() + "\n");
             sender.setStyle("-fx-fill: " + message.getSender().getColourTag() + ";" 
@@ -188,17 +184,19 @@ public class ChatController extends CustomWindowBaseController {
 
         ArrayList<HBox> users = new ArrayList<>();
         for (User user: activeUsers) {
-            Label label = new Label(user.getUsername());
-            label.setStyle("-fx-text-fill: " + user.getColourTag() + ";"
+            Label username = new Label(user.getUsername());
+            username.setStyle("-fx-text-fill: " + user.getColourTag() + ";"
                     + "-fx-font-size: 16;");
-            ImageView avatar = new ImageView(new Image(message.getSender().getAvatar()));
+            Label status = new Label(user.getStatus().toString());
+            status.setStyle("-fx-text-fill: #949392;" +
+                    "-fx-font-size: 12;");
+            ImageView avatar = new ImageView(new Image(user.getAvatar()));
             avatar.setFitWidth(20);
             avatar.setFitHeight(20);
             HBox container = new HBox();
             container.setPrefHeight(35);
             container.setSpacing(6);
-            container.getChildren().add(avatar);
-            container.getChildren().add(label);
+            container.getChildren().addAll(avatar, username, status);
             container.setAlignment(Pos.CENTER);
             container.setStyle("-fx-background-color: #151a1c;" +
                     "-fx-border-color: #151a1c #151a1c #484a4a #151a1c");
@@ -268,7 +266,7 @@ public class ChatController extends CustomWindowBaseController {
             e.printStackTrace();
         }
 
-        if (!message.getSender().getUsername().equals(username)) {
+        if (!message.getSender().getUsername().equals(client.getUsername())) {
             bubble.setStyle(
                     "-fx-background-color: #3b3d3d;"
                             +"-fx-text-fill: #ffffff;"
@@ -396,9 +394,9 @@ public class ChatController extends CustomWindowBaseController {
     }
 
     /**
-     * Splits text content to identify Strings that represent emojis (byte codes).
-     * Turns string byte codes into corresponding emojis where they are added,
-     * along with text content, to the resulting TextFlow.
+     * Splits text content to identify Strings that represent emojis.
+     * Turns string representations into corresponding emoji.pngs. They are 
+     * then added, along with text content, to the resulting TextFlow.
      * 
      * @param message text message content
      * @return the formatted text content now containing inline emojis
@@ -428,6 +426,12 @@ public class ChatController extends CustomWindowBaseController {
             }
         }
         return flow;
+    }
+    
+    @FXML
+    public void changeAvailability() {
+        Status update = Status.valueOf(statusBar.getValue().toUpperCase());
+        client.updateStatus(update);
     }
 
     /**
@@ -472,10 +476,6 @@ public class ChatController extends CustomWindowBaseController {
 
     public Client getClient() {
         return client;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
     
     public void setEmojiSelector(ScrollPane emojiSelector) {

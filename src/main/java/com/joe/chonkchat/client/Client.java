@@ -1,9 +1,6 @@
 package com.joe.chonkchat.client;
 
-import com.joe.chonkchat.data.FileTransfer;
-import com.joe.chonkchat.data.Message;
-import com.joe.chonkchat.data.MessageType;
-import com.joe.chonkchat.data.User;
+import com.joe.chonkchat.data.*;
 import com.joe.chonkchat.server.Server;
 import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
@@ -26,12 +23,17 @@ public class Client {
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private final User user;
+    private final String username;
+    private final String colourTag;
+    private final String avatar;
     private final ChatController chatController;
     
-    public Client(Socket socket, User user, ChatController chatController) {
+    public Client(Socket socket, String username, String colourTag,
+                  String avatar, ChatController chatController) {
         this.socket = socket;
-        this.user = user;
+        this.username = username;
+        this.colourTag = colourTag;
+        this.avatar = avatar;
         this.chatController = chatController;
     }
 
@@ -73,6 +75,8 @@ public class Client {
                                 break;
                                 
                             case CONNECTED:
+                                
+                            case STATUS_UPDATE:
                                 Platform.runLater(
                                         () -> chatController.refreshOnlineUserList(incomingMsg)
                                 );
@@ -84,7 +88,7 @@ public class Client {
                     }
 
                 } catch (SocketException e) {
-                    ResourceHandler.sendStackTrace(e, user, output);
+                    ResourceHandler.sendStackTrace(e, username, output);
                     System.err.println("[SERVER @ port " + Server.PORT + "]: Socket no longer available");
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -105,7 +109,7 @@ public class Client {
     public void sendMessage(String text) {
         try {
             Message message = new Message();
-            message.setSender(user);
+            message.setSender(new User(username, colourTag, avatar));
             message.setTextData(text);
             message.setMessageType(MessageType.TEXT);
             message.setTimeSent(new Date());
@@ -114,7 +118,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, user, output);
+            ResourceHandler.sendStackTrace(e, username, output);
             ResourceHandler.closeResources(socket, input, output);
         }
     }
@@ -142,7 +146,7 @@ public class Client {
             fileTransfer.setExtension(extension);
 
             Message message = new Message();
-            message.setSender(user);
+            message.setSender(new User(username, colourTag, avatar));
             message.setMessageType(MessageType.FILE);
             message.setTimeSent(new Date());
             message.setFile(fileTransfer);
@@ -151,7 +155,7 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, user, output);
+            ResourceHandler.sendStackTrace(e, username, output);
             ResourceHandler.closeResources(socket, input, output);
         }
     }
@@ -164,15 +168,15 @@ public class Client {
         
         try {
             Message connectMsg = new Message();
-            connectMsg.setSender(user);
-            connectMsg.setTextData(user.getUsername() + " has entered the chat.");
+            connectMsg.setSender(new User(username, colourTag, avatar));
+            connectMsg.setTextData(username + " has entered the chat.");
             connectMsg.setMessageType(MessageType.CONNECTED);
             
             output.writeObject(connectMsg);
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, user, output);
+            ResourceHandler.sendStackTrace(e, username, output);
         }
     }
 
@@ -189,7 +193,26 @@ public class Client {
             output.flush();
             
         } catch (IOException e) {
-            ResourceHandler.sendStackTrace(e, user, output);
+            ResourceHandler.sendStackTrace(e, username, output);
         }
+    }
+    
+    public void updateStatus(Status update) {
+        try {
+            Message message = new Message();
+            message.setSender(new User(username, colourTag, avatar));
+            message.setMessageType(MessageType.STATUS_UPDATE);
+            message.setStatusUpdate(update);
+            
+            output.writeObject(message);
+            output.flush();
+            
+        } catch (IOException e) {
+            ResourceHandler.sendStackTrace(e, username, output);
+        }
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

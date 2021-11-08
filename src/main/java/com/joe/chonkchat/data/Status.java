@@ -7,5 +7,10 @@ package com.joe.chonkchat.data;
  * @author Joseph Adamson
  */
 public enum Status {
-    ONLINE, BUSY, AWAY
+    ONLINE, BUSY, AWAY;
+    
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

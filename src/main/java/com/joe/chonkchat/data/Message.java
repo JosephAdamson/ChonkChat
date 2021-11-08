@@ -13,10 +13,10 @@ import java.util.List;
 public class Message implements Serializable {
     
     private User sender;
-    private String senderColourTag;
     private String textData;
     private MessageType messageType;
     private List<User> activeUsers;
+    private Status statusUpdate;
     private FileTransfer file;
     private Exception exception;
     
@@ -31,14 +31,6 @@ public class Message implements Serializable {
 
     public void setSender(User sender) {
         this.sender = sender;
-    }
-
-    public String getSenderColourTag() {
-        return senderColourTag;
-    }
-
-    public void setSenderColourTag(String senderColourTag) {
-        this.senderColourTag = senderColourTag;
     }
 
     public String getTextData() {
@@ -87,5 +79,13 @@ public class Message implements Serializable {
 
     public void setException(Exception exception) {
         this.exception = exception;
+    }
+
+    public Status getStatusUpdate() {
+        return statusUpdate;
+    }
+
+    public void setStatusUpdate(Status statusUpdate) {
+        this.statusUpdate = statusUpdate;
     }
 }

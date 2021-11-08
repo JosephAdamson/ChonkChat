@@ -11,11 +11,12 @@ public class User implements Serializable {
     private final String colourTag;
     private final String avatar;
     private Status status;
-    
+
     public User(String username, String colourTag, String avatar) {
         this.username = username;
         this.colourTag = colourTag;
         this.avatar = avatar;
+        this.status = Status.ONLINE;
     }
     
     @Override
@@ -42,6 +43,16 @@ public class User implements Serializable {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", colourTag='" + colourTag + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", status=" + status +
+                '}';
+    }
+    
     public String getUsername() {
         return username;
     }
