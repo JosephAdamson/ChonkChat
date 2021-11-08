@@ -37,33 +37,14 @@ public class ChatController extends CustomWindowBaseController {
     
     private Client client;
     private final DownloaderService downloaderService = new DownloaderService();
-    
-    // set this up, so we only have to initialize it once.
     private ScrollPane emojiSelector;
-
-    @FXML
-    public BorderPane basePane;
-
-    /**
-     * Allows for further manipulation of text input area
-     */
-    @FXML
-    private BorderPane consoleBox;
-
-    @FXML
-    public ComboBox<String> statusBar;
-    
-    @FXML
-    private TextArea textInput;
-
-    @FXML
-    public HBox textInputConsole;
-    
-    @FXML
-    private ListView<HBox> chatWindow;
-
-    @FXML
-    private ListView<HBox> onlineUsers;
+    @FXML public BorderPane basePane;
+    @FXML private BorderPane consoleBox;
+    @FXML public ComboBox<String> statusBar;
+    @FXML private TextArea textInput;
+    @FXML public HBox textInputConsole;
+    @FXML private ListView<HBox> chatWindow;
+    @FXML private ListView<HBox> onlineUsers;
 
     /**
      * Method is called by client lister thread repeatedly during conversation.

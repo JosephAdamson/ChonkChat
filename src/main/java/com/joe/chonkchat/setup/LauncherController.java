@@ -31,20 +31,11 @@ import java.util.Objects;
 public class LauncherController extends CustomWindowBaseController {
     
     private TerminalController terminalController;
-
     private boolean terminalOpen;
-
-    @FXML
-    public TextField usernameInput;
-
-    @FXML
-    public ColorPicker usernameFont;
-    
-    @FXML
-    public ImageView avatar;
-
-    @FXML
-    private ToggleButton launchServerButton;
+    @FXML public TextField usernameInput;
+    @FXML public ColorPicker usernameFont;
+    @FXML public ImageView avatar;
+    @FXML private ToggleButton launchServerButton;
     
     @FXML
     public void launchServer() {
@@ -67,12 +58,7 @@ public class LauncherController extends CustomWindowBaseController {
                         .getResourceAsStream("/com/joe/images/server.png"))));
                 stage.setTitle("chonkchat server terminal");
                 
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent windowEvent) {
-                        launchServerButton.setSelected(false);
-                    }
-                });
+                stage.setOnCloseRequest(windowEvent -> launchServerButton.setSelected(false));
 
                 // Enable manipulation of terminal window from launcher.
                 terminalController = fxmlLoader.getController();
@@ -170,7 +156,6 @@ public class LauncherController extends CustomWindowBaseController {
                     Scene scene = new Scene(root);
                     scene.setFill(Color.TRANSPARENT);
                     Stage stage = new Stage();
-
                     stage.setScene(scene);
                     stage.initStyle(StageStyle.TRANSPARENT);
                     stage.show();
@@ -237,10 +222,17 @@ public class LauncherController extends CustomWindowBaseController {
             }
         }
     }
-    
+
+    /**
+     * Allow user to choose colour of their displayed username.
+     */
     @FXML
     public void changeUsernameDisplayFont() {
-        String hex = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
+        Color choice = usernameFont.getValue();
+        String choiceString = choice.toString();
+        String hex = "#" + choiceString.substring(2, choice.toString().length() - 2);
+        System.out.println(hex);
+        
         usernameInput.setStyle("-fx-text-fill: " + hex + ";");
     }
 }
