@@ -5,6 +5,7 @@ import com.joe.chonkchat.client.Client;
 import com.joe.chonkchat.data.User;
 import com.joe.chonkchat.server.Server;
 import com.joe.chonkchat.server.TerminalController;
+import com.joe.chonkchat.util.AlertWrapper;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -20,7 +21,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -161,30 +161,21 @@ public class LauncherController extends CustomWindowBaseController {
                     stage.show();
 
                 } else {
-                    Alert usernameAlert = new Alert(Alert.AlertType.WARNING);
-                    usernameAlert.setTitle("Connection rejected");
-                    usernameAlert.setHeaderText("Duplicate username detected");
-                    usernameAlert.setContentText("There is already an active user with this username.");
+                    AlertWrapper usernameAlert = 
+                            new AlertWrapper(AlertWrapper.AlertWrapperType.DUPLICATE_USERNAME);
                     usernameAlert.show();
                 }
                 
             } else {
-                Alert nameError = new Alert(Alert.AlertType.WARNING);
-                nameError.setTitle("Username Warning");
-                nameError.setHeaderText("Username must not be blank.");
-                nameError.setContentText("Please make provide a username before logging in.");
+                AlertWrapper nameError = 
+                        new AlertWrapper(AlertWrapper.AlertWrapperType.BLANK_USERNAME);
                 nameError.show();
             }
 
         } catch (ConnectException e) {
-            
-            Alert connectionAlert = new Alert(Alert.AlertType.WARNING);
-            connectionAlert.setTitle("Connection Warning");
-            connectionAlert.setHeaderText("Could not connect to a chonk server");
-            connectionAlert.setContentText("To set set up a server locally, click launch and " +
-                    "follow the terminal instructors.");
+            AlertWrapper connectionAlert = 
+                    new AlertWrapper(AlertWrapper.AlertWrapperType.CONNECTION_WARNING);
             connectionAlert.show();
-            
         } catch (IOException e) {
             e.printStackTrace();
         }

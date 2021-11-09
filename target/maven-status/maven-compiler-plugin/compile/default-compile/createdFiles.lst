@@ -7,6 +7,7 @@ com/joe/chonkchat/data/User.class
 com/joe/chonkchat/util/ResourceHandler.class
 com/joe/chonkchat/util/CustomWindowBaseController.class
 com/joe/chonkchat/data/MessageType.class
+com/joe/chonkchat/client/ChatController$Post.class
 com/joe/chonkchat/client/ChatController$1.class
 com/joe/chonkchat/setup/LauncherController.class
 com/joe/chonkchat/data/FileTransfer.class
@@ -18,11 +19,8 @@ com/joe/chonkchat/server/TerminalController.class
 com/joe/chonkchat/server/Server$2.class
 module-info.class
 com/joe/chonkchat/setup/Application.class
-com/joe/chonkchat/client/ChatController$UserPost.class
-com/joe/chonkchat/client/ChatController$SelfPost.class
 com/joe/chonkchat/data/Message.class
 com/joe/chonkchat/client/ChatController.class
-com/joe/chonkchat/setup/LauncherController$1.class
 com/joe/chonkchat/client/ChatController$3.class
 com/joe/chonkchat/client/Client$1.class
 com/joe/chonkchat/data/Status.class

@@ -1,6 +1,7 @@
 package com.joe.chonkchat.client;
 
 import com.joe.chonkchat.data.*;
+import com.joe.chonkchat.util.AlertWrapper;
 import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -436,12 +438,10 @@ public class ChatController extends CustomWindowBaseController {
      */
     @FXML
     public void logoutOnWindowClose() {
-
-        Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        logoutAlert.setContentText("Are you sure you want to log out?");
+        AlertWrapper logoutAlert = new AlertWrapper(AlertWrapper.AlertWrapperType.LOG_OUT);
 
         Optional<ButtonType> confirmation = logoutAlert.showAndWait();
-        if (confirmation.get() == ButtonType.OK) {
+        if (confirmation.isPresent() && confirmation.get() == ButtonType.OK) {
             client.disconnect();
             Stage thisStage = (Stage) basePane.getScene().getWindow();
             thisStage.close();

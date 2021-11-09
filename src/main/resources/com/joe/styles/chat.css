@@ -201,3 +201,8 @@
     -fx-background-color: derive(#2d2e2e, -20%);
     -fx-text-fill: #949392;
 }
+
+.dialog-pane {
+    -fx-background-color: #2d2e2e;;
+}
+
