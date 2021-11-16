@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /**
  * Encapsulates information about active user
+ * 
+ * @author Joseph Adamson
  */
 public class User implements Serializable {
 

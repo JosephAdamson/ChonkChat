@@ -9,6 +9,8 @@ import java.util.Optional;
 
 /**
  * Wrapper class for custom styled alerts.
+ *
+ * @author Joseph Adamson
  */
 public class AlertWrapper {
     

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /**
  * Basic data class for transferring files (.txt, .pdf, .png etc.)
+ * 
+ * @author Joseph Adamson
  */
 public class FileTransfer implements Serializable {
     

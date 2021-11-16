@@ -9,6 +9,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Task runner that executes a file download whilst updating download progress
+ * on the chat GUI.
+ * 
+ * @author Joseph Adamson
+ */
 public class DownloaderService extends Service<Void> {
 
     private FileTransfer fileTransfer;

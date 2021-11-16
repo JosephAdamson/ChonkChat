@@ -71,6 +71,14 @@
     -fx-background-color: #2d2e2e;
 }
 
-.color-picker .arrow {
+.color-picker .arrow { 
     -fx-background-color: transparent;
+}
+
+#avatarButton {
+    -fx-background-color: #2d2e2e;
+}
+
+#avatarButton:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
 }

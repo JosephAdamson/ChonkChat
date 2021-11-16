@@ -174,8 +174,8 @@ public class ChatController extends CustomWindowBaseController {
             status.setStyle("-fx-text-fill: #949392;" +
                     "-fx-font-size: 12;");
             ImageView avatar = new ImageView(new Image(user.getAvatar()));
-            avatar.setFitWidth(20);
-            avatar.setFitHeight(20);
+            avatar.setFitWidth(30);
+            avatar.setFitHeight(30);
             HBox container = new HBox();
             container.setPrefHeight(35);
             container.setSpacing(6);

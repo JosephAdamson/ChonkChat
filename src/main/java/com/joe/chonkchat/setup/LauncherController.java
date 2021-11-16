@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -28,13 +29,21 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Objects;
 
+/**
+ * Launch window for app. Allows user to sign in or create
+ * a terminal instance.
+ * 
+ * @author Joseph Adamson
+ */
 public class LauncherController extends CustomWindowBaseController {
     
     private TerminalController terminalController;
     private boolean terminalOpen;
-    @FXML public TextField usernameInput;
-    @FXML public ColorPicker usernameFont;
-    @FXML public ImageView avatar;
+    @FXML private TextField usernameInput;
+    @FXML private ColorPicker usernameFont;
+    @FXML public Button avatarButton;
+    public String avatarImageURL;
+    private int avatarSelectionIndex = 0;
     @FXML private ToggleButton launchServerButton;
     
     @FXML
@@ -87,7 +96,9 @@ public class LauncherController extends CustomWindowBaseController {
         try {
             String username = usernameInput.getText();
             String colorTag = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
-            String avatarChoice = avatar.getImage().getUrl();
+            String avatarChoice = avatarImageURL;
+            
+            //String avatarChoice = avatar.getImage().getUrl();
 
             if (username != null && !username.isBlank()) {
 
@@ -225,5 +236,27 @@ public class LauncherController extends CustomWindowBaseController {
         System.out.println(hex);
         
         usernameInput.setStyle("-fx-text-fill: " + hex + ";");
+    }
+
+    /**
+     * Allows user to select their avatar of choice from the ones available.
+     */
+    @FXML
+    public void selectAvatar() {
+        File avatarFolder = new File(Objects.requireNonNull(getClass()
+                .getResource("/com/joe/images/avatars")).getFile());
+        
+        File[] selections = Objects.requireNonNull(avatarFolder.listFiles());
+        avatarSelectionIndex++;
+        String selection = selections[avatarSelectionIndex % selections.length].getName();
+        System.out.println(avatarSelectionIndex % selections.length);
+        Image img = new Image(
+                String.valueOf(getClass().getResource("/com/joe/images/avatars/" + selection))
+        );
+        ImageView avatar = new ImageView(img);
+        avatar.setFitHeight(80);
+        avatar.setFitWidth(80);
+        avatarButton.setGraphic(avatar);
+        avatarImageURL = img.getUrl();
     }
 }

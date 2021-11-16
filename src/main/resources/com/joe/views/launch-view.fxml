@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -75,19 +74,16 @@
                      <Insets bottom="60.0" />
                   </StackPane.margin>
                </ImageView>
-               <ImageView fx:id="avatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                  <StackPane.margin>
-                     <Insets bottom="60.0" left="10.0" />
-                  </StackPane.margin>
-                  <image>
-                     <Image url="@../images/avatars/ninja.png" />
-                  </image>
-               </ImageView>
                <ColorPicker id="usernameFont" fx:id="usernameFont" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeUsernameDisplayFont" prefHeight="30.0" prefWidth="30.0">
                   <StackPane.margin>
                      <Insets left="220.0" top="70.0" />
                   </StackPane.margin>
                </ColorPicker>
+               <Button fx:id="avatarButton" id="avatarButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="80.0" onMouseClicked="#selectAvatar">
+                  <StackPane.margin>
+                     <Insets bottom="60.0" left="15.0" />
+                  </StackPane.margin>
+               </Button>
             </StackPane>
          </center>
       </BorderPane>
