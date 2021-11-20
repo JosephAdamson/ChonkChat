@@ -1,5 +1,6 @@
 package com.joe.chonkchat.server;
 
+import com.joe.chonkchat.util.CustomWindowBaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
  * 
  * @author Joseph Adamson
  */
-public class TerminalController implements Initializable {
+public class TerminalController extends CustomWindowBaseController implements Initializable {
 
     private boolean serverActive = false;
     private Server server;

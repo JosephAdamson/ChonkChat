@@ -2,6 +2,7 @@ package com.joe.chonkchat.client;
 
 import com.joe.chonkchat.data.*;
 import com.joe.chonkchat.server.Server;
+import com.joe.chonkchat.util.AlertWrapper;
 import com.joe.chonkchat.util.ResourceHandler;
 import javafx.application.Platform;
 
@@ -71,6 +72,14 @@ public class Client {
 
                             case SHUTDOWN:
                                 System.out.println("Server has shut down");
+                                Platform.runLater(
+                                        () -> {
+                                            AlertWrapper alert =
+                                                    new AlertWrapper(AlertWrapper.AlertWrapperType.SERVER_SHUTDOWN);
+                                            alert.showAndWait();
+                                            chatController.forceClose();
+                                        }
+                                );
                                 ResourceHandler.closeResources(socket, input, output);
                                 break;
                                 

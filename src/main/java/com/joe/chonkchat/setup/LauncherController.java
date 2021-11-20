@@ -19,15 +19,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Launch window for app. Allows user to sign in or create
@@ -40,9 +41,9 @@ public class LauncherController extends CustomWindowBaseController {
     private TerminalController terminalController;
     private boolean terminalOpen;
     @FXML private TextField usernameInput;
-    @FXML private ColorPicker usernameFont;
-    @FXML public Button avatarButton;
-    public String avatarImageURL;
+    @FXML private ComboBox<Color> usernameFont;
+    @FXML private Button avatarButton;
+    private String avatarImageURL;
     private int avatarSelectionIndex = 0;
     @FXML private ToggleButton launchServerButton;
     
@@ -67,7 +68,13 @@ public class LauncherController extends CustomWindowBaseController {
                         .getResourceAsStream("/com/joe/images/server.png"))));
                 stage.setTitle("chonkchat server terminal");
                 
-                stage.setOnCloseRequest(windowEvent -> launchServerButton.setSelected(false));
+                stage.setOnCloseRequest(
+                        windowEvent -> {
+                            terminalController.forceWindowClose();
+                            launchServerButton.setSelected(false);
+                            terminalOpen = false;
+                        }
+                );
 
                 // Enable manipulation of terminal window from launcher.
                 terminalController = fxmlLoader.getController();
@@ -82,11 +89,16 @@ public class LauncherController extends CustomWindowBaseController {
             }
         } else {
             
-            terminalOpen = false;
-            
-            Platform.runLater(
-                    () -> terminalController.forceWindowClose()
-            );
+            AlertWrapper alert = 
+                    new AlertWrapper(AlertWrapper.AlertWrapperType.SERVER_TOGGLE);
+
+            Optional<ButtonType> confirmation = alert.showAndWait();
+            if (confirmation.isPresent() && confirmation.get() == ButtonType.OK) {
+                terminalOpen = false;
+                Platform.runLater(
+                        () -> terminalController.forceWindowClose()
+                );
+            }
         }
     }
     
@@ -233,8 +245,6 @@ public class LauncherController extends CustomWindowBaseController {
         Color choice = usernameFont.getValue();
         String choiceString = choice.toString();
         String hex = "#" + choiceString.substring(2, choice.toString().length() - 2);
-        System.out.println(hex);
-        
         usernameInput.setStyle("-fx-text-fill: " + hex + ";");
     }
 
@@ -259,4 +269,17 @@ public class LauncherController extends CustomWindowBaseController {
         avatarButton.setGraphic(avatar);
         avatarImageURL = img.getUrl();
     }
+    
+    public ComboBox<Color> getUsernameFont() {
+        return usernameFont;
+    }
+    
+    public Button getAvatarButton() {
+        return avatarButton;
+    }
+
+    public void setAvatarImageURL(String avatarImageURL) {
+        this.avatarImageURL = avatarImageURL;
+    }
+
 }

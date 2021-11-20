@@ -45,6 +45,17 @@ public class AlertWrapper {
                 this.content.setContentText("Are you sure you want to log out?");
                 break;
                 
+            case SERVER_TOGGLE: 
+                this.content = new Alert(Alert.AlertType.CONFIRMATION);
+                this.content.setContentText("Toggling the server terminal off will shutdown" +
+                        " the server for all those using it, do you want to proceed?");
+                break;
+                
+            case SERVER_SHUTDOWN:
+                this.content = new Alert(Alert.AlertType.INFORMATION);
+                this.content.setContentText("The server has shutdown, session expired.");
+                break;
+                
             default:
                 System.out.println("Format not found");
         }
@@ -71,6 +82,8 @@ public class AlertWrapper {
         CONNECTION_WARNING,
         DUPLICATE_USERNAME,
         BLANK_USERNAME,
-        LOG_OUT;
+        LOG_OUT,
+        SERVER_TOGGLE,
+        SERVER_SHUTDOWN;
     }
 }

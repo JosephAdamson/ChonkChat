@@ -27,7 +27,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -449,6 +448,14 @@ public class ChatController extends CustomWindowBaseController {
         } else {
             logoutAlert.close();
         }
+    }
+
+    /**
+     * Close window on server shutdown.
+     */
+    public void forceClose() {
+        Stage thisStage = (Stage) basePane.getScene().getWindow();
+        thisStage.close();
     }
 
     public void setClient(Client client) {
