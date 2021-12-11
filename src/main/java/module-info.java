@@ -1,6 +1,7 @@
 module com.example.chonkchat {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
     exports com.joe.chonkchat.setup;

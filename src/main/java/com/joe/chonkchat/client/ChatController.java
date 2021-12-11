@@ -39,6 +39,7 @@ public class ChatController extends CustomWindowBaseController {
     private Client client;
     private final DownloaderService downloaderService = new DownloaderService();
     private ScrollPane emojiSelector;
+    private boolean mediaButtonClicked;
     @FXML public BorderPane basePane;
     @FXML private BorderPane consoleBox;
     @FXML public ComboBox<String> statusBar;
@@ -49,8 +50,8 @@ public class ChatController extends CustomWindowBaseController {
 
     /**
      * Method is called by client lister thread repeatedly during conversation.
-     * Must be synchronized each post thread will share same data structure (chatWindow)
-     * on execution.
+     * Must be synchronized as each post thread shares the same data structure (chatWindow, 
+     * observable list) on execution.
      *
      * @param message Message object kicked up from clientThread.
      */
@@ -132,9 +133,6 @@ public class ChatController extends CustomWindowBaseController {
         content.setMaxWidth(340);
 
         Text time = new Text(message.getTimeSent());
-        time = new Text(time.getText());
-        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
-        time.setFill(Color.valueOf("#d0d2d6"));
         
         TextFlow flow = new TextFlow();
         flow.setMaxWidth(350);
@@ -202,6 +200,8 @@ public class ChatController extends CustomWindowBaseController {
         
         // middle element of the bubble; displays file pic, filename and download clickable.
         HBox downloadView = new HBox();
+        Button downloadButton = new Button();
+        StackPane loadPane = new StackPane();
 
         try {
             ImageView fileImg = new ImageView(String.valueOf(getClass()
@@ -211,16 +211,18 @@ public class ChatController extends CustomWindowBaseController {
 
             // load pane will contain download image, the progress indicator and
             // the updated (on success image)
-            StackPane loadPane = new StackPane();
             loadPane.setPrefWidth(30);
             loadPane.setPrefHeight(30);
-
+            
+            downloadButton.setPrefWidth(30);
+            downloadButton.setPrefHeight(30);
             ImageView downloadImg = new ImageView(String.valueOf(getClass()
                     .getResource("/com/joe/images/download.png")));
             downloadImg.setFitWidth(30);
             downloadImg.setFitHeight(30);
+            downloadButton.setGraphic(downloadImg);
             
-            loadPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            downloadButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
                     ProgressIndicator progressIndicator = new ProgressIndicator();
@@ -230,18 +232,19 @@ public class ChatController extends CustomWindowBaseController {
                     
                     loadPane.getChildren().add(progressIndicator);
                     downloaderService.restart();
-                    downloadImg.toFront();
-                    downloadImg.setImage(new Image(String.valueOf(getClass()
-                            .getResource("/com/joe/images/checked.png"))));
+                    downloadButton.toFront();
+                    ImageView checkedImg = new ImageView(String.valueOf(getClass()
+                            .getResource("/com/joe/images/checked.png")));
+                    checkedImg.setFitHeight(30);
+                    checkedImg.setFitWidth(30);
+                    downloadButton.setGraphic(checkedImg);
                 }
             });
-            loadPane.getChildren().add(downloadImg);
 
             downloadView.getChildren().add(fileImg);
             Label file = new Label(filename);
             file.setStyle("-fx-text-fill: #ffffff");
             downloadView.getChildren().add(file);
-            downloadView.getChildren().add(loadPane);
             downloadView.setSpacing(5);
 
         } catch (NullPointerException e) {
@@ -249,15 +252,9 @@ public class ChatController extends CustomWindowBaseController {
         }
 
         if (!message.getSender().getUsername().equals(client.getUsername())) {
-            bubble.setStyle(
-                    "-fx-background-color: #3b3d3d;"
-                            +"-fx-text-fill: #ffffff;"
-                            + "-fx-font-size: 15;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
+            bubble.getStyleClass().add("senderBubble");
             downloadView.setStyle("-fx-background-color: #3b3d3d;");
+            downloadButton.setStyle("-fx-background-color: #3b3d3d;");
             downloadView.getChildren().get(1).setStyle("-fx-text-fill: #ffffff");
             
             Label sender = new Label(message.getSender().getUsername());
@@ -265,16 +262,13 @@ public class ChatController extends CustomWindowBaseController {
                     +"-fx-text-fill:" + message.getSender().getColourTag() + ";");
             bubble.getChildren().add(sender);
         } else {
-            bubble.setStyle(
-                    "-fx-background-color: #007EA7;"
-                            +"-fx-text-fill: #ffffff;"
-                            + "-fx-font-size: 15;"
-                            + "-fx-background-radius: 24px;"
-                            +"-fx-border-radius: 24px;"
-                            + "-fx-padding: 10;"
-            );
+            bubble.getStyleClass().add("selfBubble");
             downloadView.setStyle("-fx-background-color: #007EA7;");
+            downloadButton.setStyle("-fx-background-color: #007EA7;");
         }
+        bubble.setStyle("-fx-text-fill: #ffffff;");
+        loadPane.getChildren().add(downloadButton);
+        downloadView.getChildren().add(loadPane);
         bubble.getChildren().add(downloadView);
         
         TextFlow flow = new TextFlow();
@@ -292,14 +286,67 @@ public class ChatController extends CustomWindowBaseController {
         size.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         size.setFill(Color.BLACK);
         
-        Text time = new Text(message.getTimeSent());
-        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
-        time.setFill(Color.valueOf("#d0d2d6"));
+        Text time = getTimeSent(message);
         
         flow.getChildren().addAll(size, new Text("\n"), time);
         bubble.getChildren().add(flow);
         bubble.setSpacing(5);
         
+        return bubble;
+    }
+
+    /**
+     * Play an audio message.
+     * 
+     * @param message audio message sent to the chat room
+     * @return formatted post containing audio message.
+     */
+    public VBox formatAudioPost(Message message) {
+        // get audio data
+        byte[] audioFile = message.getAudioFile();
+
+        // create bubble
+        VBox bubble = new VBox();
+        Button mediaButton = new Button();
+        mediaButton.setPrefHeight(30);
+        mediaButton.setPrefWidth(30);
+
+        final ImageView playIcon = new ImageView(String.valueOf(
+                getClass().getResource("/com/joe/images/video-play-button.png"))
+        );
+        final ImageView pauseIcon = new ImageView(
+                String.valueOf(
+                        getClass().getResource("/com/joe/images/video-pause-button.png"))
+        );
+        playIcon.setFitWidth(30);
+        playIcon.setFitHeight(30);
+        mediaButton.setGraphic(playIcon);
+
+        mediaButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (!mediaButtonClicked) {
+                    mediaButtonClicked = true;
+                    mediaButton.setGraphic(pauseIcon);
+                    AudioPlayback.playback(audioFile);
+                    mediaButtonClicked = false;
+                }
+            }
+        });
+
+        if (!message.getSender().getUsername().equals(client.getUsername())) {
+            bubble.getStyleClass().add("senderBubble");
+            mediaButton.setStyle("-fx-background-color: #3b3d3d;");
+
+            Label sender = new Label(message.getSender().getUsername());
+            sender.setStyle("-fx-background-color: #3b3d3d;"
+                    +"-fx-text-fill:" + message.getSender().getColourTag() + ";");
+            bubble.getChildren().add(sender);
+        } else {
+            bubble.getStyleClass().add("selfBubble");
+        }
+        Text time = getTimeSent(message);
+        bubble.getChildren().addAll(mediaButton, time);
         return bubble;
     }
 
@@ -327,7 +374,6 @@ public class ChatController extends CustomWindowBaseController {
         if (selectedFile != null) {
             client.sendFile(selectedFile);
         }
-        
     }
     
     @FXML
@@ -474,5 +520,12 @@ public class ChatController extends CustomWindowBaseController {
 
     public ComboBox<String> getStatusBar() {
         return statusBar;
+    }
+    
+    public Text getTimeSent(Message message) {
+        Text time = new Text(message.getTimeSent());
+        time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
+        time.setFill(Color.valueOf("#d0d2d6"));
+        return time;
     }
 }

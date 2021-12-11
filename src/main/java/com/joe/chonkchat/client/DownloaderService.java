@@ -20,9 +20,8 @@ public class DownloaderService extends Service<Void> {
     private FileTransfer fileTransfer;
 
     /**
-     * Protocol for downloading files. Download location is set as the default OS 
-     * downloads folder. Executed in another thread separate form the client thread to 
-     * avoid failed download backing up the client thread.
+     * Protocol for downloading files. Download location is set as the default OS downloads folder. 
+     * Executed in a separate thread to avoid failed download backing  up the client thread.
      * 
      * @return a download task which is executed by the service.
      */
@@ -63,10 +62,10 @@ public class DownloaderService extends Service<Void> {
                     FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
 
                     long totalSize = fileTransfer.getContent().length;
-                    byte[] chunkHolder = new byte[1024];
+                    byte[] buffer = new byte[1024];
                     long downloadSize = 0;
                     int chunk;
-                    while((chunk = byteArrayInputStream.read(chunkHolder, 0, 1024)) >= 0) {
+                    while((chunk = byteArrayInputStream.read(buffer, 0, 1024)) >= 0) {
 
                         downloadSize += chunk;
                         
@@ -74,7 +73,7 @@ public class DownloaderService extends Service<Void> {
                         double progress = ((double) downloadSize / (double) totalSize) * 100;
                         this.updateProgress(progress, totalSize);
                         
-                        fileOutputStream.write(chunkHolder, 0, chunk);
+                        fileOutputStream.write(buffer, 0, chunk);
                     }
                     fileOutputStream.close();
 

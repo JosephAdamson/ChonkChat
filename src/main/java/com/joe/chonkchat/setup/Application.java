@@ -26,7 +26,7 @@ public class Application extends javafx.application.Application {
         
         LauncherController controller = fxmlLoader.getController();
         Image img = new Image(String.valueOf(getClass()
-                .getResource("/com/joe/images/avatars/robot_1.png")));
+                .getResource("/com/joe/images/avatars/robot_2.png")));
         ImageView defaultAvatar = new ImageView(img);
         defaultAvatar.setFitHeight(80);
         defaultAvatar.setFitWidth(80);
@@ -46,7 +46,7 @@ public class Application extends javafx.application.Application {
                                 Color.HOTPINK
                         );
         
-        // Set-up for a simplified color picker
+        // Set-up for a simplified color picker.
         controller.getUsernameFont().setCellFactory(new Callback<ListView<Color>, ListCell<Color>>() {
             @Override public ListCell<Color> call(ListView<Color> p) {
                 return new ListCell<Color>() {

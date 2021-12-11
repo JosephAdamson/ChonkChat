@@ -6,5 +6,5 @@ package com.joe.chonkchat.data;
  * @author Joseph Adamson
  */
 public enum MessageType {
-    CONNECTED, DISCONNECTED, TEXT, FILE, SERVER, SHUTDOWN, ERROR, STATUS_UPDATE
+    CONNECTED, DISCONNECTED, TEXT, FILE, AUDIO, SERVER, SHUTDOWN, ERROR, STATUS_UPDATE
 }

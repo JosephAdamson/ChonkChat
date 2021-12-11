@@ -18,6 +18,7 @@ public class Message implements Serializable {
     private List<User> activeUsers;
     private Status statusUpdate;
     private FileTransfer file;
+    private byte[] audioFile;
     private Exception exception;
     
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm");
@@ -88,4 +89,14 @@ public class Message implements Serializable {
     public void setStatusUpdate(Status statusUpdate) {
         this.statusUpdate = statusUpdate;
     }
+
+
+    public byte[] getAudioFile() {
+        return audioFile;
+    }
+
+    public void setAudioFile(byte[] audioFile) {
+        this.audioFile = audioFile;
+    }
+
 }

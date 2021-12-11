@@ -19,7 +19,7 @@
     -fx-background-color: derive(#2d2e2e, -20%);
 }
 
-/* Styles for scroll bars*/
+/* Styles for all scroll bars */
 .scroll-bar:vertical {
     -fx-background-color :transparent;
     -fx-border-color :transparent;
@@ -128,7 +128,6 @@
     -fx-border-color: #3b3d3d;
     -fx-text-fill: #ffffff;
     -fx-font-size: 15;
-    -fx-font-family: "OpenSansEmoji";
 }
 
 #textInput .content {

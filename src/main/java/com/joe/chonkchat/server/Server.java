@@ -14,7 +14,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,15 +39,14 @@ public class Server {
     }
     
     /**
-     * Creates main server thread which in turn generates client connection
-     * threads.
+     * Creates main server thread which in turn generates client connection threads.
      */
     @FXML
     public void startSever() {
         
         serverActive = true;
         
-        // Server runs on its own thread away from the main UI thread.
+        // Server runs on its own thread away from the main UI (terminal) thread.
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -57,16 +55,11 @@ public class Server {
                 ExecutorService clientThreads = Executors.newFixedThreadPool(50);
                 
                 try {
-                    // init server socket
                     serverSocket = new ServerSocket(PORT);
-
-                    // Platform.runlater() schedules terminal update for when we are handed back
-                    // the main UI thread (the terminal) because we cannot update directly 
-                    // from this thread.
+                    
                     Platform.runLater(
                             () -> serverController.addTerminalMessage(serverID + " now online!")
                     );
-
                     
                     // listen for incoming connections and start new thread for each connection
                     while (!serverSocket.isClosed()) {
@@ -96,8 +89,7 @@ public class Server {
     }
 
     /**
-     * Close server socket to force shutdown. Communicate shutdown to
-     * active clients.
+     * Close server socket to force shutdown. Communicate shutdown to active clients.
      */
     public void shutdownServer() {
         
@@ -126,7 +118,7 @@ public class Server {
     }
 
     /**
-     * checks active clients against parameter user.
+     * Checks active clients against parameter user.
      * 
      * @param user: prospective connection
      * @return true if user with same username already exists, false otherwise.
@@ -172,9 +164,7 @@ public class Server {
                     Message msg = (Message) input.readObject();
                     
                     switch (msg.getMessageType()) {
-
-                        // to test we'll print the message to the server terminal
-                        // more cases will be added as Message's functionality is increased.
+                        
                         case TEXT:
                             String text = msg.getTextData();
                             
@@ -301,7 +291,7 @@ public class Server {
         }
 
         /**
-         * print stacktrace caused by client exception to terminal GUI
+         * Print stacktrace caused by client exception to terminal GUI
          * 
          * @param sender: source of exception
          * @param timeSent: time of exception's occurrence

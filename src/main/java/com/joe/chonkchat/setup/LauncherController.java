@@ -107,7 +107,9 @@ public class LauncherController extends CustomWindowBaseController {
         
         try {
             String username = usernameInput.getText();
-            String colorTag = "#" + Integer.toHexString(usernameFont.getValue().hashCode());
+            String colorTag = "#" + usernameFont.getValue().toString()
+                    .substring(2, usernameFont.getValue().toString().length() - 2);
+            System.out.println(colorTag);
             String avatarChoice = avatarImageURL;
             
             //String avatarChoice = avatar.getImage().getUrl();
@@ -244,7 +246,8 @@ public class LauncherController extends CustomWindowBaseController {
     public void changeUsernameDisplayFont() {
         Color choice = usernameFont.getValue();
         String choiceString = choice.toString();
-        String hex = "#" + choiceString.substring(2, choice.toString().length() - 2);
+        String hex = "#" + choiceString.substring(2, choiceString.length() - 2);
+        System.out.println(hex);
         usernameInput.setStyle("-fx-text-fill: " + hex + ";");
     }
 

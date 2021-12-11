@@ -39,9 +39,9 @@ public class Client {
     }
 
     /**
-     * Client needs to be able to listen for incoming messages 
-     * on a separate thread, as while loop is a blocking operation
-     * and would otherwise lock up the main client thread.
+     * Client needs to be able to listen for incoming messages on a separate thread, 
+     * as readObject() in while loop is a blocking operation and would otherwise lock 
+     * up the main client thread.
      */
     public void listenForIncomingMessages() {
         
@@ -162,6 +162,28 @@ public class Client {
             
             output.writeObject(message);
             output.flush();
+            
+        } catch (IOException e) {
+            ResourceHandler.sendStackTrace(e, username, output);
+            ResourceHandler.closeResources(socket, input, output);
+        }
+    }
+
+    /**
+     * Send an audio file over connection to other clients.
+     * 
+     * @param audio recorded by user.
+     */
+    public void sendAudio(byte[] audio) {
+        try {
+           Message message = new Message();
+           message.setSender(new User(username, colourTag, avatar));
+           message.setMessageType(MessageType.AUDIO);
+           message.setAudioFile(audio);
+           message.setTimeSent(new Date());
+           
+           output.writeObject(message);
+           output.flush();
             
         } catch (IOException e) {
             ResourceHandler.sendStackTrace(e, username, output);
