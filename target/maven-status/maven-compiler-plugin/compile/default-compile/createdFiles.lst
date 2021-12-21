@@ -16,6 +16,7 @@ com/joe/chonkchat/server/Server$2.class
 com/joe/chonkchat/setup/Application$1$1.class
 module-info.class
 com/joe/chonkchat/setup/Application$1.class
+com/joe/chonkchat/client/ChatController$AudioRecordButtonClicker.class
 com/joe/chonkchat/data/Status.class
 com/joe/chonkchat/client/AudioRecorder$1.class
 com/joe/chonkchat/client/DownloaderService.class

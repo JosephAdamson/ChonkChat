@@ -171,7 +171,8 @@ public class Server {
                             // For now we'll keep track of conversations.
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
-                                            msg.getSender().getUsername() + ": " + text
+                                            "@ " + msg.getTimeSent() + "user " +msg.getSender().getUsername() 
+                                                    + ": " + text
                                     )
                             );
                             broadcastMessage(msg);
@@ -181,7 +182,18 @@ public class Server {
                             String file = (msg.getFile().getName() + msg.getFile().getExtension());
                             Platform.runLater(
                                     () -> serverController.addTerminalMessage(
-                                            msg.getSender().getUsername() + " sent file: " + file
+                                            "@ " + msg.getTimeSent() + "user " + msg.getSender().getUsername()
+                                                    + " sent file: " + file
+                                    )
+                            );
+                            broadcastMessage(msg);
+                            break;
+                            
+                        case AUDIO:
+                            Platform.runLater(
+                                    () -> serverController.addTerminalMessage(
+                                            "@ " + msg.getTimeSent() + "user " + msg.getSender().getUsername()
+                                                    + " sent audio file of size " + msg.getAudioFile().length
                                     )
                             );
                             broadcastMessage(msg);

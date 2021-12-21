@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * @author Joseph Adamson
  * 
- * Allows user to record sound messages that can be sent ot other clients.
+ * Allows user to record sound messages that can be sent to other clients.
  */
 public class AudioRecorder extends AudioUtil {
 

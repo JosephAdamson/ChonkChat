@@ -61,6 +61,8 @@ public class Client {
                         switch (incomingMsg.getMessageType()) {
 
                             case TEXT:
+                                
+                            case AUDIO:    
 
                             case FILE:
                                 chatController.updateChatWindow(incomingMsg);

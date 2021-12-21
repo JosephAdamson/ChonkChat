@@ -1,5 +1,9 @@
 package com.joe.chonkchat.client;
 
+import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -10,6 +14,8 @@ import java.io.IOException;
  * Handles audio playback of sound messages.
  */
 public class AudioPlayback extends AudioUtil {
+
+    private static Thread playbackThread;
 
     /**
      * Playback audio contained in a byte array.
@@ -54,7 +60,7 @@ public class AudioPlayback extends AudioUtil {
                     System.out.println("Playback stopped.");
                 }
             };
-            Thread playbackThread = new Thread(playback);
+            playbackThread = new Thread(playback);
             playbackThread.start();
             
         } catch (LineUnavailableException e) {
@@ -69,5 +75,9 @@ public class AudioPlayback extends AudioUtil {
         if(audioOutputLine.isActive()) {
             audioOutputLine.stop();
         }
+    }
+
+    public static Thread getPlaybackThread() {
+        return playbackThread;
     }
 }

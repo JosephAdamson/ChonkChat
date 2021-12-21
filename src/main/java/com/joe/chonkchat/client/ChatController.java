@@ -39,15 +39,17 @@ public class ChatController extends CustomWindowBaseController {
     private Client client;
     private final DownloaderService downloaderService = new DownloaderService();
     private ScrollPane emojiSelector;
-    private boolean mediaButtonClicked;
+    @FXML private Button micButton;
+    @FXML private Button fileButton;
+    @FXML private Button emojiButton;
+    private boolean micToggled;
     @FXML public BorderPane basePane;
-    @FXML private BorderPane consoleBox;
+    @FXML private BorderPane chatBox;
     @FXML public ComboBox<String> statusBar;
     @FXML private TextArea textInput;
     @FXML public HBox textInputConsole;
     @FXML private ListView<HBox> chatWindow;
     @FXML private ListView<HBox> onlineUsers;
-
     /**
      * Method is called by client lister thread repeatedly during conversation.
      * Must be synchronized as each post thread shares the same data structure (chatWindow, 
@@ -111,8 +113,13 @@ public class ChatController extends CustomWindowBaseController {
                 break;
 
             case FILE:
-                VBox box = formatFilePost(message);
-                container.getChildren().add(box);
+                VBox fileBox = formatFilePost(message);
+                container.getChildren().add(fileBox);
+                break;
+                
+            case AUDIO:
+                VBox audioBox = formatAudioPost(message);
+                container.getChildren().add(audioBox);
                 break;
 
             default:
@@ -132,7 +139,7 @@ public class ChatController extends CustomWindowBaseController {
         TextFlow content = emojiParser(message.getTextData());
         content.setMaxWidth(340);
 
-        Text time = new Text(message.getTimeSent());
+        Text time = formatTime(message);
         
         TextFlow flow = new TextFlow();
         flow.setMaxWidth(350);
@@ -286,7 +293,7 @@ public class ChatController extends CustomWindowBaseController {
         size.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         size.setFill(Color.BLACK);
         
-        Text time = getTimeSent(message);
+        Text time = formatTime(message);
         
         flow.getChildren().addAll(size, new Text("\n"), time);
         bubble.getChildren().add(flow);
@@ -310,26 +317,36 @@ public class ChatController extends CustomWindowBaseController {
         Button mediaButton = new Button();
         mediaButton.setPrefHeight(30);
         mediaButton.setPrefWidth(30);
-
+        mediaButton.setStyle("-fx-background-color: #007EA7;");
+        
         final ImageView playIcon = new ImageView(String.valueOf(
-                getClass().getResource("/com/joe/images/video-play-button.png"))
-        );
-        final ImageView pauseIcon = new ImageView(
-                String.valueOf(
-                        getClass().getResource("/com/joe/images/video-pause-button.png"))
+                getClass().getResource("/com/joe/images/play-button.png"))
         );
         playIcon.setFitWidth(30);
         playIcon.setFitHeight(30);
+        
+        final ImageView stopIcon = new ImageView(
+                String.valueOf(
+                        getClass().getResource("/com/joe/images/stop-button.png"))
+        );
+        stopIcon.setFitWidth(30);
+        stopIcon.setFitHeight(30);
+        
         mediaButton.setGraphic(playIcon);
 
         mediaButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            private boolean mediaButtonClicked;
+            
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (!mediaButtonClicked) {
                     mediaButtonClicked = true;
-                    mediaButton.setGraphic(pauseIcon);
+                    mediaButton.setGraphic(stopIcon);
                     AudioPlayback.playback(audioFile);
+                } else {
                     mediaButtonClicked = false;
+                    mediaButton.setGraphic(playIcon);
+                    AudioPlayback.stopPlayback();
                 }
             }
         });
@@ -345,7 +362,7 @@ public class ChatController extends CustomWindowBaseController {
         } else {
             bubble.getStyleClass().add("selfBubble");
         }
-        Text time = getTimeSent(message);
+        Text time = formatTime(message);
         bubble.getChildren().addAll(mediaButton, time);
         return bubble;
     }
@@ -376,17 +393,34 @@ public class ChatController extends CustomWindowBaseController {
         }
     }
     
+    public void recordAudio() {
+        if (!micToggled) {
+            micToggled = true;
+            textInput.setDisable(true);
+            emojiButton.setDisable(true);
+            fileButton.setDisable(true);
+            micButton.setStyle("-fx-background-color: #94ed5c");
+            AudioUtil.setIsRecording(true);
+            AudioRecorder.record(client);
+        } else {
+            micToggled = false;
+            micButton.setStyle("-fx-background-color: #2d2e2e");
+            textInput.setDisable(false);
+            emojiButton.setDisable(false);
+            fileButton.setDisable(false);
+            AudioUtil.setIsRecording(false);
+        }
+    }
+    
     @FXML
     public void emojiChooser() {
         
         // if the cancel button is present (emoji button already clicked)
-        // we do nothing, this might have to be changed in the future if I add further buttons.
-        if (textInputConsole.getChildren().size() == 3) {
+        if (textInputConsole.getChildren().size() == 4) {
             
-            // We will need to resize the textInputContainer and its container dynamically
-            // to accommodate cancel button.
+            // We will need to resize the textInputContainer dynamically to accommodate cancel button.
             HBox textInputContainer = (HBox) textInputConsole.getChildren().get(2);
-            double originalContainerWidth = textInputContainer.getWidth();
+            final double originalTextBoxWidth = textInputContainer.getWidth();
             
             // add cancellation button to left of emoji button
             Button cancel = new Button();
@@ -406,18 +440,18 @@ public class ChatController extends CustomWindowBaseController {
                 public void handle(MouseEvent mouseEvent) {
                     textInputConsole.getChildren().remove(0);
                     ((HBox) textInputConsole.getChildren().get(2))
-                            .setPrefWidth(originalContainerWidth);
+                            .setPrefWidth(originalTextBoxWidth);
                     
-                    consoleBox.getChildren().remove(consoleBox.getTop());
-                    consoleBox.setPrefHeight(consoleBox.getPrefHeight() - 100);
+                    chatBox.getChildren().remove(chatBox.getTop());
+                    chatBox.setPrefHeight(chatBox.getPrefHeight() - 100);
                 }
             });
             ((HBox) textInputConsole.getChildren().get(2))
-                    .setPrefWidth(originalContainerWidth - 45);
+                    .setPrefWidth(originalTextBoxWidth - 45);
             
             textInputConsole.getChildren().add(0, cancel);
-            consoleBox.setPrefHeight(consoleBox.getPrefHeight() + 100);
-            consoleBox.setTop(emojiSelector);
+            chatBox.setPrefHeight(chatBox.getPrefHeight() + 100);
+            chatBox.setTop(emojiSelector);
         }
     }
 
@@ -521,8 +555,13 @@ public class ChatController extends CustomWindowBaseController {
     public ComboBox<String> getStatusBar() {
         return statusBar;
     }
-    
-    public Text getTimeSent(Message message) {
+
+    /**
+     * Format timestamps for messages.
+     * @param message message content
+     * @return formatted text object
+     */
+    public Text formatTime(Message message) {
         Text time = new Text(message.getTimeSent());
         time.setFont(Font.font("Veranda", FontWeight.NORMAL, 10));
         time.setFill(Color.valueOf("#d0d2d6"));
