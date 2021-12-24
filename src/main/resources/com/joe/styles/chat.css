@@ -80,14 +80,6 @@
     -fx-background-color: #151a1c;
 }
 
-.emojiButton {
-    -fx-background-color: #151a1c; 
-}
-
-.emojiButton:hover {
-    -fx-background-color: derive(#151a1c, -20%); 
-}
-
 .scroll-pane {
     -fx-padding: 0;
     -fx-background-insets: 0;
@@ -114,6 +106,18 @@
 
 #textInputConsole .button:hover {
     -fx-background-color: derive(#2d2e2e, -20%);
+}
+
+#textInputConsole .toggle-button {
+    -fx-background-color: #2d2e2e; 
+}
+
+#textInputConsole .toggle-button:hover {
+    -fx-background-color: derive(#2d2e2e, -20%);
+}
+
+#textInputConsole .toggle-button:selected {
+    -fx-background-color: #94ed5c
 }
 
 #textInputContainer {
@@ -165,7 +169,6 @@
 }
 
 /* style classes for post bubbles */
-
 .senderBubble {
     -fx-background-color: #3b3d3d;
     -fx-background-radius: 24px;
@@ -173,11 +176,27 @@
     -fx-padding: 10;
 }
 
+.senderBubble .button {
+    -fx-background-color: #3b3d3d;
+}
+
+.senderBubble .button:hover {
+    -fx-background-color: derive(#3b3d3d, -20%);
+}
+
 .selfBubble {
     -fx-background-color: #007EA7;
     -fx-background-radius: 24px;
     -fx-border-radius: 24px;
     -fx-padding: 10;
+}
+
+.selfBubble .button {
+    -fx-background-color: #007EA7; 
+}
+
+.selfBubble .button:hover {
+    -fx-background-color: derive(#007EA7, -20%);
 }
 
 .combo-box {

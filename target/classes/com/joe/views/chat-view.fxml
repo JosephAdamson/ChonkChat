@@ -13,7 +13,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="580.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.client.ChatController">
+<?import javafx.scene.control.ToggleButton?>
+<BorderPane fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#drag" onMousePressed="#pressed" prefHeight="580.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.joe.chonkchat.client.ChatController">
    <top>
       <HBox id="titleBar" prefHeight="60.0" prefWidth="650.0" BorderPane.alignment="CENTER">
          <Button id="close" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#logoutOnWindowClose" prefHeight="45.0" prefWidth="45.0" text="X">
@@ -58,7 +59,7 @@
             <BorderPane fx:id="chatBox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <center>
                   <HBox id="textInputConsole" fx:id="textInputConsole" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <Button fx:id="emojiButton" id="emojiButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#emojiChooser" prefHeight="50.0" prefWidth="50.0">
+                     <Button id="emojiButton" fx:id="emojiButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#emojiChooser" prefHeight="50.0" prefWidth="50.0">
                         <HBox.margin>
                            <Insets left="10.0" top="25.0" />
                         </HBox.margin>
@@ -68,7 +69,7 @@
                            </ImageView>
                         </graphic>
                      </Button>
-                     <Button fx:id="fileButton" id="fileButton" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#uploadFile" prefHeight="50.0" prefWidth="50.0">
+                     <Button id="fileButton" fx:id="fileButton" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#uploadFile" prefHeight="50.0" prefWidth="50.0">
                         <HBox.margin>
                            <Insets left="10.0" top="25.0" />
                         </HBox.margin>
@@ -90,7 +91,7 @@
                            <Insets bottom="10.0" left="10.0" top="10.0" />
                         </HBox.margin>
                      </HBox>
-                     <Button fx:id="micButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" onMouseClicked="#recordAudio">
+                     <ToggleButton fx:id="micButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#recordAudio" prefHeight="50.0" prefWidth="50.0">
                         <HBox.margin>
                            <Insets left="10.0" top="25.0" />
                         </HBox.margin>
@@ -99,7 +100,7 @@
                               <Image url="@../images/mic.png" />
                            </ImageView>
                         </graphic>
-                     </Button>
+                     </ToggleButton>
                   </HBox>
                </center>
             </BorderPane>

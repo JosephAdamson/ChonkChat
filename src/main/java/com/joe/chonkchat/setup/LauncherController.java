@@ -114,7 +114,7 @@ public class LauncherController extends CustomWindowBaseController {
             
             //String avatarChoice = avatar.getImage().getUrl();
 
-            if (username != null && !username.isBlank()) {
+            if (username != null && !username.isBlank() && username.length() <= 10) {
 
                 FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass()
                         .getResource("/com/joe/views/chat-view.fxml")));

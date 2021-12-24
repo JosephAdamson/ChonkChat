@@ -39,7 +39,7 @@ public class ChatController extends CustomWindowBaseController {
     private Client client;
     private final DownloaderService downloaderService = new DownloaderService();
     private ScrollPane emojiSelector;
-    @FXML private Button micButton;
+    @FXML private ToggleButton micButton;
     @FXML private Button fileButton;
     @FXML private Button emojiButton;
     private boolean micToggled;
@@ -261,7 +261,6 @@ public class ChatController extends CustomWindowBaseController {
         if (!message.getSender().getUsername().equals(client.getUsername())) {
             bubble.getStyleClass().add("senderBubble");
             downloadView.setStyle("-fx-background-color: #3b3d3d;");
-            downloadButton.setStyle("-fx-background-color: #3b3d3d;");
             downloadView.getChildren().get(1).setStyle("-fx-text-fill: #ffffff");
             
             Label sender = new Label(message.getSender().getUsername());
@@ -314,23 +313,16 @@ public class ChatController extends CustomWindowBaseController {
 
         // create bubble
         VBox bubble = new VBox();
+        bubble.setAlignment(Pos.CENTER);
         Button mediaButton = new Button();
         mediaButton.setPrefHeight(30);
         mediaButton.setPrefWidth(30);
-        mediaButton.setStyle("-fx-background-color: #007EA7;");
         
         final ImageView playIcon = new ImageView(String.valueOf(
-                getClass().getResource("/com/joe/images/play-button.png"))
+                getClass().getResource("/com/joe/images/speaker.png"))
         );
         playIcon.setFitWidth(30);
         playIcon.setFitHeight(30);
-        
-        final ImageView stopIcon = new ImageView(
-                String.valueOf(
-                        getClass().getResource("/com/joe/images/stop-button.png"))
-        );
-        stopIcon.setFitWidth(30);
-        stopIcon.setFitHeight(30);
         
         mediaButton.setGraphic(playIcon);
 
@@ -341,11 +333,9 @@ public class ChatController extends CustomWindowBaseController {
             public void handle(MouseEvent mouseEvent) {
                 if (!mediaButtonClicked) {
                     mediaButtonClicked = true;
-                    mediaButton.setGraphic(stopIcon);
                     AudioPlayback.playback(audioFile);
                 } else {
                     mediaButtonClicked = false;
-                    mediaButton.setGraphic(playIcon);
                     AudioPlayback.stopPlayback();
                 }
             }
@@ -353,7 +343,7 @@ public class ChatController extends CustomWindowBaseController {
 
         if (!message.getSender().getUsername().equals(client.getUsername())) {
             bubble.getStyleClass().add("senderBubble");
-            mediaButton.setStyle("-fx-background-color: #3b3d3d;");
+            //mediaButton.setStyle("-fx-background-color: #3b3d3d;");
 
             Label sender = new Label(message.getSender().getUsername());
             sender.setStyle("-fx-background-color: #3b3d3d;"
@@ -392,19 +382,20 @@ public class ChatController extends CustomWindowBaseController {
             client.sendFile(selectedFile);
         }
     }
-    
+
+    /**
+     * Toggle microphone button to record audio.
+     */
     public void recordAudio() {
         if (!micToggled) {
             micToggled = true;
             textInput.setDisable(true);
             emojiButton.setDisable(true);
             fileButton.setDisable(true);
-            micButton.setStyle("-fx-background-color: #94ed5c");
             AudioUtil.setIsRecording(true);
             AudioRecorder.record(client);
         } else {
             micToggled = false;
-            micButton.setStyle("-fx-background-color: #2d2e2e");
             textInput.setDisable(false);
             emojiButton.setDisable(false);
             fileButton.setDisable(false);

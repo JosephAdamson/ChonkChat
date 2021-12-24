@@ -36,7 +36,7 @@ public class AlertWrapper {
             case BLANK_USERNAME:
                 this.content = new Alert(Alert.AlertType.WARNING);
                 this.content.setTitle("Username Warning");
-                this.content.setHeaderText("Username must not be blank.");
+                this.content.setHeaderText("Username must not be blank and cannot be more than 10 characters.");
                 this.content.setContentText("Please make provide a username before logging in.");
                 break;
                 
