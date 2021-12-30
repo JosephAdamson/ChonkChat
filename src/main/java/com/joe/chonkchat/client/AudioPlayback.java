@@ -1,9 +1,5 @@
 package com.joe.chonkchat.client;
 
-import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

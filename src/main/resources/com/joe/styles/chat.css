@@ -80,6 +80,14 @@
     -fx-background-color: #151a1c;
 }
 
+.emojiBox .button {
+    -fx-background-color: #151a1c;
+}
+
+.emojiBox .button:hover {
+    -fx-background-color: derive(#151a1c, 20%);
+}
+
 .scroll-pane {
     -fx-padding: 0;
     -fx-background-insets: 0;

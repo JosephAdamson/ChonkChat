@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -118,7 +119,7 @@ public class ChatController extends CustomWindowBaseController {
                 break;
                 
             case AUDIO:
-                VBox audioBox = formatAudioPost(message);
+                HBox audioBox = formatAudioPost(message);
                 container.getChildren().add(audioBox);
                 break;
 
@@ -307,13 +308,13 @@ public class ChatController extends CustomWindowBaseController {
      * @param message audio message sent to the chat room
      * @return formatted post containing audio message.
      */
-    public VBox formatAudioPost(Message message) {
+    public HBox formatAudioPost(Message message) {
         // get audio data
         byte[] audioFile = message.getAudioFile();
 
         // create bubble
-        VBox bubble = new VBox();
-        bubble.setAlignment(Pos.CENTER);
+        HBox bubble = new HBox();
+        bubble.setAlignment(Pos.BASELINE_CENTER);
         Button mediaButton = new Button();
         mediaButton.setPrefHeight(30);
         mediaButton.setPrefWidth(30);
@@ -341,19 +342,24 @@ public class ChatController extends CustomWindowBaseController {
             }
         });
 
+        TextFlow content = new TextFlow();
+        Text sender = new Text();
         if (!message.getSender().getUsername().equals(client.getUsername())) {
             bubble.getStyleClass().add("senderBubble");
-            //mediaButton.setStyle("-fx-background-color: #3b3d3d;");
-
-            Label sender = new Label(message.getSender().getUsername());
-            sender.setStyle("-fx-background-color: #3b3d3d;"
-                    +"-fx-text-fill:" + message.getSender().getColourTag() + ";");
-            bubble.getChildren().add(sender);
+            sender = new Text(message.getSender().getUsername());
+            sender.setFill(Paint.valueOf(message.getSender().getColourTag()));
         } else {
             bubble.getStyleClass().add("selfBubble");
+            sender = new Text("You");
+            sender.setFill(Color.WHITE);
         }
+        sender.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+        Text trail = new Text(" posted an audio message");
+        trail.setFill(Color.WHITE);
+        trail.setFont(Font.font("Veranda", FontWeight.NORMAL, 15));
+        content.getChildren().addAll(sender, trail);
         Text time = formatTime(message);
-        bubble.getChildren().addAll(mediaButton, time);
+        bubble.getChildren().addAll(content, mediaButton, time);
         return bubble;
     }
 
@@ -480,7 +486,11 @@ public class ChatController extends CustomWindowBaseController {
         }
         return flow;
     }
-    
+
+    /**
+     * Enables user to change availability displayed to all
+     * other users.
+     */
     @FXML
     public void changeAvailability() {
         Status update = Status.valueOf(statusBar.getValue().toUpperCase());
