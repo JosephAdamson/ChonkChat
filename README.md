@@ -5,4 +5,4 @@ Chonkchat is a simple GUI desktop chat application build using javafx, it suppor
 
 <img src=https://i.postimg.cc/wMtQynYV/chat-view-2.png>
 
-<img src=https://i.postimg.cc/Jn3LwY2p/terminal-view.png>
+<img src=https://i.postimg.cc/W341nv3M/terminal-view.png>
