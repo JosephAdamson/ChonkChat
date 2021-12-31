@@ -38,9 +38,9 @@ import java.util.Optional;
 public class ChatController extends CustomWindowBaseController {
     
     private Client client;
+    @FXML private Label username;
     private final DownloaderService downloaderService = new DownloaderService();
     private ScrollPane emojiSelector;
-    @FXML private ToggleButton micButton;
     @FXML private Button fileButton;
     @FXML private Button emojiButton;
     private boolean micToggled;
@@ -555,6 +555,10 @@ public class ChatController extends CustomWindowBaseController {
 
     public ComboBox<String> getStatusBar() {
         return statusBar;
+    }
+    
+    public Label getUsername() {
+        return this.username;
     }
 
     /**

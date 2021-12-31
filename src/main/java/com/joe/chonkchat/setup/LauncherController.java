@@ -21,7 +21,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +113,7 @@ public class LauncherController extends CustomWindowBaseController {
             
             //String avatarChoice = avatar.getImage().getUrl();
 
-            if (username != null && !username.isBlank() && username.length() <= 10) {
+            if (username != null && !username.isBlank() && username.length() <= 14) {
 
                 FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass()
                         .getResource("/com/joe/views/chat-view.fxml")));
@@ -128,6 +127,10 @@ public class LauncherController extends CustomWindowBaseController {
                 Socket socket = new Socket("localhost", Server.PORT);
                 
                 User user = new User(username, colorTag, avatarChoice);
+                
+                // set display username for chat box
+                chatController.getUsername().setText(username);
+                chatController.getUsername().setStyle("-fx-text-fill: " + colorTag + ";");
                 
                 // Do not progress with connection if there is already a user 
                 // with the same username.
